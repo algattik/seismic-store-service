@@ -21,31 +21,31 @@ variables:
 include: 
   # pipeline logic
   - project: "osdu/platform/ci-cd-pipelines"
-    ref: "release/0.7"
+    ref: "v0.7.0"
     file: "standard-setup.yml"
   
   # build
   - project: "osdu/platform/ci-cd-pipelines"
-    ref: "release/0.7"
+    ref: "v0.7.0"
     file: "build/seismic-store-service.yml"
 
   # containerize
   - project: "osdu/platform/ci-cd-pipelines"
-    ref: "release/0.7"
+    ref: "v0.7.0"
     file: "containerize/seismic-store-service.yml"
     
   # deploy
     #azure
   - project: "osdu/platform/ci-cd-pipelines"
-    ref: "release/0.7"
+    ref: "v0.7.0"
     file: "cloud-providers/azure-seismic-store-service.yml"
     
     #ibm  
   - project: "osdu/platform/ci-cd-pipelines"
-    ref: "release/0.7"
+    ref: "v0.7.0"
     file: "cloud-providers/ibm-seismic-store-service.yml"
     
     #gcp
   - project: "osdu/platform/ci-cd-pipelines"
-    ref: "release/0.7"
+    ref: "v0.7.0"
     file: "cloud-providers/gcp-seismic-store-service.yml"
