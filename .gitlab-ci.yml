@@ -30,22 +30,27 @@ variables:
 include: 
   # pipeline logic
   - project: "osdu/platform/ci-cd-pipelines"
+    ref: "release/0.8"
     file: "standard-setup.yml"
   
   # build
   - project: "osdu/platform/ci-cd-pipelines"
+    ref: "release/0.8"
     file: "build/seismic-store-service.yml"
     
   # scan
   - project: "osdu/platform/ci-cd-pipelines"
+    ref: "release/0.8"
     file: "scanners/fossa-node.yml"
 
   # containerize
   - project: "osdu/platform/ci-cd-pipelines"
+    ref: "release/0.8"
     file: "containerize/seismic-store-service.yml"
     
   # aws
   - project: "osdu/platform/ci-cd-pipelines"
+    ref: "release/0.8"
     file: "cloud-providers/aws.yml"
 
   - local: "/devops/aws/awstest.yml"
@@ -53,12 +58,15 @@ include:
   # deploy
     #azure
   - project: "osdu/platform/ci-cd-pipelines"
+    ref: "release/0.8"
     file: "cloud-providers/azure-seismic-store-service.yml"
     
     #ibm  
   - project: "osdu/platform/ci-cd-pipelines"
+    ref: "release/0.8"
     file: "cloud-providers/ibm-seismic-store-service.yml"
 
     #gcp
   - project: "osdu/platform/ci-cd-pipelines"
+    ref: "release/0.8"
     file: "cloud-providers/gcp-seismic-store-service.yml"
