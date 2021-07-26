@@ -42,6 +42,7 @@ include:
   # pipeline logic
   - project: "osdu/platform/ci-cd-pipelines"
     file: "standard-setup.yml"
+    ref: release/0.10
 
   # build
   - local: "devops/osdu/build/seismic-store-service.yml"
@@ -49,31 +50,32 @@ include:
   # scan
   # fossa
   - local: "devops/osdu/scanners/fossa-node.yml"
-  
+
   # lint
   - local: "/devops/osdu/scanners/lint-node.yml"
 
   # containerize
   - project: "osdu/platform/ci-cd-pipelines"
     file: "containerize/seismic-store-service.yml"
+    ref: release/0.10
 
   # aws
   - project: "osdu/platform/ci-cd-pipelines"
     file: "cloud-providers/aws-global.yml"
+    ref: release/0.10
 
   - local: "/devops/aws/awstest.yml"
 
   # deploy
   #azure
   - local: "/devops/osdu/cloud-providers/azure-seismic-store-service.yml"
-
     #ibm
   - project: "osdu/platform/ci-cd-pipelines"
     file: "cloud-providers/ibm-seismic-store-service.yml"
-
+    ref: release/0.10
     #gcp
   - project: "osdu/platform/ci-cd-pipelines"
-    ref: "master"
+    ref: release/0.10
     file: "cloud-providers/osdu-gcp-cloudrun.yml"
 
 osdu-gcp-test:
