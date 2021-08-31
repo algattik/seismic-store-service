@@ -46,6 +46,7 @@ include:
   # pipeline logic
   - project: "osdu/platform/ci-cd-pipelines"
     file: "standard-setup.yml"
+    ref: release/0.11
 
   # build
   - local: "devops/osdu/build/seismic-store-service.yml"
@@ -63,10 +64,12 @@ include:
   # containerize
   - project: "osdu/platform/ci-cd-pipelines"
     file: "containerize/seismic-store-service.yml"
+    ref: release/0.11
 
   # aws
   - project: "osdu/platform/ci-cd-pipelines"
     file: "cloud-providers/aws-global.yml"
+    ref: release/0.11
 
   - local: "/devops/aws/awstest.yml"
 
@@ -77,10 +80,10 @@ include:
     #ibm
   - project: "osdu/platform/ci-cd-pipelines"
     file: "cloud-providers/ibm-seismic-store-service.yml"
-
+    ref: release/0.11
     #gcp
   - project: "osdu/platform/ci-cd-pipelines"
-    ref: "master"
+    ref: release/0.11
     file: "cloud-providers/osdu-gcp-cloudrun.yml"
 
 osdu-gcp-test:
