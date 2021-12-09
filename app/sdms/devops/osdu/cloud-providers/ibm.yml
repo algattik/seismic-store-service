@@ -58,10 +58,10 @@ sdms_ibm-test:
   script:
     - cd app/$SDMS_SERVICE
     - apt-get update
-    - apt-get install -y python
-    - apt-get install -y python-pip
-    - pip install requests
-    - svctoken=$(python devops/scripts/ibm_jwt_client.py)
+    - apt-get install -y python3
+    - apt-get install -y python3-pip
+    - pip3 install requests
+    - svctoken=$(python3 devops/scripts/ibm_jwt_client.py)
     - echo $svctoken > /dev/null
     - npm install -g newman
     - chmod +x ./tests/e2e/run_e2e_tests.sh
