@@ -87,7 +87,4 @@ sdms_ibm-preship-promote:
     - oc project $IBM_OPENSHIFT_PRESHIP_PROJECT
     - oc start-build og-$SDMS_PROJECT_NAME-ibm
   rules:
-    - if: '$CI_COMMIT_BRANCH == "master"'
-      changes:
-        - devops/**/*
-        - app/sdms/**/*
+    - if: '$CI_COMMIT_BRANCH == $IBM_PRESHIP_RELEASE_BRANCH'
