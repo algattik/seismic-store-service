@@ -78,7 +78,7 @@ sdms_ibm-test:
       - merge_requests
 
 sdms_ibm-preship-promote:
-  extends: .ibm-preship-promote
+  extends: .ibm
   needs: ['sdms_ibm-test-py']
   script:
     - cd app/$SDMS_SERVICE
@@ -92,7 +92,7 @@ sdms_ibm-preship-promote:
         - app/sdms/**/*
 
 sdms_ibm-preship-promote-release:
-  extends: .ibm-preship-promote-release
+  extends: .ibm
   stage: publish
   needs: ['sdms_ibm-test-py']
   script:
