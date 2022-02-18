@@ -78,13 +78,27 @@ sdms_ibm-test:
       - merge_requests
 
 sdms_ibm-preship-promote:
-  extends: .ibm
-  stage: publish
-  needs: ['sdms_ibm-test']
+  extends: .ibm-preship-promote
+  needs: ['sdms_ibm-test-py']
   script:
     - cd app/$SDMS_SERVICE
     - oc login --token=$IBM_PRESHIP_OPENSHIFT_TOKEN --server=$IBM_PRESHIP_OPENSHIFT_URL
     - oc project $IBM_OPENSHIFT_PRESHIP_PROJECT
     - oc start-build og-$SDMS_PROJECT_NAME-ibm
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master"'
+      changes:
+        - devops/**/*
+        - app/sdms/**/*
+
+sdms_ibm-preship-promote-release:
+  extends: .ibm-preship-promote-release
+  stage: publish
+  needs: ['sdms_ibm-test-py']
+  script:
+    - cd app/$SDMS_SERVICE
+    - oc login --token=$IBM_PRESHIP_OPENSHIFT_TOKEN --server=$IBM_PRESHIP_OPENSHIFT_URL
+    - oc project $IBM_OPENSHIFT_PRESHIP_PROJECT
+    - oc start-build og-$SDMS_PROJECT_NAME-monthly-ibm --commit=$CI_COMMIT_SHA --follow
   rules:
     - if: '$CI_COMMIT_BRANCH == $IBM_PRESHIP_RELEASE_BRANCH'
