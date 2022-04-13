@@ -121,6 +121,7 @@ filemetadata-osdu-gcp-dev2-deploy-deployment:
     SEISMIC_OSDU_GCP_SERVICE: seismic-store-filemetadata
   extends: .osdu-gcp-dev2-deploy-deployment
   needs: ["filemetadata-osdu-gcp-containerize-gitlab", "filemetadata-osdu-gcp-dev2-deploy-configmap"]
+  allow_failure: true
   rules:
     - if: '$OSDU_GCP == "true" && $CI_COMMIT_BRANCH =~ /^release/'
       when: on_success
