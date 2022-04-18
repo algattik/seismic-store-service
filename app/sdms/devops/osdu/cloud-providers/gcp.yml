@@ -38,8 +38,7 @@ sdms-osdu-gcp-containerize-gitlab:
       changes:
         - devops/**/*
         - app/sdms/**/*
-    # The variable DEV2="true" should be specified manually in GitLab before running a pipeline to test this job against a protected branch
-    - if: '$OSDU_GCP == "true" && $DEV2 == "true"'
+    - if: '$OSDU_GCP == "true"
       when: on_success
       changes:
         - devops/**/*
@@ -69,12 +68,6 @@ sdms-osdu-gcp-deploy-configmap:
       changes:
         - devops/**/*
         - app/sdms/**/*
-    # The variable DEV2="true" should be specified manually in GitLab before running a pipeline to test this job against a protected branch
-    - if: '$OSDU_GCP == "true" && $DEV2 == "true"'
-      when: on_success
-      changes:
-        - devops/**/*
-        - app/sdms/**/*
       
 sdms-osdu-gcp-dev2-deploy-configmap:
   needs: ["sdms-osdu-gcp-containerize-gitlab"]
@@ -96,12 +89,6 @@ sdms-osdu-gcp-dev2-deploy-configmap:
         - devops/**/*
         - app/sdms/**/*
     - if: '$OSDU_GCP == "true" && $CI_COMMIT_TAG'
-      when: on_success
-      changes:
-        - devops/**/*
-        - app/sdms/**/*
-    # The variable DEV2="true" should be specified manually in GitLab before running a pipeline to test this job against a protected branch
-    - if: '$OSDU_GCP == "true" && $DEV2 == "true"'
       when: on_success
       changes:
         - devops/**/*
@@ -128,12 +115,6 @@ sdms-osdu-gcp-deployment:
       changes:
         - devops/**/*
         - app/sdms/**/*
-    # The variable DEV2="true" should be specified manually in GitLab before running a pipeline to test this job against a protected branch
-    - if: '$OSDU_GCP == "true" && $DEV2 == "true"'
-      when: on_success
-      changes:
-        - devops/**/*
-        - app/sdms/**/*
 
 sdms-osdu-gcp-dev2-deploy-deployment:
   variables:
@@ -152,12 +133,6 @@ sdms-osdu-gcp-dev2-deploy-deployment:
         - devops/**/*
         - app/sdms/**/*
     - if: '$OSDU_GCP == "true" && $CI_COMMIT_TAG'
-      when: on_success
-      changes:
-        - devops/**/*
-        - app/sdms/**/*
-    # The variable DEV2="true" should be specified manually in GitLab before running a pipeline to test this job against a protected branch
-    - if: '$OSDU_GCP == "true" && $DEV2 == "true"'
       when: on_success
       changes:
         - devops/**/*
@@ -200,12 +175,6 @@ sdms-osdu-gcp-test-python:
       changes:
         - devops/**/*
         - app/sdms/**/*
-    # The variable DEV2="true" should be specified manually in GitLab before running a pipeline to test this job against a protected branch
-    - if: '$OSDU_GCP == "true" && $DEV2 == "true"'
-      when: on_success
-      changes:
-        - devops/**/*
-        - app/sdms/**/*
 
 sdms-osdu-gcp-dev2-test-python:
   variables: 
@@ -240,12 +209,6 @@ sdms-osdu-gcp-dev2-test-python:
         - devops/**/*
         - app/sdms/**/*
     - if: '$OSDU_GCP == "true" && $CI_COMMIT_TAG'
-      when: on_success
-      changes:
-        - devops/**/*
-        - app/sdms/**/*
-    # The variable DEV2="true" should be specified manually in GitLab before running a pipeline to test this job against a protected branch
-    - if: '$OSDU_GCP == "true" && $DEV2 == "true"'
       when: on_success
       changes:
         - devops/**/*
