@@ -56,7 +56,7 @@
       when: on_success
     - if: '$OSDU_GCP == "true" && $CI_COMMIT_TAG'
       when: on_success
-    - if: '$OSDU_GCP == "true"
+    - if: '$OSDU_GCP == "true"'
       when: on_success
 
 .osdu-gcp-deploy-configmap:
