@@ -38,7 +38,7 @@ sdms-osdu-gcp-containerize-gitlab:
       changes:
         - devops/**/*
         - app/sdms/**/*
-    - if: '$OSDU_GCP == "true"
+    - if: '$OSDU_GCP == "true"'
       when: on_success
       changes:
         - devops/**/*
