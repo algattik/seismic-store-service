@@ -1,5 +1,5 @@
 // ============================================================================
-// Copyright 2017-2021, Schlumberger
+// Copyright 2017-2022, Schlumberger
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 import cors from 'cors';
 import express from 'express';
 import fs from 'fs';
-import hpropagate from 'hpropagate';
 import https from 'https';
 import jwtProxy, { JwtProxyOptions } from 'jwtproxy';
 import swaggerUi from 'swagger-ui-express';
@@ -74,17 +73,7 @@ export class Server {
         ]
     };
 
-
     constructor() {
-
-        // set the caller headers to forward to the downstream services
-        if (Config.CALLER_FORWARD_HEADERS) {
-            hpropagate({
-                headersToPropagate: Config.CALLER_FORWARD_HEADERS.split(',')
-            });
-        } else {
-            hpropagate();
-        }
 
         this.app = express();
         this.app.use(express.urlencoded({ extended: false }));
