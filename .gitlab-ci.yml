@@ -2,7 +2,7 @@ include:
   # pipeline logic
   - project: "osdu/platform/ci-cd-pipelines"
     file: "standard-setup.yml"
-    ref: release/0.15
+    ref: v0.15.4
 
   # global
   # scanners
