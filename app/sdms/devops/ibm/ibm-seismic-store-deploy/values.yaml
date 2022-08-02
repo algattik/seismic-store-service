@@ -7,7 +7,7 @@ replicaCount: 1
 sidecarIstioInjected: "true"
 
 image:
-  repository: community.opengroup.org:5555/osdu/platform/system/seismic-store-service/os-seismic-store-ibm
+  repository: community.opengroup.org:5555/osdu/platform/domain-data-mgmt-services/seismic/seismic-dms-suite/seismic-store-service/seismic-store-service
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: "release-0.14-apr22"
