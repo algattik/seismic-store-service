@@ -1,0 +1,19 @@
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: {{ .Values.conf.appName }}-authz-policy
+spec:
+  selector:
+    matchLabels:
+      {{- include "ibm-seismic-store-deploy.selectorLabels" . | nindent 6 }}
+  action: DENY
+  rules:
+  - from:
+    - source:
+        notRequestPrincipals:
+        - '*'
+    to:
+    - operation:
+        notPaths:
+        - '*/v3/api-docs'
+        - /api/seismic-store/v3/info

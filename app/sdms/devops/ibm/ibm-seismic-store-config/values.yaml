@@ -1,0 +1,61 @@
+data:
+  #common
+  logLevel: "INFO"
+  logPrefix: seismic-store
+  javaAppJar: "/deployments/*-spring-boot.jar"
+  serverPort: 8080
+  contextPath: "/api/seismic-store/v3"
+  beanDefOverriding: true
+  acceptHttp: true
+  cacheExpiration: 9000
+  cahceMaxSize: 2000
+  healthCheckUri: "/api/seismic-store/v3/_ah/liveness_check,/api/seismic-store/v3/_ah/readiness_check,/api/seismic-store/v3/info,/api/seismic-store/v3/api-docs"
+  loggingLevelOsdu: debug
+  loggingLevelSpring: debug
+
+  #API
+  authorizeAPI: http://TBD:8080/api/entitlements/v2
+  patitionAPI: http://tbd:8080/api/partition/v1
+  policyAPI: http://tbd:8080/api/policy/v1
+  deployEnv: CLOUD
+
+  #DB
+  dbURL: http://tbd:5984
+  dbUser: admin
+  dbPassw: tbd
+
+  #ENV
+  envPrefix: ibm-iks
+  envPrefixProject: ibm-ibm-build
+
+  #KEYCLOAK
+  keycloakEndPointHost: tbd
+  keycloakRealm: OSDU
+  keycloakUserEmail: admin-sa@ibm.com
+  KCUser: osdu-bvt
+
+  #tenant-validation
+  pKCClientId: partition-service
+  pKCClientSecret: tbd
+  pKCGrantType: password
+  pKCPassword: changeit
+  pKCRealm: OSDU
+  pKCEndPointHost: tbd
+  pKCUser: partition-service-admin
+  pKAcceptHttp: true
+  tenantCacheExpiryInSec: 10000
+
+  #AMQ
+  amqpPassword: TBD
+  amqpUserName: TBD
+  amqpURL: "amqp://ex-aao-amqp-0-svc:5672"
+
+  #SEISMIC
+  redisDdmsHost: "redis-cache-ddms.redis.svc.cluster.local"
+  redisPort: "6379"
+  seistoreDesAppkey: "NA"
+
+  
+conf:
+  configmap: "seismic-store-config"
+  
