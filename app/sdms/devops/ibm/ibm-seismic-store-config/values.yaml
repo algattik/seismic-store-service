@@ -1,5 +1,7 @@
 data:
   #common
+  cloudProvider: "ibm"
+  desServiceHost: "https://des"
   logLevel: "INFO"
   logPrefix: seismic-store
   javaAppJar: "/deployments/*-spring-boot.jar"
