@@ -6,6 +6,9 @@ data:
   #common
   CLOUDPROVIDER: "{{ .Values.data.cloudProvider }}"
   DES_SERVICE_HOST: "{{ .Values.data.desServiceHost }}"
+  APP_ENVIRONMENT_IDENTIFIER: "{{ .Values.data.appEnvironmentIdentifier }}"
+  PORT: "{{ .Values.data.serverPort }}"
+  SDMS_PREFIX: "{{ .Values.data.contextPath }}"
   LOG_LEVEL: "{{ .Values.data.logLevel }}"
   LOG_PREFIX: "{{ .Values.data.logPrefix }}"
   JAVA_APP_JAR: "{{ .Values.data.javaAppJar }}"
@@ -66,5 +69,8 @@ data:
   LOCKSMAP_REDIS_INSTANCE_ADDRESS: "{{ .Values.data.redisDdmsHost }}"
   LOCKSMAP_REDIS_INSTANCE_PORT: "{{ .Values.data.redisPort }}"
   SEISTORE_DES_APPKEY: "{{ .Values.data.seistoreDesAppkey }}"
+  SERVICE_CLOUD_PROJECT: "{{ .Values.data.serviceCloudProject }}"
+
+
 
 
