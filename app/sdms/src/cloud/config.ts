@@ -343,6 +343,7 @@ export abstract class Config implements IConfig {
 
     protected static checkRequiredConfig(config: any, name: string) {
         if (config === undefined || (typeof (config) === 'number' && isNaN(config))) {
+            console.log('missing configuration: ' + name);
             throw (new Error('missing configuration: ' + name));
         }
     }
