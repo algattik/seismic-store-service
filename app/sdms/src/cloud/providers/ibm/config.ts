@@ -184,6 +184,74 @@ export class IbmConfig extends Config {
             DES_POLICY_SERVICE_HOST: process.env.DES_POLICY_SERVICE_HOST || process.env.DES_SERVICE_HOST
         });
 
+        // Check if present
+        Config.checkRequiredConfig(IbmConfig.DES_SERVICE_HOST_COMPLIANCE, 'DES_SERVICE_HOST_COMPLIANCE');
+        Config.checkRequiredConfig(IbmConfig.DES_SERVICE_HOST_ENTITLEMENT, 'DES_SERVICE_HOST_ENTITLEMENT');
+        Config.checkRequiredConfig(IbmConfig.DES_SERVICE_HOST_STORAGE, 'DES_SERVICE_HOST_STORAGE');
+        Config.checkRequiredConfig(IbmConfig.IMP_SERVICE_ACCOUNT_SIGNER, 'IMP_SERVICE_ACCOUNT_SIGNER');
+        Config.checkRequiredConfig(IbmConfig.CCM_SERVICE_URL, 'CCM_SERVICE_URL');
+
+        // caller forwarded headers to the downstream service
+        Config.checkRequiredConfig(IbmConfig.CALLER_FORWARD_HEADERS, 'CALLER_FORWARD_HEADERS');
+
+        // DES service context path
+        Config.checkRequiredConfig(IbmConfig.ENTITLEMENT_CONTEXT_PATH, 'ENTITLEMENT_CONTEXT_PATH');
+        Config.checkRequiredConfig(IbmConfig.COMPLIANCE_CONTEXT_PATH, 'COMPLIANCE_CONTEXT_PATH');
+        Config.checkRequiredConfig(IbmConfig.STORAGE_CONTEXT_PATH, 'STORAGE_CONTEXT_PATH');
+        Config.checkRequiredConfig(IbmConfig.POLICY_SVC_CONTEXT_PATH, 'POLICY_SVC_CONTEXT_PATH');
+
+        // DES_SERVICE_HOST replaced by new variable ENTITLEMENT_HOST
+        Config.checkRequiredConfig(IbmConfig.ENTITLEMENT_HOST, 'ENTITLEMENT_HOST');
+        Config.checkRequiredConfig(IbmConfig.LEGAL_HOST, 'LEGAL_HOST');// DES_SERVICE_HOST replaced by new variable LEGAL_HOST
+        Config.checkRequiredConfig(IbmConfig.STORAGE_HOST, 'STORAGE_HOST');// DES_SERVICE_HOST replaced by new variable LEGAL_HOST
+
+        // IBM COS
+        Config.checkRequiredConfig(IbmConfig.COS_ACCESS_KEY_ID, 'COS_ACCESS_KEY_ID');
+        Config.checkRequiredConfig(IbmConfig.COS_SECRET_ACCESS_KEY, 'COS_SECRET_ACCESS_KEY');
+        Config.checkRequiredConfig(IbmConfig.COS_ENDPOINT, 'COS_ENDPOINT');
+        Config.checkRequiredConfig(IbmConfig.COS_S3_FORCEPATHSTYLE, 'COS_S3_FORCEPATHSTYLE');// string to boolean
+        Config.checkRequiredConfig(IbmConfig.COS_SIGNATUREVERSION, 'COS_SIGNATUREVERSION');
+        Config.checkRequiredConfig(IbmConfig.COS_SUBUSER_ACCESS_KEY_ID, 'COS_SUBUSER_ACCESS_KEY_ID');
+        Config.checkRequiredConfig(IbmConfig.COS_SUBUSER_SECRET_ACCESS_KEY, 'COS_SUBUSER_SECRET_ACCESS_KEY');
+        Config.checkRequiredConfig(IbmConfig.COS_TEMP_CRED_EXPITY, 'COS_TEMP_CRED_EXPITY');
+
+        // IBM Keycloak
+        Config.checkRequiredConfig(IbmConfig.KEYCLOAK_BASEURL, 'KEYCLOAK_BASEURL');
+        Config.checkRequiredConfig(IbmConfig.KEYCLOAK_URL_TOKEN, 'KEYCLOAK_URL_TOKEN');
+        Config.checkRequiredConfig(IbmConfig.KEYCLOAK_USERNAME, 'KEYCLOAK_USERNAME');
+        Config.checkRequiredConfig(IbmConfig.KEYCLOAK_PASSWORD, 'KEYCLOAK_PASSWORD');
+        Config.checkRequiredConfig(IbmConfig.KEYCLOAK_GRANTTYPE, 'KEYCLOAK_GRANTTYPE');
+        Config.checkRequiredConfig(IbmConfig.KEYCLOAK_CLIENTID, 'KEYCLOAK_CLIENTID');
+        Config.checkRequiredConfig(IbmConfig.KEYCLOAK_CLIENTSECRET, 'KEYCLOAK_CLIENTSECRET');
+        Config.checkRequiredConfig(IbmConfig.KEYCLOAK_REALM, 'KEYCLOAK_REALM');
+
+        // IBM Document DB
+        Config.checkRequiredConfig(IbmConfig.DOC_DB_URL, 'DB_URL');
+        Config.checkRequiredConfig(IbmConfig.DOC_DB_COLLECTION, 'DOC_DB_COLLECTION');
+        Config.checkRequiredConfig(IbmConfig.DOC_DB_QUERY_SELECT_FIELDS, 'DOC_DB_QUERY_SELECT_FIELDS');
+        Config.checkRequiredConfig(IbmConfig.DOC_DB_QUERY_RESULT_LIMIT, 'DOC_DB_QUERY_RESULT_LIMIT');
+        Config.checkRequiredConfig(IbmConfig.DOC_DB_QUERY_RESULT_LIMIT_VALUE, 'DOC_DB_QUERY_RESULT_LIMIT_VALUE');
+
+        Config.checkRequiredConfig(IbmConfig.DES_SERVICE_APPKEY, 'na');
+        Config.checkRequiredConfig(IbmConfig.DES_SERVICE_HOST_COMPLIANCE, 'DES_SERVICE_HOST_COMPLIANCE');
+        Config.checkRequiredConfig(IbmConfig.DES_SERVICE_HOST_ENTITLEMENT, 'DES_SERVICE_HOST_ENTITLEMENT');
+        Config.checkRequiredConfig(IbmConfig.DES_SERVICE_HOST_STORAGE, 'DES_SERVICE_HOST_STORAGE');
+        Config.checkRequiredConfig(IbmConfig.DES_SERVICE_APPKEY, 'DES_SERVICE_APPKEY');
+
+        // redis cache port for locks (the port as env variable)
+        Config.checkRequiredConfig(IbmConfig.LOCKSMAP_REDIS_INSTANCE_PORT, 'REDIS_INSTANCE_PORT');
+        Config.checkRequiredConfig(IbmConfig.LOCKSMAP_REDIS_INSTANCE_ADDRESS, 'LOCKSMAP_REDIS_INSTANCE_ADDRESS');
+        Config.checkRequiredConfig(IbmConfig.LOCKSMAP_REDIS_INSTANCE_KEY, 'LOCKSMAP_REDIS_INSTANCE_KEY');
+        Config.checkRequiredConfig(IbmConfig.LOCKSMAP_REDIS_INSTANCE_TLS_DISABLE, 'CACHE_TLS_DISABLE');
+
+        Config.checkRequiredConfig(IbmConfig.DES_REDIS_INSTANCE_ADDRESS, 'DES_REDIS_INSTANCE_ADDRESS');
+        Config.checkRequiredConfig(IbmConfig.DES_REDIS_INSTANCE_PORT, 'DES_REDIS_INSTANCE_PORT');
+        Config.checkRequiredConfig(IbmConfig.DES_REDIS_INSTANCE_KEY, 'DES_REDIS_INSTANCE_KEY');
+        Config.checkRequiredConfig(IbmConfig.DES_REDIS_INSTANCE_TLS_DISABLE, 'CACHE_TLS_DISABLE');
+
+
+        Config.checkRequiredConfig(IbmConfig.LOCKSMAP_REDIS_INSTANCE_PORT, 'REDIS_INSTANCE_PORT');
+
         config();
 
     }
