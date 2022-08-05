@@ -16,7 +16,7 @@ include:
   - local: "devops/osdu/cloud-providers/gcp.yml"
 
   # azure
-  - local: "devops/osdu/cloud-providers/azure.yml"
+  #- local: "devops/osdu/cloud-providers/azure.yml"
 
   # ibm
   - local: "devops/osdu/cloud-providers/ibm.yml"
