@@ -20,6 +20,14 @@ data:
   patitionAPI: http://tbd:8080/api/partition/v1
   policyAPI: http://tbd:8080/api/policy/v1
   deployEnv: CLOUD
+  entitlementHost: http://entitlements
+  legalHost: http://legal
+  storageHost: http://storage
+  storageContextPath: "/api/storage/v2"
+  policyContextPath: "/api/policy/v1"
+  entitlementContextPath: "/api/entitlements/v2"
+  legalContextPath: "/api/legal/v1"
+
 
   #DB
   dbURL: http://tbd:5984
@@ -53,10 +61,10 @@ data:
   amqpURL: "amqp://ex-aao-amqp-0-svc:5672"
 
   #SEISMIC
-  redisDdmsHost: "redis-cache-ddms.redis.svc.cluster.local"
-  redisPort: "6379"
-  seistoreDesAppkey: "NA"
-  appEnvironmentIdentifier: "dev"
+  redisDdmsHost: ""
+  redisPort: ""
+  seistoreDesAppkey: ""
+  appEnvironmentIdentifier: ""
   serviceCloudProject: ""
 
 conf:

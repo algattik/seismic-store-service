@@ -29,10 +29,20 @@ data:
   POLICY_API: "http://{{ .Release.Name }}-ibm-policy-deploy:8080/api/policy/v1"
   LEGALTAG_API: "http://{{ .Release.Name }}-ibm-legal-deploy:8080/api/legal/v1"
   STORAGE_API: "http://{{ .Release.Name }}-ibm-storage-deploy:8080/api/storage/v2"
-  ENVIRONMENT: "{{ .Values.data.deployEnv }}" #  DEPLOYMENT_ENVIRONMENT
+  
+  ENTITLEMENT_HOST: "{{ .Values.data.entitlementHost }}"
+  LEGAL_HOST: "{{ .Values.data.legalHost }}"
+  STORAGE_HOST: "{{ .Values.data.storageHost }}"
+  STORAGE_CONTEXT_PATH: "{{ .Values.data.storageContextPath }}"
+  POLICY_SVC_CONTEXT_PATH: "{{ .Values.data.policyContextPath }}"
+  ENTITLEMENT_CONTEXT_PATH: "{{ .Values.data.entitlementContextPath }}"
+  COMPLIANCE_CONTEXT_PATH: "{{ .Values.data.legalContextPath }}"
+
+  IBM_ENVIRONMENT: "{{ .Values.data.deployEnv }}" #  DEPLOYMENT_ENVIRONMENT
 
   #DB
   ibm.db.url: "http://{{ .Release.Name }}-couchdb:5984"
+  DOC_DB_URL: "{{ .Values.data.dbURL }}"
   ibm.db.user: "{{ .Values.data.dbUser }}"
   ibm.db.password: "{{ .Values.data.dbPassw }}"
 
@@ -43,18 +53,24 @@ data:
   #KEYCLOAK
   ibm.keycloak.endpoint_url: "keycloak-discovery:8080"
   ibm.keycloak.realm: "{{ .Values.data.keycloakRealm }}"
+  KEYCLOAK_REALM: "{{ .Values.data.keycloakRealm }}"
   ibm.keycloak.useremail: "{{ .Values.data.keycloakUserEmail }}"
   keycloak.user: "{{ .Values.data.KCUser }}"
 
 
   #tenant-validation
   partition.keycloak.client_id: "{{ .Values.data.pKCClientId }}"
+  KEYCLOAK_CLIENTID: "{{ .Values.data.pKCClientId }}"
   partition.keycloak.client_secert: "{{ .Values.data.pKCClientSecret }}"
+  KEYCLOAK_CLIENTSECRET: "{{ .Values.data.pKCClientSecret }}"
   partition.keycloak.grant_type: "{{ .Values.data.pKCGrantType }}"
+  KEYCLOAK_GRANTTYPE: "{{ .Values.data.pKCGrantType }}"
   partition.keycloak.password: "{{ .Values.data.pKCPassword }}"
+  KEYCLOAK_PASSWORD: "{{ .Values.data.pKCPassword }}"
   partition.keycloak.realm: "{{ .Values.data.pKCRealm }}"
   partition.keycloak.url: "{{ .Values.data.pKCEndPointHost }}"
   partition.keycloak.user: "{{ .Values.data.pKCUser }}"
+  KEYCLOAK_USERNAME: "{{ .Values.data.pKCUser }}"
   partition.keycloak.accept_http: "{{ .Values.data.pKAcceptHttp }}"
   tenantCache.exp.time.in.second: "{{ .Values.data.tenantCacheExpiryInSec }}"
 
@@ -70,6 +86,7 @@ data:
   LOCKSMAP_REDIS_INSTANCE_PORT: "{{ .Values.data.redisPort }}"
   SEISTORE_DES_APPKEY: "{{ .Values.data.seistoreDesAppkey }}"
   SERVICE_CLOUD_PROJECT: "{{ .Values.data.serviceCloudProject }}"
+  
 
 
 
