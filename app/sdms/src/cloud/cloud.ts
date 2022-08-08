@@ -39,6 +39,7 @@ export class CloudFactory {
     public static build(providerLabel: string, referenceAbstraction: any, args: { [key: string]: any } = {}) {
 
         if (providerLabel === undefined || providerLabel === 'unknown') {
+            console.log(`Unrecognized cloud provider: ${providerLabel}`);
             throw Error.make(Error.Status.UNKNOWN, `Unrecognized cloud provider: ${providerLabel}`);
         }
 
@@ -52,6 +53,7 @@ export class CloudFactory {
                     return new provider(args);
                 }
             }
+            console.log(`The cloud provider builder that extend ${referenceAbstraction} has not been found`);
             throw Error.make(Error.Status.UNKNOWN,
                 `The cloud provider builder that extend ${referenceAbstraction} has not been found`);
 
@@ -95,12 +97,14 @@ export class CloudFactory {
 
                 // database are not detected most probably due to an issue with cosmos <> 404, example 429 rate-limit
                 if (CloudFactory.azureDatabase[partition].failure) {
+                    console.log('The service failed to locate the internal Cosmos DB. Call should be retried');
                     throw (Error.make(Error.Status.NOT_AVAILABLE,
                         'The service failed to locate the internal Cosmos DB. Call should be retried'));
                 }
 
                 // both database cannot exist at the same time. the migration process is probably running
                 if (CloudFactory.azureDatabase[partition].regular && CloudFactory.azureDatabase[partition].enhanced) {
+                    console.log('The partition has 2 active databases in cosmos. A migration process is possibly in place.');
                     throw (Error.make(Error.Status.NOT_AVAILABLE,
                         'The partition has 2 active databases in cosmos. A migration process is possibly in place.'));
                 }
@@ -115,7 +119,7 @@ export class CloudFactory {
                     }
                 }
             }
-
+            console.log(`The cloud provider builder that extend ${referenceAbstraction} has not been found`);
             throw Error.make(Error.Status.UNKNOWN,
                 `The cloud provider builder that extend ${referenceAbstraction} has not been found`);
         }
