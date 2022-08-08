@@ -1,7 +1,0 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
-
-echo "2)"
-echo "Validating commit message syntax"
-cd ./app/sdms && npx --no-install commitlint --edit $1
-echo "-------------------------------------------------------"
