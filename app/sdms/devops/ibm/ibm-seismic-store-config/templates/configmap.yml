@@ -92,7 +92,7 @@ data:
   SEISTORE_DES_APPKEY: "{{ .Values.data.seistoreDesAppkey }}"
   SERVICE_CLOUD_PROJECT: "{{ .Values.data.serviceCloudProject }}"
   IMP_SERVICE_ACCOUNT_SIGNER: "{{ .Values.data.impServiceAccountSigner }}"
-  
+  DES_REDIS_INSTANCE_KEY: "{{ .Values.data.redisInstanceKey }}"
 
 
 

@@ -56,6 +56,11 @@ spec:
                 secretKeyRef:
                   key: partition_service_secret_data
                   name: props-secret-generated-password
+            - name: DES_REDIS_INSTANCE_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: osdu-deploy-redis
+                  name: redis-password
             - name: partition.keycloak.url
               valueFrom:
                 configMapKeyRef:
