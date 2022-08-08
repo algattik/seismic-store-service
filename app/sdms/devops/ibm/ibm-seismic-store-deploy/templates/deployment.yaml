@@ -59,8 +59,8 @@ spec:
             - name: DES_REDIS_INSTANCE_KEY
               valueFrom:
                 secretKeyRef:
-                  key: osdu-deploy-redis
-                  name: redis-password
+                  key: redis-password
+                  name: {{ .Release.Name }}-redis
             - name: partition.keycloak.url
               valueFrom:
                 configMapKeyRef:
