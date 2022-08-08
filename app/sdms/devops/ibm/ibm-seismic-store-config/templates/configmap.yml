@@ -38,6 +38,10 @@ data:
   ENTITLEMENT_CONTEXT_PATH: "{{ .Values.data.entitlementContextPath }}"
   COMPLIANCE_CONTEXT_PATH: "{{ .Values.data.legalContextPath }}"
 
+  DES_SERVICE_HOST_STORAGE: "{{ .Values.data.DESStorageHost }}"
+  DES_SERVICE_HOST_COMPLIANCE: "{{ .Values.data.DESComplianceHost }}"
+  DES_SERVICE_HOST_ENTITLEMENT: "{{ .Values.data.DESEntitlementsHost }}"
+
   IBM_ENVIRONMENT: "{{ .Values.data.deployEnv }}" #  DEPLOYMENT_ENVIRONMENT
 
   #DB
@@ -80,12 +84,14 @@ data:
   amqphub.amqp10jms.remote-url: "{{ .Values.data.amqpURL }}"
 
   # SEISMIC
-  DES_REDIS_INSTANCE_ADDRESS: "{{ .Values.data.redisDdmsHost }}"
+  DES_REDIS_INSTANCE_ADDRESS: "{{ .Release.Name }}-redis-master"
   DES_REDIS_INSTANCE_PORT: "{{ .Values.data.redisPort }}"
-  LOCKSMAP_REDIS_INSTANCE_ADDRESS: "{{ .Values.data.redisDdmsHost }}"
+  REDIS_INSTANCE_PORT: "{{ .Values.data.redisPort }}"
+  LOCKSMAP_REDIS_INSTANCE_ADDRESS: "{{ .Release.Name }}-redis-master"
   LOCKSMAP_REDIS_INSTANCE_PORT: "{{ .Values.data.redisPort }}"
   SEISTORE_DES_APPKEY: "{{ .Values.data.seistoreDesAppkey }}"
   SERVICE_CLOUD_PROJECT: "{{ .Values.data.serviceCloudProject }}"
+  IMP_SERVICE_ACCOUNT_SIGNER: "{{ .Values.data.impServiceAccountSigner }}"
   
 
 

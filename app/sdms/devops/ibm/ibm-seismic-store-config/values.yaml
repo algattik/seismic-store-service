@@ -26,6 +26,9 @@ data:
   storageContextPath: "/api/storage/v2"
   policyContextPath: "/api/policy/v1"
   entitlementContextPath: "/api/entitlements/v2"
+  DESStorageHost: http://storage
+  DESComplianceHost: http://legal
+  DESEntitlementsHost: http://entitlements
   legalContextPath: "/api/legal/v1"
 
 
@@ -61,11 +64,12 @@ data:
   amqpURL: "amqp://ex-aao-amqp-0-svc:5672"
 
   #SEISMIC
-  redisDdmsHost: ""
-  redisPort: ""
+  redisDdmsHost: "osdu-deploy-redis-master"
+  redisPort: "6379"
   seistoreDesAppkey: ""
   appEnvironmentIdentifier: ""
   serviceCloudProject: ""
+  impServiceAccountSigner: "NA"
 
 conf:
   configmap: "seismic-store-config"
