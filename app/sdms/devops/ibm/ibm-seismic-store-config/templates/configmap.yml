@@ -84,10 +84,10 @@ data:
   amqphub.amqp10jms.remote-url: "{{ .Values.data.amqpURL }}"
 
   # SEISMIC
-  DES_REDIS_INSTANCE_ADDRESS: "{{ .Release.Name }}-redis-master"
+  DES_REDIS_INSTANCE_ADDRESS: "{{ .Values.data.localHost }}"
   DES_REDIS_INSTANCE_PORT: "{{ .Values.data.redisPort }}"
   REDIS_INSTANCE_PORT: "{{ .Values.data.redisPort }}"
-  LOCKSMAP_REDIS_INSTANCE_ADDRESS: "{{ .Release.Name }}-redis-master"
+  LOCKSMAP_REDIS_INSTANCE_ADDRESS: "{{ .Values.data.localHost }}"
   LOCKSMAP_REDIS_INSTANCE_PORT: "{{ .Values.data.redisPort }}"
   SEISTORE_DES_APPKEY: "{{ .Values.data.seistoreDesAppkey }}"
   SERVICE_CLOUD_PROJECT: "{{ .Values.data.serviceCloudProject }}"

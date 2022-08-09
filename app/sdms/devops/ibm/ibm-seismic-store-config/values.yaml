@@ -71,6 +71,7 @@ data:
   serviceCloudProject: ""
   impServiceAccountSigner: "NA"
   redisInstanceKey: tbd
+  localHost: 127.0.0.1
 
 conf:
   configmap: "seismic-store-config"
