@@ -65,14 +65,14 @@ data:
 
   #SEISMIC
   redisDdmsHost: "osdu-deploy-redis-master"
-  redisPort: "6379"
+  redisPort: 6379
   seistoreDesAppkey: ""
   appEnvironmentIdentifier: ""
   serviceCloudProject: ""
   impServiceAccountSigner: "NA"
   redisInstanceKey: tbd
-  localHost: "127.0.0.1"
-  cacheTLSDisable: "false"
+  localHost: 127.0.0.1
+  cacheTLSDisable: true
 
 conf:
   configmap: "seismic-store-config"

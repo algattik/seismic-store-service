@@ -85,6 +85,7 @@ data:
 
   # SEISMIC
   DES_REDIS_INSTANCE_ADDRESS: "{{ .Values.data.localHost }}"
+  #"{{ .Release.Name }}-redis-master"
   DES_REDIS_INSTANCE_PORT: "{{ .Values.data.redisPort }}"
   REDIS_INSTANCE_PORT: "{{ .Values.data.redisPort }}"
   LOCKSMAP_REDIS_INSTANCE_ADDRESS: "{{ .Values.data.localHost }}"
