@@ -93,7 +93,7 @@ data:
   SERVICE_CLOUD_PROJECT: "{{ .Values.data.serviceCloudProject }}"
   IMP_SERVICE_ACCOUNT_SIGNER: "{{ .Values.data.impServiceAccountSigner }}"
   DES_REDIS_INSTANCE_KEY: "{{ .Values.data.redisInstanceKey }}"
-
+  LOCKSMAP_REDIS_INSTANCE_KEY: "{{ .Values.data.redisInstanceKey }}"
 
 
 

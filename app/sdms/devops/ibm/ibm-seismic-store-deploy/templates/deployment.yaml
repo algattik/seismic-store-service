@@ -61,6 +61,11 @@ spec:
                 secretKeyRef:
                   key: redis-password
                   name: {{ .Release.Name }}-redis
+            - name: LOCKSMAP_REDIS_INSTANCE_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: redis-password
+                  name: {{ .Release.Name }}-redis
             - name: partition.keycloak.url
               valueFrom:
                 configMapKeyRef:
