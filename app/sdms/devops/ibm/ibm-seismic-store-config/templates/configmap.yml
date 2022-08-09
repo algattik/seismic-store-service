@@ -94,6 +94,7 @@ data:
   IMP_SERVICE_ACCOUNT_SIGNER: "{{ .Values.data.impServiceAccountSigner }}"
   DES_REDIS_INSTANCE_KEY: "{{ .Values.data.redisInstanceKey }}"
   LOCKSMAP_REDIS_INSTANCE_KEY: "{{ .Values.data.redisInstanceKey }}"
+  CACHE_TLS_DISABLE: "{{ .Values.data.cacheTLSDisable }}"
 
 
 
