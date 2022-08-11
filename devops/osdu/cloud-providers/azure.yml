@@ -1,7 +1,8 @@
 include:
 
   # azure-global
-  #- project: "osdu/platform/ci-cd-pipelines"
-  #  file: "cloud-providers/azure.yml"
+  - project: "osdu/platform/ci-cd-pipelines"
+    file: "cloud-providers/azure.yml"
+    ref: azure/m12-master
     
   - local: "devops/osdu/cloud-providers/azure-common-pipeline.yml"
