@@ -64,7 +64,7 @@ data:
   amqpURL: "amqp://ex-aao-amqp-0-svc:5672"
 
   #SEISMIC
-  redisDdmsHost: "osdu-deploy-redis-master"
+  redisHost: "redis-seismic-master"
   redisPort: 6379
   seistoreDesAppkey: ""
   appEnvironmentIdentifier: ""

@@ -60,12 +60,12 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: redis-password
-                  name: {{ .Release.Name }}-redis
+                  name: redis-seismic
             - name: LOCKSMAP_REDIS_INSTANCE_KEY
               valueFrom:
                 secretKeyRef:
                   key: redis-password
-                  name: {{ .Release.Name }}-redis
+                  name: redis-seismic
             - name: partition.keycloak.url
               valueFrom:
                 configMapKeyRef:
