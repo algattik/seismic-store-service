@@ -71,7 +71,6 @@ data:
   serviceCloudProject: ""
   impServiceAccountSigner: "NA"
   redisInstanceKey: tbd
-  localHost: 127.0.0.1
   cacheTLSDisable: true
 
 conf:
