@@ -64,7 +64,7 @@ data:
   amqpURL: "amqp://ex-aao-amqp-0-svc:5672"
 
   #SEISMIC
-  redisHost: "redis-seismic-master"
+  redisHost: "redis-seismic"
   redisPort: 6379
   seistoreDesAppkey: ""
   appEnvironmentIdentifier: ""
