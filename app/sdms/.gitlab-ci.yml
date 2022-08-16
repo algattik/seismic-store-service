@@ -27,7 +27,7 @@ include:
   - local: "app/sdms/devops/osdu/cloud-providers/aws.yml"
 
   # gcp
-  - local: "app/sdms/devops/osdu/cloud-providers/gcp.yml"
+  #- local: "app/sdms/devops/osdu/cloud-providers/gcp.yml"
 
   # ibm
   - local: "app/sdms/devops/osdu/cloud-providers/ibm.yml"
