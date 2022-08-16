@@ -15,6 +15,11 @@
 // ============================================================================
 
 // tslint:disable: no-console
+<<<<<<< HEAD
+=======
+
+import hpropagate from 'hpropagate';
+>>>>>>> release/0.14
 import { Config, ConfigFactory, LoggerFactory, TraceFactory } from '../cloud';
 import { StorageJobManager } from '../cloud/shared/queue';
 import { Locker } from '../services/dataset/locker';
@@ -68,7 +73,11 @@ async function ServerStart() {
         callerHeadersToForward.push('x-correlation-id');
         callerHeadersToForward.push('traceparent');
         if (Config.CORRELATION_ID) { callerHeadersToForward.push(Config.CORRELATION_ID); }
+<<<<<<< HEAD
         require('hpropagate')({
+=======
+        hpropagate({
+>>>>>>> release/0.14
             setAndPropagateCorrelationId: false,
             headersToPropagate: callerHeadersToForward
         });
