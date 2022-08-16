@@ -30,17 +30,17 @@ data:
   LEGALTAG_API: "http://{{ .Release.Name }}-ibm-legal-deploy:8080/api/legal/v1"
   STORAGE_API: "http://{{ .Release.Name }}-ibm-storage-deploy:8080/api/storage/v2"
   
-  ENTITLEMENT_HOST: "{{ .Values.data.entitlementHost }}"
-  LEGAL_HOST: "{{ .Values.data.legalHost }}"
-  STORAGE_HOST: "{{ .Values.data.storageHost }}"
+  ENTITLEMENT_HOST: "http://{{ .Release.Name }}-ibm-entitlement-deploy:8080/api/entitlements/v2"
+  LEGAL_HOST: "http://{{ .Release.Name }}-ibm-legal-deploy:8080/api/legal/v1"
+  STORAGE_HOST: "http://{{ .Release.Name }}-ibm-storage-deploy:8080/api/storage/v2"
   STORAGE_CONTEXT_PATH: "{{ .Values.data.storageContextPath }}"
   POLICY_SVC_CONTEXT_PATH: "{{ .Values.data.policyContextPath }}"
   ENTITLEMENT_CONTEXT_PATH: "{{ .Values.data.entitlementContextPath }}"
   COMPLIANCE_CONTEXT_PATH: "{{ .Values.data.legalContextPath }}"
 
-  DES_SERVICE_HOST_STORAGE: "{{ .Values.data.DESStorageHost }}"
-  DES_SERVICE_HOST_COMPLIANCE: "{{ .Values.data.DESComplianceHost }}"
-  DES_SERVICE_HOST_ENTITLEMENT: "{{ .Values.data.DESEntitlementsHost }}"
+  DES_SERVICE_HOST_STORAGE: "http://{{ .Release.Name }}-ibm-storage-deploy:8080/api/storage/v2"
+  DES_SERVICE_HOST_COMPLIANCE: "http://{{ .Release.Name }}-ibm-legal-deploy:8080/api/legal/v1"
+  DES_SERVICE_HOST_ENTITLEMENT: "http://{{ .Release.Name }}-ibm-entitlement-deploy:8080/api/entitlements/v2"
 
   IBM_ENVIRONMENT: "{{ .Values.data.deployEnv }}" #  DEPLOYMENT_ENVIRONMENT
 

@@ -20,15 +20,15 @@ data:
   patitionAPI: http://tbd:8080/api/partition/v1
   policyAPI: http://tbd:8080/api/policy/v1
   deployEnv: CLOUD
-  entitlementHost: http://entitlements
-  legalHost: http://legal
-  storageHost: http://storage
+  #entitlementHost: "http://{{ .Release.Name }}-ibm-entitlement-deploy:8080/api/entitlements/v2"
+  #legalHost: "http://{{ .Release.Name }}-ibm-legal-deploy:8080/api/legal/v1"
+  #storageHost: "http://{{ .Release.Name }}-ibm-storage-deploy:8080/api/storage/v2"
   storageContextPath: "/api/storage/v2"
   policyContextPath: "/api/policy/v1"
   entitlementContextPath: "/api/entitlements/v2"
-  DESStorageHost: http://storage
-  DESComplianceHost: http://legal
-  DESEntitlementsHost: http://entitlements
+  #DESStorageHost: "http://{{ .Release.Name }}-ibm-storage-deploy:8080/api/storage/v2"
+  #DESComplianceHost: "http://{{ .Release.Name }}-ibm-legal-deploy:8080/api/legal/v1"
+  #DESEntitlementsHost: "http://{{ .Release.Name }}-ibm-entitlement-deploy:8080/api/entitlements/v2"
   legalContextPath: "/api/legal/v1"
 
 

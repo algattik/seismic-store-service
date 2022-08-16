@@ -3,27 +3,6 @@ data:
   logLevel: "INFO"
   cloudProvider: "google"
   port: "5000"
-<<<<<<< HEAD
-  desServiceHost: "https://des"
-  partitionHost: "http://partition"
-  entitlementBaseUrlPath: "/entitlements/v2"
-  dataPartitionRestHeaderKey: "data-partition-id"
-  storageHost: "http://storage"
-  legalHost: "http://legal"
-  appEnvironmentIdentifier: "dev"
-  entitlementsHost: "http://entitlements"
-  redisDdmsHost: "redis-cache-ddms.redis.svc.cluster.local"
-  redisPort: "6379"
-  urlPrefix: "/api/seismic-store/v3"
-  # gcp configuration
-  impServiceAccountSigner: "NA"
-  seistoreDesAppkey: "NA"
-  serviceCloudProject: ""
-  googleAudiences: ""
-  # onprem configuration
-  apiBasePath: "/api/v3"
-  serviceEnv: "dev"
-=======
   des_service_host: https://des
   des_service_host_partition: "http://partition/api/partition/v1/"
   entitlement_base_url_path: "/entitlements/v2"
@@ -41,7 +20,6 @@ data:
   locksmap_redis_instance_address: "redis-cache-ddms.redis.svc.cluster.local"
   locksmap_redis_instance_port: "6379"
   url_prefix: #{SDMS_PREFIX}#
->>>>>>> release/0.14
 conf:
   appName: "seismic-store"
   configmap: "seismic-store-config"

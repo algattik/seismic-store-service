@@ -87,12 +87,8 @@
       then EXTRA_DOCKER_TAG="-t $CI_REGISTRY_IMAGE/$IMAGE_NAME:latest"; fi
     - docker build -t $CI_REGISTRY_IMAGE/$IMAGE_NAME:$CI_COMMIT_SHORT_SHA $EXTRA_DOCKER_TAG --file $SEISMIC_OSDU_GCP_DOCKERFILE_NAME .
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-<<<<<<< HEAD
-    - docker push $CI_REGISTRY_IMAGE/$IMAGE_NAME
-=======
     - docker push $CI_REGISTRY_IMAGE/osdu-gcp-$SEISMIC_OSDU_GCP_SERVICE:$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
     - docker push $CI_REGISTRY_IMAGE/osdu-gcp-$SEISMIC_OSDU_GCP_SERVICE
->>>>>>> release/0.14
   rules:
     - if: '$OSDU_GCP == "true" && $CI_COMMIT_BRANCH =~ /^release/'
       when: on_success
@@ -100,22 +96,6 @@
       when: on_success
     - if: '$OSDU_GCP == "true"'
       when: on_success
-<<<<<<< HEAD
-
-.osdu-gcp-containerize-gcr:
-  stage: containerize
-  tags: ["osdu-medium"]
-  extends: .osdu-gcp-variables
-  image: docker:19.03
-  cache: {}
-  script:
-    - docker build -t $OSDU_GCP_GCR_REGISTRY/$SEISMIC_OSDU_GCP_SERVICE/$IMAGE_NAME:$CI_COMMIT_TAG -f $SEISMIC_OSDU_GCP_DOCKERFILE_NAME .
-    - docker push $OSDU_GCP_GCR_REGISTRY/$SEISMIC_OSDU_GCP_SERVICE/$IMAGE_NAME
-  rules:
-    - if: "$OSDU_GCP == 'true' && $CI_COMMIT_TAG"
-      when: on_success
-=======
->>>>>>> release/0.14
 
 .osdu-gcp-deploy-configmap:
   stage: deploy
@@ -132,13 +112,6 @@
       --namespace=$OSDU_GCP_HELM_NAMESPACE
       --wait
       --history-max=3
-<<<<<<< HEAD
-      --set data.appEnvironmentIdentifier=$OSDU_GCP_TENANT
-      --set data.cloudProvider="google"
-      --set data.redisDdmsHost=$REDIS_DDMS_HOST
-      --set data.serviceCloudProject=$OSDU_GCP_PROJECT
-      --set data.googleAudiences=$TARGET_AUDIENCE
-=======
       $SEISMIC_OSDU_GCP_HELM_CONFIG_SERVICE_VARS
   rules:
     - if: '$OSDU_GCP == "true" && $CI_COMMIT_BRANCH =~ /^release/'
@@ -160,71 +133,11 @@
       --wait
       --history-max=3
       $SEISMIC_OSDU_GCP_HELM_CONFIG_SERVICE_VARS
->>>>>>> release/0.14
   rules:
     - if: '$OSDU_GCP == "true" && $CI_COMMIT_BRANCH =~ /^release/'
       when: on_success
     - if: '$OSDU_GCP == "true" && $CI_COMMIT_TAG'
       when: on_success
-<<<<<<< HEAD
-
-.osdu-gcp-dev2-deploy-configmap:
-  stage: deploy
-  tags: ["osdu-small"]
-  extends: .osdu-gcp-dev2-variables
-  image: gcr.io/google.com/cloudsdktool/cloud-sdk
-  script:
-    - !reference [.common-dev2, script]
-    - !reference [.define_VER, script]
-    - helm repo add $SEISMIC_OSDU_GCP_SERVICE ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/helm/stable
-    - >
-      helm upgrade $SEISMIC_OSDU_GCP_HELM_CONFIG_SERVICE $SEISMIC_OSDU_GCP_HELM_CONFIG_DIR --version $VER
-      --install
-      --create-namespace
-      --namespace=$OSDU_GCP_HELM_NAMESPACE
-      --wait
-      --history-max=3
-      --set data.appEnvironmentIdentifier=$OSDU_TENANT
-      --set data.cloudProvider="google"
-      --set data.redisDdmsHost=$REDIS_DDMS_HOST
-      --set data.serviceCloudProject=$OSDU_GCP_PROJECT
-      --set data.googleAudiences=$TARGET_AUDIENCE
-  rules:
-    - if: '$OSDU_GCP == "true" && $CI_COMMIT_BRANCH =~ /^release/'
-      when: on_success
-    - if: '$OSDU_GCP == "true" && $CI_COMMIT_TAG'
-      when: on_success
-
-.osdu-gcp-anthos-deploy-configmap:
-  stage: deploy
-  extends: .osdu-gcp-anthos-variables
-  tags: ["osdu-small"]
-  image: gcr.io/google.com/cloudsdktool/cloud-sdk
-  retry: 1
-  allow_failure: true
-  script:
-    - !reference [.common-anthos, script]
-    - !reference [.define_VER, script]
-    - >
-      helm upgrade $SEISMIC_OSDU_GCP_HELM_CONFIG_SERVICE $SEISMIC_OSDU_GCP_HELM_CONFIG_DIR
-      --install
-      --create-namespace
-      --namespace=$OSDU_GCP_HELM_NAMESPACE
-      --wait
-      --history-max=3
-      --set data.appEnvironmentIdentifier=$OSDU_TENANT
-      --set data.cloudProvider="anthos"
-      --set data.redisDdmsHost=$REDIS_DDMS_HOST
-      --set data.serviceCloudProject=$OSDU_GCP_PROJECT
-      --set data.googleAudiences=$TARGET_AUDIENCE
-      --set conf.onPremEnabled=true
-  rules:
-    - if: '$OSDU_GCP == "true" && $CI_COMMIT_BRANCH =~ /^release/'
-      when: on_success
-    - if: '$OSDU_GCP == "true" && $CI_COMMIT_TAG'
-      when: on_success
-=======
->>>>>>> release/0.14
 
 .osdu-gcp-deployment:
   stage: deploy
@@ -242,12 +155,6 @@
       --namespace=$OSDU_GCP_HELM_NAMESPACE
       --wait
       --history-max=3
-<<<<<<< HEAD
-      --set data.image=$CI_REGISTRY_IMAGE/osdu-gcp-$SEISMIC_OSDU_GCP_SERVICE:$CI_COMMIT_SHORT_SHA 
-      --set data.serviceAccountName=$SEISMIC_OSDU_GCP_SERVICE-k8s
-      --set data.domain=$DOMAIN
-    - !reference [.verify_deploy, script]
-=======
       $SEISMIC_OSDU_GCP_HELM_DEPLOYMENT_SERVICE_VARS
     - echo ----- Verify Deployment -----
     - kubectl rollout status deployment.v1.apps/$SEISMIC_OSDU_GCP_SERVICE -n $OSDU_GCP_HELM_NAMESPACE --timeout=900s
@@ -284,69 +191,11 @@
     - STATUS=$(kubectl wait -n $OSDU_GCP_HELM_NAMESPACE --for=condition=Ready pod/$POD --timeout=300s)
     - echo $STATUS
     - if [[ "$STATUS" != *"met"* ]]; then echo "POD didn't start correctly" ; exit 1 ; fi
->>>>>>> release/0.14
   rules:
     - if: '$OSDU_GCP == "true" && $CI_COMMIT_BRANCH =~ /^release/'
       when: on_success
     - if: '$OSDU_GCP == "true" && $CI_COMMIT_TAG'
       when: on_success
-<<<<<<< HEAD
-
-.osdu-gcp-dev2-deploy-deployment:
-  stage: deploy
-  retry: 1
-  tags: ["osdu-small"]
-  extends: .osdu-gcp-dev2-variables
-  image: gcr.io/google.com/cloudsdktool/cloud-sdk
-  script:
-    - !reference [.common-dev2, script]
-    - !reference [.define_VER, script]
-    - helm repo add $SEISMIC_OSDU_GCP_SERVICE ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/helm/stable
-    - >
-      helm upgrade $SEISMIC_OSDU_GCP_HELM_DEPLOYMENT_SERVICE $SEISMIC_OSDU_GCP_HELM_DEPLOYMENT_DIR --version $VER
-      --install
-      --create-namespace
-      --namespace=$OSDU_GCP_HELM_NAMESPACE
-      --wait
-      --history-max=3
-      --set data.image=$CI_REGISTRY_IMAGE/osdu-gcp-$SEISMIC_OSDU_GCP_SERVICE:${CI_COMMIT_TAG:-$CI_COMMIT_SHORT_SHA}
-      --set data.imagePullPolicy=Always
-      --set data.serviceAccountName=$SEISMIC_OSDU_GCP_SERVICE-k8s
-      --set data.domain=$DOMAIN
-    - !reference [.verify_deploy, script]
-  rules:
-    - if: '$OSDU_GCP == "true" && $CI_COMMIT_BRANCH =~ /^release/'
-      when: on_success
-    - if: '$OSDU_GCP == "true" && $CI_COMMIT_TAG'
-      when: on_success
-
-.osdu-gcp-anthos-deploy-deployment:
-  stage: deploy
-  retry: 1
-  tags: ["osdu-small"]
-  extends: .osdu-gcp-anthos-variables
-  image: gcr.io/google.com/cloudsdktool/cloud-sdk
-  script:
-    - !reference [.common-anthos, script]
-    - >
-      helm upgrade $SEISMIC_OSDU_GCP_HELM_DEPLOYMENT_SERVICE $SEISMIC_OSDU_GCP_HELM_DEPLOYMENT_DIR
-      --install
-      --create-namespace
-      --namespace=$OSDU_GCP_HELM_NAMESPACE
-      --wait
-      --history-max=3
-      --set data.image=$CI_REGISTRY_IMAGE/osdu-gcp-$SEISMIC_OSDU_GCP_SERVICE:$CI_COMMIT_SHORT_SHA 
-      --set data.serviceAccountName=$SEISMIC_OSDU_GCP_SERVICE
-      --set data.domain=$DOMAIN
-      --set conf.onPremEnabled=true
-    - !reference [.verify_deploy, script]
-  rules:
-    - if: '$OSDU_GCP == "true" && $CI_COMMIT_BRANCH =~ /^release/'
-      when: on_success
-    - if: '$OSDU_GCP == "true" && $CI_COMMIT_TAG'
-      when: on_success
-=======
->>>>>>> release/0.14
 
 .osdu-gcp-test-python:
   stage: integration
@@ -355,10 +204,7 @@
   variables:
     # Service Accounts for running integration tests
     INTEGRATION_TESTER: $OSDU_GCP_INTEGRATION_TESTER
-<<<<<<< HEAD
-=======
   stage: integration
->>>>>>> release/0.14
   rules:
     - if: '$OSDU_GCP == "true" && $CI_COMMIT_BRANCH =~ /^release/'
       when: on_success
