@@ -69,42 +69,6 @@ export class AzureCredentials extends AbstractCredentials {
         return new RetriableAzureCredential();
     }
 
-    public static async getAzureServicePrincipalAccessToken(
-        clientID: string, clientSecret: string, tenantID: string, appResourceID: string): Promise<IAccessTokenModel> {
-
-        if (AzureCredentials.servicePrincipalCredential &&
-            AzureCredentials.servicePrincipalCredential.expires_in > Math.floor(Date.now() / 1000) &&
-            AzureCredentials.servicePrincipalCredential.token_type ===
-            'internal;' + clientID + ';' + clientSecret + ';' + tenantID + ';' + appResourceID) {
-            return AzureCredentials.servicePrincipalCredential;
-        }
-
-        const options = {
-            form: {
-                grant_type: 'client_credentials',
-                client_id: clientID,
-                // pragma: allowlist nextline secret
-                client_secret: clientSecret,
-                resource: appResourceID
-            },
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            url: 'https://login.microsoftonline.com/' + tenantID + '/oauth2/token',
-        };
-
-        try {
-            AzureCredentials.servicePrincipalCredential = JSON.parse(await request.post(options)) as IAccessTokenModel;
-            AzureCredentials.servicePrincipalCredential.expires_in = Math.floor(Date.now() / 1000) +
-                +AzureCredentials.servicePrincipalCredential.expires_in - KExpiresMargin;
-            AzureCredentials.servicePrincipalCredential.token_type =
-                'internal;' + clientID + ';' + clientSecret + ';' + tenantID + ';' + appResourceID;
-            return AzureCredentials.servicePrincipalCredential;
-        } catch (error) {
-            throw (Error.makeForHTTPRequest(error));
-        }
-    }
-
     public async getStorageCredentials(
         tenant: string, subproject: string,
         bucket: string,readonly: boolean,partition: string): Promise<IAccessTokenModel> {

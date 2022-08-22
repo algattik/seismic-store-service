@@ -74,12 +74,13 @@ export class AzureDataEcosystemServices extends AbstractDataEcosystemCore {
     }
 
     public static async getPartitions(): Promise<string[]> {
+        const credentials = AzureCredentials.getCredential()
+        const aud = AzureConfig.SP_APP_RESOURCE_ID;
+        const accessToken = (await credentials.getToken(`${aud}/.default`)).token
         const options = {
             headers: {
                 'Accept': 'application/json',
-                'Authorization': 'Bearer ' + (await AzureCredentials.getAzureServicePrincipalAccessToken(
-                    AzureConfig.SP_CLIENT_ID, AzureConfig.SP_CLIENT_SECRET,
-                    AzureConfig.SP_TENANT_ID, AzureConfig.SP_APP_RESOURCE_ID)).access_token,
+                'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json'
             },
             url: AzureConfig.DES_SERVICE_HOST_PARTITION + '/api/partition/v1/partitions'
