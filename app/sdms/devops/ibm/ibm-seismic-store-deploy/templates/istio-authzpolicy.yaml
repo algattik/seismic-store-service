@@ -16,4 +16,6 @@ spec:
     - operation:
         notPaths:
         - '*/v3/api-docs'
-        - /api/seismic-store/v3/info
+        - /api/v3/info
+        - '*/svcstatus'
+        - '*/svcstatus/readiness'

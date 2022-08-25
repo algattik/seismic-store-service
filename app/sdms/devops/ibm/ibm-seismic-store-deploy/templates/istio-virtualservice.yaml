@@ -18,7 +18,7 @@ spec:
   http:
   - match:
     - uri:
-        prefix: /api/seismic-store/
+        prefix: /api
     route:
     - destination:
         host: {{ .Release.Name }}-ibm-seismic-store-deploy
