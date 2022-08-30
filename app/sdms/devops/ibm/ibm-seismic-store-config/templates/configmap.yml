@@ -45,8 +45,8 @@ data:
   IBM_ENVIRONMENT: "{{ .Values.data.deployEnv }}" #  DEPLOYMENT_ENVIRONMENT
 
   #DB
-  ibm.db.url: "http://{{ .Release.Name }}-couchdb:5984"
-  DOC_DB_URL: "{{ .Values.data.dbURL }}"
+  DOC_DB_URL: "http://{{ .Release.Name }}-couchdb:5984"
+  #DOC_DB_URL: "{{ .Values.data.dbURL }}"
   ibm.db.user: "{{ .Values.data.dbUser }}"
   ibm.db.password: "{{ .Values.data.dbPassw }}"
 
