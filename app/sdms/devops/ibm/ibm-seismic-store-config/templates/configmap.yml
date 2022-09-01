@@ -46,8 +46,8 @@ data:
 
   #DB
   #DOC_DB_URL: "http://{{ .Release.Name }}-couchdb:5984"
-  #ibm.db.user: "{{ .Values.data.dbUser }}"
-  #ibm.db.password: "{{ .Values.data.dbPassw }}"
+  ibm.db.user: "{{ .Values.data.dbUser }}"
+  ibm.db.password: "{{ .Values.data.dbPassw }}"
 
   #ENV
   #ibm.env.prefix: "{{ .Values.data.envPrefix }}"
@@ -102,15 +102,15 @@ data:
   COS_SUBUSER_ACCESS_KEY_ID: "{{ .Values.data.cosSubuserKeyID }}" #Add to deployment
   DOC_DB_QUERY_SELECT_FIELDS: "{{ .Values.data.docdbQueryFields }}"
   COS_ENDPOINT: "{{ .Values.data.cosEndpoint }}"
-  DB_URL: "{{ .Values.data.dbURL }}"
+  DB_URL: "http://{{ .Values.data.ibm.db.user }}:{{ .Values.data.ibm.db.password }}@{{ .Release.Name }}-couchdb:5984"
   COS_TEMP_CRED_EXPITY: "{{ .Values.data.cosTempCred }}"
   KEYCLOAK_BASE_URL: "{{ .Values.data.KCBaseURL }}"
   COS_SIGNATUREVERSION: "{{ .Values.data.cosSigVersion }}"
   DOC_DB_COLLECTION: "{{ .Values.data.docdbCollection }}"
   KEYCLOAK_URL_TOKEN: "{{ .Values.data.KCURLToken }}"
-  #***COS_SECRET_ACCESS_KEY: #Add to deployment
+  COS_SECRET_ACCESS_KEY: "{{ .Values.data.cosSecret }}"
   DOC_DB_QUERY_RESULT_LIMIT_VALUE: "{{ .Values.data.docdbQueryLimit }}"
-  #***COS_ACCESS_KEY_ID: admin #Add to deployment
+  COS_ACCESS_KEY_ID: "{{ .Values.data.cosAccessKey }}"
 
 
 

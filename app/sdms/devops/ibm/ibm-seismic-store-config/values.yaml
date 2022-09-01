@@ -33,7 +33,7 @@ data:
 
 
   #DB
-  dbUser: admin
+  dbUser: tbd
   dbPassw: tbd
 
   #ENV
@@ -73,10 +73,10 @@ data:
   cacheTLSDisable: true
   
   #ADDED 9/1
-  cosSubuserSecret: user1  #(D)
+  cosSubuserSecret: tbd #D
   cosForcePathStyle: 'true'
   docdbQueryLimit: limit
-  cosSubuserKeyID: user1passw0rd   #(D)
+  cosSubuserKeyID: tbd #(D)
   docdbQueryFields: fields
   cosEndpoint: osdu-deploy-minio:9000
   dbURL: http://adminUsername:adminPassword@osdu-deploy-couchdb:5984  #(D)
@@ -86,6 +86,8 @@ data:
   KCURLToken: /realms/OSDU/protocol/openid-connect/token
   docdbQueryLimit: '10'
   docdbCollection: seismic-store-service
+  cosSecret: tbd
+  cosAccessKey: tbd
 
 
 conf:

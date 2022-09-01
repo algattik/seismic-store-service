@@ -51,6 +51,11 @@ spec:
                 secretKeyRef:
                   key: adminPassword
                   name: {{ .Release.Name }}-couchdb
+            - name: ibm.db.user
+              valueFrom:
+                secretKeyRef:
+                  key: adminUsername
+                  name: {{ .Release.Name }}-couchdb
             - name: partition.keycloak.client_secert
               valueFrom:
                 secretKeyRef:
@@ -66,6 +71,26 @@ spec:
                 secretKeyRef:
                   key: redis-password
                   name: redis-seismic
+            - name: COS_SUBUSER_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: ibm.cos.subpassword
+                  name: minio-subuser
+            - name: COS_SUBUSER_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  key: ibm.cos.subuser
+                  name: minio-subuser
+            - name: COS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: root-password
+                  name: {{ .Release.Name }}-minio
+            - name: COS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  key: root-user
+                  name: {{ .Release.Name }}-minio
             - name: partition.keycloak.url
               valueFrom:
                 configMapKeyRef:
