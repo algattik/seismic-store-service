@@ -33,7 +33,6 @@ data:
 
 
   #DB
-  dbURL: http://tbd:5984
   dbUser: admin
   dbPassw: tbd
 
@@ -72,6 +71,20 @@ data:
   impServiceAccountSigner: "NA"
   redisInstanceKey: tbd
   cacheTLSDisable: true
+  
+  #ADDED 9/1
+  cosSubuserSecret: user1  #(D)
+  cosForcePathStyle: 'true'
+  docdbQueryLimit: limit
+  cosSubuserKeyID: user1passw0rd   #(D)
+  docdbQueryFields: fields
+  cosEndpoint: osdu-deploy-minio:9000
+  dbURL: http://admin:1UJT146N16EDjyTQUd99@osdu-deploy-couchdb:5984  #(D)
+  cosTempCred: '7200'
+  KCBaseURL: http://keycloak-discovery-lb/auth
+  cosSigVersion: v4
+  KCURLToken: /realms/OSDU/protocol/openid-connect/token
+  docdbQueryLimit: '10'
 
 conf:
   configmap: "seismic-store-config"
