@@ -102,7 +102,7 @@ data:
   COS_SUBUSER_ACCESS_KEY_ID: "{{ .Values.data.cosSubuserKeyID }}" #Add to deployment
   DOC_DB_QUERY_SELECT_FIELDS: "{{ .Values.data.docdbQueryFields }}"
   COS_ENDPOINT: "{{ .Values.data.cosEndpoint }}"
-  DB_URL: "http://{{ .Values.data.ibm.db.user }}:{{ .Values.data.ibm.db.password }}@{{ .Release.Name }}-couchdb:5984"
+  DB_URL: "http://{{ .Values.data.dbUser }}:{{ .Values.data.dbPassw }}@{{ .Release.Name }}-couchdb:5984"
   COS_TEMP_CRED_EXPITY: "{{ .Values.data.cosTempCred }}"
   KEYCLOAK_BASE_URL: "{{ .Values.data.KCBaseURL }}"
   COS_SIGNATUREVERSION: "{{ .Values.data.cosSigVersion }}"
