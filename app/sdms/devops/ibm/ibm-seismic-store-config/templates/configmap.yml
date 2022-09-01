@@ -7,15 +7,15 @@ data:
   CLOUDPROVIDER: "{{ .Values.data.cloudProvider }}"
   #DES_SERVICE_HOST: "{{ .Values.data.desServiceHost }}"
   APP_ENVIRONMENT_IDENTIFIER: "{{ .Values.data.appEnvironmentIdentifier }}"
-  #PORT: "{{ .Values.data.serverPort }}"
+  PORT: "{{ .Values.data.serverPort }}"
   SDMS_PREFIX: "{{ .Values.data.contextPath }}"
-  #LOG_LEVEL: "{{ .Values.data.logLevel }}"
-  #LOG_PREFIX: "{{ .Values.data.logPrefix }}"
-  #JAVA_APP_JAR: "{{ .Values.data.javaAppJar }}"
+  LOG_LEVEL: "{{ .Values.data.logLevel }}"
+  LOG_PREFIX: "{{ .Values.data.logPrefix }}"
+  JAVA_APP_JAR: "{{ .Values.data.javaAppJar }}"
   #server.port: "{{ .Values.data.serverPort }}"
   #server.servlet.context-path: "{{ .Values.data.contextPath }}"
   #spring.main.allow-bean-definition-overriding: "{{ .Values.data.beanDefOverriding }}"
-  #ACCEPT_HTTP: "{{ .Values.data.acceptHttp }}"
+  ACCEPT_HTTP: "{{ .Values.data.acceptHttp }}"
   #cache.expiration: "{{ .Values.data.cacheExpiration }}"
   #cache.maxSize: "{{ .Values.data.cahceMaxSize }}"
   #ibm.health-check-uri: "{{ .Values.data.healthCheckUri }}"
@@ -23,7 +23,7 @@ data:
   #logging.level.org.springframework.web: "{{ .Values.data.loggingLevelSpring }}"
 
   #API
-  #AUTHORIZE_API: "http://{{ .Release.Name }}-ibm-entitlement-deploy:8080/api/entitlements/v2"
+  AUTHORIZE_API: "http://{{ .Release.Name }}-ibm-entitlement-deploy:8080/api/entitlements/v2"
   #ENTITLEMENT_URL: "http://{{ .Release.Name }}-ibm-entitlement-deploy:8080/api/entitlements/v2"
   PARTITION_API: "http://{{ .Release.Name }}-ibm-partition-deploy:8080/api/partition/v1"
   POLICY_API: "http://{{ .Release.Name }}-ibm-policy-deploy:8080/api/policy/v1"
@@ -38,9 +38,9 @@ data:
   ENTITLEMENT_CONTEXT_PATH: "{{ .Values.data.entitlementContextPath }}"
   COMPLIANCE_CONTEXT_PATH: "{{ .Values.data.legalContextPath }}"
 
-  DES_SERVICE_HOST_STORAGE: "http://{{ .Release.Name }}-ibm-storage-deploy:8080/api/storage/v2"
-  DES_SERVICE_HOST_COMPLIANCE: "http://{{ .Release.Name }}-ibm-legal-deploy:8080/api/legal/v1"
-  DES_SERVICE_HOST_ENTITLEMENT: "http://{{ .Release.Name }}-ibm-entitlement-deploy:8080/api/entitlements/v2"
+  DES_SERVICE_HOST_STORAGE: "http://{{ .Release.Name }}-ibm-storage-deploy:8080"
+  DES_SERVICE_HOST_COMPLIANCE: "http://{{ .Release.Name }}-ibm-legal-deploy:8080"
+  DES_SERVICE_HOST_ENTITLEMENT: "http://{{ .Release.Name }}-ibm-entitlement-deploy:8080"
 
   #IBM_ENVIRONMENT: "{{ .Values.data.deployEnv }}" #  DEPLOYMENT_ENVIRONMENT
 
@@ -96,21 +96,23 @@ data:
   CACHE_TLS_DISABLE: "{{ .Values.data.cacheTLSDisable }}"
 
   # ADDED 9/1
-  COS_SUBUSER_SECRET_ACCESS_KEY: "{{ .Values.data.cosSubuserSecret }}"
+  COS_SUBUSER_SECRET_ACCESS_KEY: "{{ .Values.data.cosSubuserSecret }}" #Add to deployment
   COS_S3_FORCEPATHSTYLE: "{{ .Values.data.cosForcePathStyle }}"
   DOC_DB_QUERY_RESULT_LIMIT: "{{ .Values.data.docdbQueryLimit }}"
-  COS_SUBUSER_ACCESS_KEY_ID: "{{ .Values.data.cosSubuserKeyID }}"
+  COS_SUBUSER_ACCESS_KEY_ID: "{{ .Values.data.cosSubuserKeyID }}" #Add to deployment
   DOC_DB_QUERY_SELECT_FIELDS: "{{ .Values.data.docdbQueryFields }}"
   COS_ENDPOINT: "{{ .Values.data.cosEndpoint }}"
   DB_URL: "{{ .Values.data.dbURL }}"
   COS_TEMP_CRED_EXPITY: "{{ .Values.data.cosTempCred }}"
   KEYCLOAK_BASE_URL: "{{ .Values.data.KCBaseURL }}"
   COS_SIGNATUREVERSION: "{{ .Values.data.cosSigVersion }}"
-  #***DOC_DB_COLLECTION: 
+  DOC_DB_COLLECTION: "{{ .Values.data.docdbCollection }}"
   KEYCLOAK_URL_TOKEN: "{{ .Values.data.KCURLToken }}"
-  #***COS_SECRET_ACCESS_KEY: 
+  #***COS_SECRET_ACCESS_KEY: #Add to deployment
   DOC_DB_QUERY_RESULT_LIMIT_VALUE: "{{ .Values.data.docdbQueryLimit }}"
-  #***COS_ACCESS_KEY_ID: 
+  #***COS_ACCESS_KEY_ID: admin #Add to deployment
+
+
 
 
 

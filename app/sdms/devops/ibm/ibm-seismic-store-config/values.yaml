@@ -20,9 +20,9 @@ data:
   patitionAPI: http://tbd:8080/api/partition/v1
   policyAPI: http://tbd:8080/api/policy/v1
   deployEnv: CLOUD
-  #entitlementHost: "http://{{ .Release.Name }}-ibm-entitlement-deploy:8080/api/entitlements/v2"
-  #legalHost: "http://{{ .Release.Name }}-ibm-legal-deploy:8080/api/legal/v1"
-  #storageHost: "http://{{ .Release.Name }}-ibm-storage-deploy:8080/api/storage/v2"
+  #entitlementHost: "http://{{ .Release.Name }}-ibm-entitlement-deploy:8080"
+  #legalHost: "http://{{ .Release.Name }}-ibm-legal-deploy:8080"
+  #storageHost: "http://{{ .Release.Name }}-ibm-storage-deploy:8080"
   storageContextPath: "/api/storage/v2"
   policyContextPath: "/api/policy/v1"
   entitlementContextPath: "/api/entitlements/v2"
@@ -66,7 +66,7 @@ data:
   redisHost: "redis-seismic-master"
   redisPort: 6379
   seistoreDesAppkey: ""
-  appEnvironmentIdentifier: ""
+  appEnvironmentIdentifier: "ibm-iks"
   serviceCloudProject: ""
   impServiceAccountSigner: "NA"
   redisInstanceKey: tbd
@@ -79,12 +79,14 @@ data:
   cosSubuserKeyID: user1passw0rd   #(D)
   docdbQueryFields: fields
   cosEndpoint: osdu-deploy-minio:9000
-  dbURL: http://admin:1UJT146N16EDjyTQUd99@osdu-deploy-couchdb:5984  #(D)
+  dbURL: http://adminUsername:adminPassword@osdu-deploy-couchdb:5984  #(D)
   cosTempCred: '7200'
   KCBaseURL: http://keycloak-discovery-lb/auth
   cosSigVersion: v4
   KCURLToken: /realms/OSDU/protocol/openid-connect/token
   docdbQueryLimit: '10'
+  docdbCollection: seismic-store-service
+
 
 conf:
   configmap: "seismic-store-config"
