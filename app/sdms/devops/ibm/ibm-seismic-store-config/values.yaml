@@ -33,7 +33,7 @@ data:
 
 
   #DB
-  dbUser: tbd
+  dbUser: admin
   dbPassw: tbd
 
   #ENV
