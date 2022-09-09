@@ -39,6 +39,25 @@ spec:
                 configMapKeyRef:
                   name: seismic-store-config
                   key: AUTHORIZE_API
+        - resources: {}
+          terminationMessagePath: /dev/termination-log
+          name: cm-config
+          imagePullPolicy: IfNotPresent
+          terminationMessagePolicy: File
+          image: >-
+            quay.io/openshift/okd-content@sha256:184ac501d886c4e5a51a308a46259987e076662cb611cbd6d3d0dfc75096692d
+          command:
+            - sh
+            - /opt/script/configMap_update_script.sh
+          args: [{{ .Release.Name }}]
+          volumeMounts:
+            - mountPath: /opt/script
+              name: update-script-seismic-configmap
+              readOnly: false
+      volumes:
+        - configMap:
+            name: update-script-seismic-configmap
+          name: update-script-seismic-configmap 
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -50,11 +69,6 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: adminPassword
-                  name: {{ .Release.Name }}-couchdb
-            - name: ibm.db.user
-              valueFrom:
-                secretKeyRef:
-                  key: adminUsername
                   name: {{ .Release.Name }}-couchdb
             - name: partition.keycloak.client_secert
               valueFrom:
@@ -96,6 +110,16 @@ spec:
                 configMapKeyRef:
                   key: partition.keycloak.url
                   name: partition-config
+            - name: partition.keycloak.client_secert
+              valueFrom:
+                secretKeyRef:
+                  key: partition_service_secret_data
+                  name: props-secret-generated-password
+            - name: KEYCLOAK_CLIENTSECRET
+              valueFrom:
+                secretKeyRef:
+                  key: osdu_login_secret_data
+                  name: props-secret-generated-password
           envFrom:
           - configMapRef:
               name: "{{ .Values.conf.configmap }}"
@@ -117,4 +141,3 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-

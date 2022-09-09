@@ -33,7 +33,7 @@ data:
 
 
   #DB
-  dbUser: tbd
+  dbUser: admin
   dbPassw: tbd
 
   #ENV
@@ -57,6 +57,16 @@ data:
   pKAcceptHttp: true
   tenantCacheExpiryInSec: 10000
 
+  #Keycloak Validation Properties
+  KCClientId: osdu-login
+  KCClientSecret: tbd
+  KCGrantType: password
+  KCPassword: changeit
+  KCRealm: OSDU
+  KCEndPointHost: tbd
+  KCUser: admin-sa
+  KAcceptHttp: true
+
   #AMQ
   amqpPassword: TBD
   amqpUserName: TBD
@@ -73,23 +83,22 @@ data:
   cacheTLSDisable: true
   
   #ADDED 9/1
-  cosSubuserSecret: tbd #D
-  cosForcePathStyle: 'true'
+  cosSubuserSecret: tbd #Dynamic
+  cosForcePathStyle: true
   docdbQueryLimit: limit
-  cosSubuserKeyID: tbd #(D)
+  cosSubuserKeyID: tbd #Dynamic
   docdbQueryFields: fields
-  cosEndpoint: osdu-deploy-minio:9000
-  dbURL: http://adminUsername:adminPassword@osdu-deploy-couchdb:5984  #(D)
-  cosTempCred: '7200'
+  cosEndpoint: http://osdu-deploy-minio:9000
+  dbURL: http://adminUsername:adminPassword@osdu-deploy-couchdb:5984  #Dynamic
+  cosTempCred: 7200
   KCBaseURL: http://keycloak-discovery-lb/auth
   cosSigVersion: v4
   KCURLToken: /realms/OSDU/protocol/openid-connect/token
-  docdbQueryLimit: '10'
+  docdbQueryLimit: 10
   docdbCollection: seismic-store-service
-  cosSecret: tbd
-  cosAccessKey: tbd
+  cosSecret: tbd  #Dynamic
+  cosAccessKey: tbd  #Dynamic
 
 
 conf:
   configmap: "seismic-store-config"
-  

@@ -63,17 +63,17 @@ data:
 
   #tenant-validation
   partition.keycloak.client_id: "{{ .Values.data.pKCClientId }}"
-  KEYCLOAK_CLIENTID: "{{ .Values.data.pKCClientId }}"
+  KEYCLOAK_CLIENTID: "{{ .Values.data.KCClientId }}"
   partition.keycloak.client_secert: "{{ .Values.data.pKCClientSecret }}"
-  KEYCLOAK_CLIENTSECRET: "{{ .Values.data.pKCClientSecret }}"
+  KEYCLOAK_CLIENTSECRET: "{{ .Values.data.KCClientSecret }}"
   partition.keycloak.grant_type: "{{ .Values.data.pKCGrantType }}"
-  KEYCLOAK_GRANTTYPE: "{{ .Values.data.pKCGrantType }}"
+  KEYCLOAK_GRANTTYPE: "{{ .Values.data.KCGrantType }}"
   partition.keycloak.password: "{{ .Values.data.pKCPassword }}"
-  KEYCLOAK_PASSWORD: "{{ .Values.data.pKCPassword }}"
+  KEYCLOAK_PASSWORD: "{{ .Values.data.KCPassword }}"
   partition.keycloak.realm: "{{ .Values.data.pKCRealm }}"
   partition.keycloak.url: "{{ .Values.data.pKCEndPointHost }}"
   partition.keycloak.user: "{{ .Values.data.pKCUser }}"
-  KEYCLOAK_USERNAME: "{{ .Values.data.pKCUser }}"
+  KEYCLOAK_USERNAME: "{{ .Values.data.KCUser }}"
   #partition.keycloak.accept_http: "{{ .Values.data.pKAcceptHttp }}"
   tenantCache.exp.time.in.second: "{{ .Values.data.tenantCacheExpiryInSec }}"
 
@@ -102,7 +102,7 @@ data:
   COS_SUBUSER_ACCESS_KEY_ID: "{{ .Values.data.cosSubuserKeyID }}" #Add to deployment
   DOC_DB_QUERY_SELECT_FIELDS: "{{ .Values.data.docdbQueryFields }}"
   COS_ENDPOINT: "{{ .Values.data.cosEndpoint }}"
-  DB_URL: "http://{{ .Values.data.dbUser }}:{{ .Values.data.dbPassw }}@{{ .Release.Name }}-couchdb:5984"
+  DB_URL: "{{ .Values.data.dbURL }}"
   COS_TEMP_CRED_EXPITY: "{{ .Values.data.cosTempCred }}"
   KEYCLOAK_BASE_URL: "{{ .Values.data.KCBaseURL }}"
   COS_SIGNATUREVERSION: "{{ .Values.data.cosSigVersion }}"
@@ -110,16 +110,4 @@ data:
   KEYCLOAK_URL_TOKEN: "{{ .Values.data.KCURLToken }}"
   COS_SECRET_ACCESS_KEY: "{{ .Values.data.cosSecret }}"
   DOC_DB_QUERY_RESULT_LIMIT_VALUE: "{{ .Values.data.docdbQueryLimit }}"
-  COS_ACCESS_KEY_ID: "{{ .Values.data.cosAccessKey }}"
-
-
-
-
-
-
-
-
-
-
-
-
+  COS_ACCESS_KEY_ID: "{{ .Values.data.cosAccessKey }}" 
