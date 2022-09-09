@@ -109,5 +109,5 @@ data:
   DOC_DB_COLLECTION: "{{ .Values.data.docdbCollection }}"
   KEYCLOAK_URL_TOKEN: "{{ .Values.data.KCURLToken }}"
   COS_SECRET_ACCESS_KEY: "{{ .Values.data.cosSecret }}"
-  DOC_DB_QUERY_RESULT_LIMIT_VALUE: "{{ .Values.data.docdbQueryLimit }}"
+  DOC_DB_QUERY_RESULT_LIMIT_VALUE: "{{ .Values.data.docdbQueryLimitValue }}"
   COS_ACCESS_KEY_ID: "{{ .Values.data.cosAccessKey }}" 

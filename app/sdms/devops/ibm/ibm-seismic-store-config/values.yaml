@@ -94,7 +94,7 @@ data:
   KCBaseURL: http://keycloak-discovery-lb/auth
   cosSigVersion: v4
   KCURLToken: /realms/OSDU/protocol/openid-connect/token
-  docdbQueryLimit: 10
+  docdbQueryLimitValue: 10
   docdbCollection: seismic-store-service
   cosSecret: tbd  #Dynamic
   cosAccessKey: tbd  #Dynamic
