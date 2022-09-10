@@ -31,6 +31,7 @@ export class Keyvault {
     public static DATA_PARTITION_COSMOS_ENDPOINT = 'cosmos-endpoint';
     public static DATA_PARTITION_COSMOS_PRIMARY_KEY = 'cosmos-primary-key';
     public static SERVICE_AUTH_PROVIDER_CREDENTIAL = 'sdms-svc-auth-provider-credential';
+    public static STORAGE_ACCOUNT_BLOB_ENDPOINT = 'storage-account-blob-endpoint';
 
     // to restore when the impersonation token for azure will be implemented
     // public static IMP_SERVICE_ACCOUNT_SIGNER = 'imp-service-account-signer';

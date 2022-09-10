@@ -29,6 +29,7 @@ import { DefaultAzureCredential, TokenCredential, DefaultAzureCredentialOptions 
 import { AzureDataEcosystemServices } from './dataecosystem';
 import {ExponentialRetryPolicyOptions} from '@azure/core-rest-pipeline'
 import { AccessToken, GetTokenOptions } from '@azure/core-auth';
+import { DataEcosystemCoreFactory } from '../../dataecosystem';
 
 const KExpiresMargin = 300; // 5 minutes
 const UserDelegationKeyValidityInMinutes = 3599; // expires at the same time as the sas token
@@ -72,10 +73,11 @@ export class AzureCredentials extends AbstractCredentials {
     public async getStorageCredentials(
         tenant: string, subproject: string,
         bucket: string,readonly: boolean,partition: string): Promise<IAccessTokenModel> {
-        const accountName = await AzureDataEcosystemServices.getStorageResourceName(partition);
+        const endpoint = await AzureDataEcosystemServices.getStorageEndpoint(partition);
+        const accountName = await AzureDataEcosystemServices.getStorageAccountName(partition);
         const now = new Date();
         const expiration = this.addMinutes(now, SasExpirationInMinutes);
-        const sasToken = await this.generateSASToken(accountName, bucket, expiration, readonly);
+        const sasToken = await this.generateSASToken(endpoint, accountName, bucket, expiration, readonly);
         const result = {
             access_token: sasToken,
             expires_in: 3599,
@@ -85,10 +87,11 @@ export class AzureCredentials extends AbstractCredentials {
     }
 
     private async generateSASToken(
-        accountName: string, containerName: string, expiration: Date, readOnly: boolean): Promise<string> {
+        endpoint: string, accountName: string, containerName: string,
+        expiration: Date, readOnly: boolean): Promise<string> {
 
         const blobServiceClient = new BlobServiceClient(
-            `https://${accountName}.blob.core.windows.net`,
+            endpoint,
             this.defaultAzureCredential
         );
 
@@ -108,7 +111,7 @@ export class AzureCredentials extends AbstractCredentials {
             expiresOn: expiration
         }, userDelegationKey, // UserDelegationKey
             accountName);
-        return `https://${accountName}.blob.core.windows.net/${containerName}?${containerSAS.toString()}`;
+        return `${endpoint}${containerName}?${containerSAS.toString()}`;
     }
 
     private async getDelegationKey(blobServiceClient: BlobServiceClient): Promise<UserDelegationKey> {
