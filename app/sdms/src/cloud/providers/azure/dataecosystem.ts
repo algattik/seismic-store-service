@@ -92,7 +92,7 @@ export class AzureDataEcosystemServices extends AbstractDataEcosystemCore {
         }
     }
 
-    public static async getStorageResourceName(dataPartitionID: string): Promise<string> {
+    public static async getStorageEndpoint(dataPartitionID: string): Promise<string> {
 
         if (!this._storageConfigs) {
             this._storageConfigs = new Cache<string>('storage');
@@ -102,14 +102,20 @@ export class AzureDataEcosystemServices extends AbstractDataEcosystemCore {
         if (res !== undefined) { return res; };
 
         const dataPartitionConfigurations = await AzureDataEcosystemServices.getPartitionConfiguration(dataPartitionID);
-        const storageConfigs = (dataPartitionConfigurations[Keyvault.DATA_PARTITION_STORAGE_ACCOUNT_NAME] as {
-            sensitive: boolean, value: string;
-        });
-        if (storageConfigs.sensitive) {
-            storageConfigs.value = (await Keyvault.CreateSecretClient().getSecret(storageConfigs.value)).value;
+        try {
+            const endpointProperty = (dataPartitionConfigurations[Keyvault.STORAGE_ACCOUNT_BLOB_ENDPOINT] as {
+                sensitive: boolean, value: string;
+            });
+            if (endpointProperty.sensitive) {
+                endpointProperty.value = (await Keyvault.CreateSecretClient().getSecret(endpointProperty.value)).value;
+            }
+            await this._storageConfigs.set(dataPartitionID, endpointProperty.value);
+            return endpointProperty.value;
         }
-        await this._storageConfigs.set(dataPartitionID, storageConfigs.value);
-        return storageConfigs.value;
+        catch(error) {
+            const accountName = this.getStorageAccountName(dataPartitionID);
+            return `http://${accountName}.blob.core.windows.net`;
+        }
     }
 
     public static async getCosmosConnectionParams(
@@ -148,4 +154,15 @@ export class AzureDataEcosystemServices extends AbstractDataEcosystemCore {
         return { endpoint: cosmosEndpointConfigs.value, key: cosmosKeyConfigs.value };
     }
 
+    public static async getStorageAccountName(dataPartitionID: string): Promise<string> {
+        const dataPartitionConfigurations = await AzureDataEcosystemServices.getPartitionConfiguration(dataPartitionID);
+        const storageAccount = (dataPartitionConfigurations[Keyvault.SERVICE_AUTH_PROVIDER_CREDENTIAL] as {
+            sensitive: boolean, value: string;
+        });
+        if (storageAccount.sensitive) {
+            storageAccount.value = (await Keyvault.CreateSecretClient().getSecret(storageAccount.value)).value;
+        }
+        await this._storageConfigs.set(dataPartitionID, storageAccount.value);
+        return storageAccount.value;
+    }
 }
