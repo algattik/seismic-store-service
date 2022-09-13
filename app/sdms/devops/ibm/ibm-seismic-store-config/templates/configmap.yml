@@ -5,36 +5,20 @@ metadata:
 data:
   #common
   CLOUDPROVIDER: "{{ .Values.data.cloudProvider }}"
-  #DES_SERVICE_HOST: "{{ .Values.data.desServiceHost }}"
   APP_ENVIRONMENT_IDENTIFIER: "{{ .Values.data.appEnvironmentIdentifier }}"
   PORT: "{{ .Values.data.serverPort }}"
   SDMS_PREFIX: "{{ .Values.data.contextPath }}"
   LOG_LEVEL: "{{ .Values.data.logLevel }}"
   LOG_PREFIX: "{{ .Values.data.logPrefix }}"
   JAVA_APP_JAR: "{{ .Values.data.javaAppJar }}"
-  #server.port: "{{ .Values.data.serverPort }}"
-  #server.servlet.context-path: "{{ .Values.data.contextPath }}"
-  #spring.main.allow-bean-definition-overriding: "{{ .Values.data.beanDefOverriding }}"
   ACCEPT_HTTP: "{{ .Values.data.acceptHttp }}"
-  #cache.expiration: "{{ .Values.data.cacheExpiration }}"
-  #cache.maxSize: "{{ .Values.data.cahceMaxSize }}"
-  #ibm.health-check-uri: "{{ .Values.data.healthCheckUri }}"
-  #logging.level.org.opengroup.osdu: "{{ .Values.data.loggingLevelOsdu }}"
-  #logging.level.org.springframework.web: "{{ .Values.data.loggingLevelSpring }}"
 
   #API
   AUTHORIZE_API: "http://{{ .Release.Name }}-ibm-entitlement-deploy:8080/api/entitlements/v2"
-  #ENTITLEMENT_URL: "http://{{ .Release.Name }}-ibm-entitlement-deploy:8080/api/entitlements/v2"
   PARTITION_API: "http://{{ .Release.Name }}-ibm-partition-deploy:8080/api/partition/v1"
   POLICY_API: "http://{{ .Release.Name }}-ibm-policy-deploy:8080/api/policy/v1"
-  #LEGALTAG_API: "http://{{ .Release.Name }}-ibm-legal-deploy:8080/api/legal/v1"
-  #STORAGE_API: "http://{{ .Release.Name }}-ibm-storage-deploy:8080/api/storage/v2"
-  
-  #ENTITLEMENT_HOST: "http://{{ .Release.Name }}-ibm-entitlement-deploy:8080/api/entitlements/v2"
-  #LEGAL_HOST: "http://{{ .Release.Name }}-ibm-legal-deploy:8080/api/legal/v1"
-  #STORAGE_HOST: "http://{{ .Release.Name }}-ibm-storage-deploy:8080/api/storage/v2"
+
   STORAGE_CONTEXT_PATH: "{{ .Values.data.storageContextPath }}"
-  #POLICY_SVC_CONTEXT_PATH: "{{ .Values.data.policyContextPath }}"
   ENTITLEMENT_CONTEXT_PATH: "{{ .Values.data.entitlementContextPath }}"
   COMPLIANCE_CONTEXT_PATH: "{{ .Values.data.legalContextPath }}"
 
@@ -42,24 +26,12 @@ data:
   DES_SERVICE_HOST_COMPLIANCE: "http://{{ .Release.Name }}-ibm-legal-deploy:8080"
   DES_SERVICE_HOST_ENTITLEMENT: "http://{{ .Release.Name }}-ibm-entitlement-deploy:8080"
 
-  #IBM_ENVIRONMENT: "{{ .Values.data.deployEnv }}" #  DEPLOYMENT_ENVIRONMENT
-
   #DB
-  #DOC_DB_URL: "http://{{ .Release.Name }}-couchdb:5984"
   ibm.db.user: "{{ .Values.data.dbUser }}"
   ibm.db.password: "{{ .Values.data.dbPassw }}"
 
-  #ENV
-  #ibm.env.prefix: "{{ .Values.data.envPrefix }}"
-  #ibm.env.prefix_project: "{{ .Values.data.envPrefixProject }}"
-
   #KEYCLOAK
-  #ibm.keycloak.endpoint_url: "keycloak-discovery:8080"
-  #ibm.keycloak.realm: "{{ .Values.data.keycloakRealm }}"
   KEYCLOAK_REALM: "{{ .Values.data.keycloakRealm }}"
-  #ibm.keycloak.useremail: "{{ .Values.data.keycloakUserEmail }}"
-  #keycloak.user: "{{ .Values.data.KCUser }}"
-
 
   #tenant-validation
   partition.keycloak.client_id: "{{ .Values.data.pKCClientId }}"
@@ -74,40 +46,29 @@ data:
   partition.keycloak.url: "{{ .Values.data.pKCEndPointHost }}"
   partition.keycloak.user: "{{ .Values.data.pKCUser }}"
   KEYCLOAK_USERNAME: "{{ .Values.data.KCUser }}"
-  #partition.keycloak.accept_http: "{{ .Values.data.pKAcceptHttp }}"
   tenantCache.exp.time.in.second: "{{ .Values.data.tenantCacheExpiryInSec }}"
+  KEYCLOAK_URL_TOKEN: "{{ .Values.data.KCURLToken }}"
+  KEYCLOAK_BASE_URL: "{{ .Values.data.KCBaseURL }}"
 
-  #AMQ
-  #amqphub.amqp10jms.password: "{{ .Values.data.amqpPassword }}"
-  #amqphub.amqp10jms.username: "{{ .Values.data.amqpUserName }}"
-  #amqphub.amqp10jms.remote-url: "{{ .Values.data.amqpURL }}"
 
-  # SEISMIC
-  #DES_REDIS_INSTANCE_ADDRESS: "{{ .Values.data.redisHost }}"
-  #DES_REDIS_INSTANCE_PORT: "{{ .Values.data.redisPort }}"
+  # SEISMIC SPECIFICS
   REDIS_INSTANCE_PORT: "{{ .Values.data.redisPort }}"
   LOCKSMAP_REDIS_INSTANCE_ADDRESS: "{{ .Values.data.redisHost }}"
-  #LOCKSMAP_REDIS_INSTANCE_PORT: "{{ .Values.data.redisPort }}"
-  #SEISTORE_DES_APPKEY: "{{ .Values.data.seistoreDesAppkey }}"
-  #SERVICE_CLOUD_PROJECT: "{{ .Values.data.serviceCloudProject }}"
   IMP_SERVICE_ACCOUNT_SIGNER: "{{ .Values.data.impServiceAccountSigner }}"
   DES_REDIS_INSTANCE_KEY: "{{ .Values.data.redisInstanceKey }}"
   LOCKSMAP_REDIS_INSTANCE_KEY: "{{ .Values.data.redisInstanceKey }}"
   CACHE_TLS_DISABLE: "{{ .Values.data.cacheTLSDisable }}"
-
-  # ADDED 9/1
-  COS_SUBUSER_SECRET_ACCESS_KEY: "{{ .Values.data.cosSubuserSecret }}" #Add to deployment
+  
+  COS_SUBUSER_SECRET_ACCESS_KEY: "{{ .Values.data.cosSubuserSecret }}" 
   COS_S3_FORCEPATHSTYLE: "{{ .Values.data.cosForcePathStyle }}"
   DOC_DB_QUERY_RESULT_LIMIT: "{{ .Values.data.docdbQueryLimit }}"
-  COS_SUBUSER_ACCESS_KEY_ID: "{{ .Values.data.cosSubuserKeyID }}" #Add to deployment
+  COS_SUBUSER_ACCESS_KEY_ID: "{{ .Values.data.cosSubuserKeyID }}" 
   DOC_DB_QUERY_SELECT_FIELDS: "{{ .Values.data.docdbQueryFields }}"
   COS_ENDPOINT: "{{ .Values.data.cosEndpoint }}"
   DB_URL: "{{ .Values.data.dbURL }}"
   COS_TEMP_CRED_EXPITY: "{{ .Values.data.cosTempCred }}"
-  KEYCLOAK_BASE_URL: "{{ .Values.data.KCBaseURL }}"
   COS_SIGNATUREVERSION: "{{ .Values.data.cosSigVersion }}"
   DOC_DB_COLLECTION: "{{ .Values.data.docdbCollection }}"
-  KEYCLOAK_URL_TOKEN: "{{ .Values.data.KCURLToken }}"
   COS_SECRET_ACCESS_KEY: "{{ .Values.data.cosSecret }}"
   DOC_DB_QUERY_RESULT_LIMIT_VALUE: "{{ .Values.data.docdbQueryLimitValue }}"
   COS_ACCESS_KEY_ID: "{{ .Values.data.cosAccessKey }}" 

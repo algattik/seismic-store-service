@@ -1,49 +1,28 @@
 data:
   #common
   cloudProvider: "ibm"
-  desServiceHost: "https://des"
+  appEnvironmentIdentifier: "ibm-iks"
+  serverPort: 8080
+  contextPath: "/api/seismic-store/v3"
   logLevel: "INFO"
   logPrefix: seismic-store
   javaAppJar: "/deployments/*-spring-boot.jar"
-  serverPort: 8080
-  contextPath: "/api/seismic-store/v3"
-  beanDefOverriding: true
   acceptHttp: true
-  cacheExpiration: 9000
-  cahceMaxSize: 2000
-  healthCheckUri: "/api/seismic-store/v3/_ah/liveness_check,/api/seismic-store/v3/_ah/readiness_check,/api/seismic-store/v3/info,/api/seismic-store/v3/api-docs"
-  loggingLevelOsdu: debug
-  loggingLevelSpring: debug
 
   #API
   authorizeAPI: http://TBD:8080/api/entitlements/v2
   patitionAPI: http://tbd:8080/api/partition/v1
   policyAPI: http://tbd:8080/api/policy/v1
-  deployEnv: CLOUD
-  #entitlementHost: "http://{{ .Release.Name }}-ibm-entitlement-deploy:8080"
-  #legalHost: "http://{{ .Release.Name }}-ibm-legal-deploy:8080"
-  #storageHost: "http://{{ .Release.Name }}-ibm-storage-deploy:8080"
   storageContextPath: "/api/storage/v2"
-  policyContextPath: "/api/policy/v1"
   entitlementContextPath: "/api/entitlements/v2"
-  #DESStorageHost: "http://{{ .Release.Name }}-ibm-storage-deploy:8080/api/storage/v2"
-  #DESComplianceHost: "http://{{ .Release.Name }}-ibm-legal-deploy:8080/api/legal/v1"
-  #DESEntitlementsHost: "http://{{ .Release.Name }}-ibm-entitlement-deploy:8080/api/entitlements/v2"
   legalContextPath: "/api/legal/v1"
-
 
   #DB
   dbUser: admin
   dbPassw: tbd
 
-  #ENV
-  envPrefix: ibm-iks
-  envPrefixProject: ibm-ibm-build
-
   #KEYCLOAK
-  keycloakEndPointHost: tbd
   keycloakRealm: OSDU
-  keycloakUserEmail: admin-sa@ibm.com
   KCUser: osdu-bvt
 
   #tenant-validation
@@ -54,7 +33,6 @@ data:
   pKCRealm: OSDU
   pKCEndPointHost: tbd
   pKCUser: partition-service-admin
-  pKAcceptHttp: true
   tenantCacheExpiryInSec: 10000
 
   #Keycloak Validation Properties
@@ -67,16 +45,10 @@ data:
   KCUser: admin-sa
   KAcceptHttp: true
 
-  #AMQ
-  amqpPassword: TBD
-  amqpUserName: TBD
-  amqpURL: "amqp://ex-aao-amqp-0-svc:5672"
-
   #SEISMIC
   redisHost: "redis-seismic-master"
   redisPort: 6379
   seistoreDesAppkey: ""
-  appEnvironmentIdentifier: "ibm-iks"
   serviceCloudProject: ""
   impServiceAccountSigner: "NA"
   redisInstanceKey: tbd
@@ -89,7 +61,7 @@ data:
   cosSubuserKeyID: tbd #Dynamic
   docdbQueryFields: fields
   cosEndpoint: http://osdu-deploy-minio:9000
-  dbURL: http://adminUsername:adminPassword@osdu-deploy-couchdb:5984  #Dynamic
+  dbURL: http://adminUsername:adminPassword@osdu-deploy-couchdb:5984  #Dynamic (see configMap_update_script.sh)
   cosTempCred: 7200
   KCBaseURL: http://keycloak-discovery-lb/auth
   cosSigVersion: v4
