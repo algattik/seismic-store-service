@@ -74,10 +74,9 @@ export class AzureCredentials extends AbstractCredentials {
         tenant: string, subproject: string,
         bucket: string,readonly: boolean,partition: string): Promise<IAccessTokenModel> {
         const endpoint = await AzureDataEcosystemServices.getStorageEndpoint(partition);
-        const accountName = await AzureDataEcosystemServices.getStorageAccountName(partition);
         const now = new Date();
         const expiration = this.addMinutes(now, SasExpirationInMinutes);
-        const sasToken = await this.generateSASToken(endpoint, accountName, bucket, expiration, readonly);
+        const sasToken = await this.generateSASToken(endpoint, bucket, expiration, readonly);
         const result = {
             access_token: sasToken,
             expires_in: 3599,
@@ -87,13 +86,17 @@ export class AzureCredentials extends AbstractCredentials {
     }
 
     private async generateSASToken(
-        endpoint: string, accountName: string, containerName: string,
-        expiration: Date, readOnly: boolean): Promise<string> {
+        endpoint: string,
+        containerName: string,
+        expiration: Date,
+        readOnly: boolean): Promise<string> {
 
         const blobServiceClient = new BlobServiceClient(
             endpoint,
             this.defaultAzureCredential
         );
+
+        const accountName = blobServiceClient.accountName;
 
         const userDelegationKey = await this.getDelegationKey(blobServiceClient);
 

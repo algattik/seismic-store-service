@@ -56,7 +56,7 @@ azure_test_py:
     - az login --service-principal -u $AZURE_PRINCIPAL_ID -p $AZURE_PRINCIPAL_SECRET --tenant $AZURE_TENANT_ID
   only:
     variables:
-      - $AZURE == 'true'
+      - $AZURE == '1'
 
 .azure_container_scanning:
   tags: ["osdu-medium"]
@@ -69,9 +69,9 @@ azure_test_py:
       echo "[INFO] Scanning Container Image: $DOCKER_IMAGE"
       trivy image --ignore-unfixed --exit-code 1 --severity "HIGH,CRITICAL" $DOCKER_IMAGE
   rules:
-    - if: $AZURE == 'true' && $ENFORCE_CONTAINER_SCANNING == 'true'
+    - if: $AZURE == '1' && $ENFORCE_CONTAINER_SCANNING == 'true'
       allow_failure: false
-    - if: $AZURE == 'true'
+    - if: $AZURE == '1'
 
 .azure_deploy:
   image: danielscholl/azure-build-image
@@ -84,7 +84,7 @@ azure_test_py:
     - az aks get-credentials -g $AZURE_UNIQUE-rg -n $AZURE_UNIQUE-aks
   only:
     variables:
-      - $AZURE == 'true'
+      - $AZURE == '1'
   except:
     variables:
       - $AZURE_SKIP_DEPLOY == 'true'
@@ -102,4 +102,4 @@ azure_test_py:
     - export svctoken=$(python3 ${CI_PROJECT_DIR}/devops/scripts/azure_jwt_client.py)
   only:
     variables:
-      - $AZURE == 'true'
+      - $AZURE == '1'
