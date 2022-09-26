@@ -14,17 +14,17 @@ data:
   ACCEPT_HTTP: "{{ .Values.data.acceptHttp }}"
 
   #API
-  AUTHORIZE_API: "http://{{ .Release.Name }}-ibm-entitlement-deploy:8080/api/entitlements/v2"
-  PARTITION_API: "http://{{ .Release.Name }}-ibm-partition-deploy:8080/api/partition/v1"
-  POLICY_API: "http://{{ .Release.Name }}-ibm-policy-deploy:8080/api/policy/v1"
+  AUTHORIZE_API: "{{ .Values.data.services.authorize }}"
+  PARTITION_API: "{{ .Values.data.services.partition }}"
+  POLICY_API: "{{ .Values.data.services.policy }}"
 
-  STORAGE_CONTEXT_PATH: "{{ .Values.data.storageContextPath }}"
-  ENTITLEMENT_CONTEXT_PATH: "{{ .Values.data.entitlementContextPath }}"
-  COMPLIANCE_CONTEXT_PATH: "{{ .Values.data.legalContextPath }}"
+  STORAGE_CONTEXT_PATH: "{{ .Values.data.services.storagePath }}"
+  ENTITLEMENT_CONTEXT_PATH: "{{ .Values.data.services.entitlementPath }}"
+  COMPLIANCE_CONTEXT_PATH: "{{ .Values.data.services.legalPath }}"
 
-  DES_SERVICE_HOST_STORAGE: "http://{{ .Release.Name }}-ibm-storage-deploy:8080"
-  DES_SERVICE_HOST_COMPLIANCE: "http://{{ .Release.Name }}-ibm-legal-deploy:8080"
-  DES_SERVICE_HOST_ENTITLEMENT: "http://{{ .Release.Name }}-ibm-entitlement-deploy:8080"
+  DES_SERVICE_HOST_STORAGE: "{{ .Values.data.services.storage }}"
+  DES_SERVICE_HOST_COMPLIANCE: "{{ .Values.data.services.legal }}"
+  DES_SERVICE_HOST_ENTITLEMENT: "{{ .Values.data.services.entitlement }}"
 
   #DB
   ibm.db.user: "{{ .Values.data.dbUser }}"

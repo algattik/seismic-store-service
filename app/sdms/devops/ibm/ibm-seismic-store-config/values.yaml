@@ -10,12 +10,16 @@ data:
   acceptHttp: true
 
   #API
-  authorizeAPI: http://TBD:8080/api/entitlements/v2
-  patitionAPI: http://tbd:8080/api/partition/v1
-  policyAPI: http://tbd:8080/api/policy/v1
-  storageContextPath: "/api/storage/v2"
-  entitlementContextPath: "/api/entitlements/v2"
-  legalContextPath: "/api/legal/v1"
+  services:
+    authorize: "http://{{ .Release.Name }}-ibm-entitlement-deploy:8080/api/entitlements/v2"
+    partition: "http://{{ .Release.Name }}-ibm-partition-deploy:8080/api/partition/v1"
+    policy: "http://{{ .Release.Name }}-ibm-policy-deploy:8080/api/policy/v1"
+    storage: "http://{{ .Release.Name }}-ibm-storage-deploy:8080"
+    legal: "http://{{ .Release.Name }}-ibm-legal-deploy:8080"
+    entitlement: "http://{{ .Release.Name }}-ibm-entitlement-deploy:8080"
+    storagePath: "/api/storage/v2"
+    entitlementPath: "/api/entitlements/v2"
+    legalPath: "/api/legal/v1"
 
   #DB
   dbUser: admin
@@ -60,7 +64,7 @@ data:
   docdbQueryLimit: limit
   cosSubuserKeyID: tbd #Dynamic
   docdbQueryFields: fields
-  cosEndpoint: http://osdu-deploy-minio:9000
+  cosEndpoint: http://{{ .Release.Name }}-minio:9000
   dbURL: http://adminUsername:adminPassword@osdu-deploy-couchdb:5984  #Dynamic (see configMap_update_script.sh)
   cosTempCred: 7200
   KCBaseURL: http://keycloak-discovery-lb/auth
