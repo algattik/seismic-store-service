@@ -96,9 +96,11 @@ export class AzureCredentials extends AbstractCredentials {
             this.defaultAzureCredential
         );
 
-        const accountName = blobServiceClient.accountName;
+        const domain = endpoint.match(/^(?:https?:\/\/)?(?:[^@\n]+@)?(?:www\.)?([^:\/\n\?\=]+)/im);
+        const accountName = domain[1].split(".")[0];
 
         const userDelegationKey = await this.getDelegationKey(blobServiceClient);
+
 
         const permissions = new ContainerSASPermissions();
         permissions.list = true;
