@@ -97,7 +97,7 @@ export class AzureCredentials extends AbstractCredentials {
         );
 
         const domain = endpoint.match(/^(?:https?:\/\/)?(?:[^@\n]+@)?(?:www\.)?([^:\/\n\?\=]+)/im);
-        const accountName = domain[1].split(".")[0];
+        const accountName = domain[1].split('.')[0];
 
         const userDelegationKey = await this.getDelegationKey(blobServiceClient);
 
