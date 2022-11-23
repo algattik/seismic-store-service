@@ -19,10 +19,10 @@ import { TestGoogleCredentials } from './google/credentials';
 import { TestGoogleDatastoreDAO, TestGoogleDatastoreTransactionDAO } from './google/datastore';
 import { TestAzureCosmosDbDAO } from './azure/cosmosdb';
 import { TestAzureCosmosDbTransactionDAO } from './azure/cosmosdb-transactions';
-import { TestGCSCore } from './google/gcs';
-import { TestAzureKeyVault } from './azure/keyvault';
-import { TestAzureStorage } from './azure/cloudstorage';
-import { TestAzureCosmosDbDAORegular } from './azure/azureCosmosDbDAORegular';
+import { TestGCSCore } from './gcs';
+import { TestAzureKeyVault } from '../cloud/azure/keyvault';
+import { TestAzureStorage } from '../cloud/azure/cloudstorage';
+import { TestAzureCosmosDbDAORegular } from '../cloud/azure/azureCosmosDbDAORegular';
 
 
 export class TestCloud {
@@ -34,6 +34,7 @@ export class TestCloud {
             TestGCSCore.run();
             TestGoogleDatastoreDAO.run();
             TestGoogleDatastoreTransactionDAO.run();
+            TestAzureCosmosDbDAORegular.run();
             TestAzureCosmosDbDAO.run();
             TestAzureCosmosDbTransactionDAO.run();
             TestAzureKeyVault.run();
