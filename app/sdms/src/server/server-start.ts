@@ -31,18 +31,23 @@ async function ServerStart() {
 
     try {
 
+        // tslint:disable-next-line:no-console
         console.log('- Initializing cloud provider');
         Config.setCloudProvider(process.env.CLOUDPROVIDER);
 
+        // tslint:disable-next-line:no-console
         console.log('- Initializing ' + Config.CLOUDPROVIDER + ' configurations');
         await ConfigFactory.build(Config.CLOUDPROVIDER).init();
 
+        // tslint:disable-next-line:no-console
         console.log('- Initializing redis locker cache');
         await Locker.init();
 
+        // tslint:disable-next-line:no-console
         console.log('- Initializing redis shared cache');
         initSharedCache();
 
+        // tslint:disable-next-line:no-console
         console.log('- Initializing storage transfer daemon');
         StorageJobManager.setup({
             ADDRESS: Config.DES_REDIS_INSTANCE_ADDRESS,
@@ -57,12 +62,15 @@ async function ServerStart() {
             TraceFactory.build(Config.CLOUDPROVIDER).start();
         }
 
+        // tslint:disable-next-line:no-console
         console.log('- Initializing schema managers');
         await SchemaManagerFactory.initialize();
 
+        // tslint:disable-next-line:no-console
         console.log('- Initializing swagger-doc manager');
         await SwaggerManager.init();
 
+        // tslint:disable-next-line:no-console
         console.log('- Initializing caller header forwarding');
         const callerHeadersToForward = Config.CALLER_FORWARD_HEADERS ? Config.CALLER_FORWARD_HEADERS.split(',') : [];
         callerHeadersToForward.push('x-correlation-id');

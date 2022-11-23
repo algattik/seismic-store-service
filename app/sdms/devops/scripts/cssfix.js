@@ -22,6 +22,7 @@ files.forEach(filePath => {
     inline(data, options).then(html => {
         let outputFile = path.resolve(filePath);
         fs.write(outputFile, html);
+    // tslint:disable-next-line:no-console
     }).catch(err => { console.log(err); });
 
 });
