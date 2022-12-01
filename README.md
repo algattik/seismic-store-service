@@ -46,7 +46,7 @@ There are 3 ways to build and test this service: local, docker and GitLab.
 1. Build the docker image. `docker build -t seismic-metadata-image . `
 
 ## Build and Test
-1. Run the docker image. `docker run --env SDMS_SERVICE_HOST=<SDMS_SERVICE_HOST> -d -it --rm --name segycontainer -p 8080:8000 seismic-metadata-image`
+1. Run the docker image. `docker run --env SDMS_SERVICE_HOST=<SDMS_SERVICE_HOST> -d -it --rm --name seismic-metadata-container -p 8080:8000 seismic-metadata-image`
 Replace environment variable `<SDMS_SERVICE_HOST>` with the url of [seismic store service]
 
 2. Open `http://localhost:8080/seismic-file-metadata/api/v1/swagger-ui.html` in web browser
@@ -62,11 +62,14 @@ Replace environment variable `<SDMS_SERVICE_HOST>` with the url of [seismic stor
 3. [Test web url](https://osdu-glab.msft-osdu-test.org/seismic-file-metadata/api/v1/swagger-ui.html)
 
 # Run Unit Tests
-1. Set the following environment variables
-`TOKEN_SVC_URL`
-`SAUTH_SVC_ACC_SECRET`
-`TOKEN_SVC_APPKEY`
-`SAUTH_SVC_ACC_ID`
-`SAUTH_SVC_PROJECT_ID`
+1. Navigate to `seismic-store-service/app/filemetadata/app`
 
-2. Run `pytest tests/` 
+2. Run command `python -m unittest discover -s test -p "test_*" -v`
+
+# Run integration tests locally
+
+> ENV variables needed for CI/CD, `svctoken (eg. Bearer eyJ...)`, `LEGAL_TAG (eg. opendes-public-usa-dataset-7643990)`, `SVC_API_KEY (Working API key)`, `TENANT_NAME (eg. opendes)`, `DNS (Defaults to localhost and qa)`
+
+1. Navigate to `seismic-store-service/app/filemetadata/app/integration_test`
+
+3. Run command `python -m behave -v`
