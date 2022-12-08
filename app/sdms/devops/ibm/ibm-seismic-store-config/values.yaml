@@ -1,0 +1,60 @@
+data:
+  #common
+  cloudProvider: "ibm"
+  appEnvironmentIdentifier: "ibm-iks"
+  serverPort: 8080
+  contextPath: "/api/seismic-store/v3"
+  logLevel: "INFO"
+  logPrefix: seismic-store
+  javaAppJar: "/deployments/*-spring-boot.jar"
+  acceptHttp: true
+
+  #API
+  services:
+    authorize: "http://{{ .Release.Name }}-ibm-entitlement-deploy:8080/api/entitlements/v2"
+    partition: "http://{{ .Release.Name }}-ibm-partition-deploy:8080/api/partition/v1"
+    policy: "http://{{ .Release.Name }}-ibm-policy-deploy:8080/api/policy/v1"
+    storage: "http://{{ .Release.Name }}-ibm-storage-deploy:8080"
+    legal: "http://{{ .Release.Name }}-ibm-legal-deploy:8080"
+    entitlement: "http://{{ .Release.Name }}-ibm-entitlement-deploy:8080"
+    storagePath: "/api/storage/v2"
+    entitlementPath: "/api/entitlements/v2"
+    legalPath: "/api/legal/v1"
+
+  #DB
+  dbUser: admin
+  dbPassw: tbd
+
+  #KEYCLOAK
+  keycloakRealm: OSDU
+  KCUser: osdu-bvt
+
+  tenantCacheExpiryInSec: 10000
+
+  #SEISMIC
+  redisHost: "redis-seismic-master"
+  redisPort: 6379
+  seistoreDesAppkey: ""
+  serviceCloudProject: ""
+  impServiceAccountSigner: "NA"
+  redisInstanceKey: tbd
+  cacheTLSDisable: true
+  
+  #ADDED 9/1
+  cosSubuserSecret: tbd #Dynamic
+  cosForcePathStyle: true
+  docdbQueryLimit: limit
+  cosSubuserKeyID: tbd #Dynamic
+  docdbQueryFields: fields
+  cosEndpoint: http://{{ .Release.Name }}-minio:9000
+  dbURL: http://adminUsername:adminPassword@osdu-deploy-couchdb:5984  #Dynamic (see configMap_update_script.sh)
+  cosTempCred: 7200
+  cosSigVersion: v4
+  docdbQueryLimitValue: 10
+  docdbCollection: seismic-store-service
+  cosSecret: tbd  #Dynamic
+  cosAccessKey: tbd  #Dynamic
+
+
+conf:
+  configmap: "seismic-store-config"

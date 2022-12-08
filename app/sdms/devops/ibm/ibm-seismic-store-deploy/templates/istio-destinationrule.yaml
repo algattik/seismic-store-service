@@ -1,0 +1,13 @@
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: {{ .Release.Name }}-ibm-seismic-store-deploy
+  namespace: {{ .Release.Namespace }}
+spec:
+  host: {{ .Release.Name }}-ibm-seismic-store-deploy
+  trafficPolicy:    
+    portLevelSettings:
+    - port:
+        number: 8080
+      tls:
+        mode: ISTIO_MUTUAL
