@@ -1,0 +1,9 @@
+apiVersion: v1
+data:
+  configMap_update_script.sh: |
+    {{- tpl (.Files.Get "files/configMap_update_script.sh" ) . | nindent 4 }}
+kind: ConfigMap
+metadata:
+  name: update-script-seismic-configmap
+  labels:
+    {{- include "ibm-seismic-store-deploy.labels" . | nindent 4 }}

@@ -1,0 +1,124 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "ibm-seismic-store-deploy.fullname" . }}
+  labels:
+    {{- include "ibm-seismic-store-deploy.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "ibm-seismic-store-deploy.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "ibm-seismic-store-deploy.selectorLabels" . | nindent 8 }}
+        sidecar.istio.io/inject: "{{ .Values.sidecarIstioInjected }}"
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "ibm-seismic-store-deploy.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:
+        - name: {{ .Values.initimage.name }}
+          image: {{ .Values.initimage.initrepository }}:{{ .Values.initimage.tag }}
+          imagePullPolicy: {{ .Values.initimage.pullPolicy }}
+          command:
+            {{- toYaml .Values.initimage.command | nindent 12 }}
+          env:
+            - name: HEALTH_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: seismic-store-config
+                  key: AUTHORIZE_API
+        - resources: {}
+          terminationMessagePath: /dev/termination-log
+          name: cm-config
+          imagePullPolicy: IfNotPresent
+          terminationMessagePolicy: File
+          image: >-
+            quay.io/openshift/okd-content@sha256:184ac501d886c4e5a51a308a46259987e076662cb611cbd6d3d0dfc75096692d
+          command:
+            - sh
+            - /opt/script/configMap_update_script.sh
+          args: [{{ tpl (.Values.envVars.release | default .Values.envVars.release) . }}]
+          volumeMounts:
+            - mountPath: /opt/script
+              name: update-script-seismic-configmap
+              readOnly: false
+      volumes:
+        - configMap:
+            name: update-script-seismic-configmap
+          name: update-script-seismic-configmap 
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: ibm.db.password
+              valueFrom:
+                secretKeyRef:
+                  key: adminPassword
+                  name: {{ tpl (.Values.envVars.couchDB | default .Values.envVars.couchDB) . }}
+            - name: DES_REDIS_INSTANCE_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: redis-password
+                  name: redis-seismic
+            - name: LOCKSMAP_REDIS_INSTANCE_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: redis-password
+                  name: redis-seismic
+            - name: COS_SUBUSER_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: ibm.cos.subpassword
+                  name: minio-subuser
+            - name: COS_SUBUSER_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  key: ibm.cos.subuser
+                  name: minio-subuser
+            - name: COS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: root-password
+                  name: {{ tpl (.Values.envVars.minio | default .Values.envVars.minio) . }}
+            - name: COS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  key: root-user
+                  name: {{ tpl (.Values.envVars.minio | default .Values.envVars.minio) . }}
+          envFrom:
+          - configMapRef:
+              name: "{{ .Values.conf.configmap }}"
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

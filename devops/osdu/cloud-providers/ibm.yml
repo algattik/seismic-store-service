@@ -1,7 +1,12 @@
+variables:
+  IBM_HELM_CONFIG_PATH: app/sdms/devops/ibm/ibm-seismic-store-config
+  IBM_HELM_DEPLOY_PATH: app/sdms/devops/ibm/ibm-seismic-store-deploy
+
 include:
 
   # ibm-global
   - project: "osdu/platform/ci-cd-pipelines"
     file: "cloud-providers/ibm.yml"
+    ref: helm-chart-override
 
   - local: "devops/osdu/cloud-providers/ibm-common-pipeline.yml"
