@@ -28,8 +28,6 @@ sdms_aws-containerize:
         sed -i "/anthos/d" src/cloud/providers/index.ts
         rm -Rf src/cloud/providers/anthos
         sed -i "/google/d" src/cloud/providers/index.ts
-        rm -Rf src/cloud/providers/azure
-        sed -i "/azure/d" src/cloud/providers/index.ts
         rm -Rf src/cloud/providers/google
         sed -i "/ibm/d" src/cloud/providers/index.ts
         rm -Rf src/cloud/providers/ibm
