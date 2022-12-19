@@ -94,7 +94,7 @@
     "keycloak-admin": "^1.14.22",
     "log4js": "^6.3.0",
     "node-cache": "^5.1.2",
-    "prisma": "^3.8.0",
+    "prisma": "3.8.0",
     "qs": "^6.11.0",
     "redlock": "^5.0.0-beta.2",
     "replace-in-file": "^6.3.2",

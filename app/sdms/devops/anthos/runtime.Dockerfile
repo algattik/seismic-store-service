@@ -31,7 +31,7 @@ RUN apk --no-cache add --virtual native-deps g++ gcc libgcc libstdc++ linux-head
     && npm install --quiet \
     && npm run build \
     && mkdir artifact \
-    && cp -r package.json npm-shrinkwrap.json dist artifact \
+    && cp -r package.json dist artifact \
     && apk del native-deps
 
 # -------------------------------
