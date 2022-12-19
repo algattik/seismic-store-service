@@ -2880,9 +2880,9 @@
       }
     },
     "@prisma/engines": {
-      "version": "3.8.0-43.34df67547cf5598f5a6cd3eb45f14ee70c3fb86f",
-      "resolved": "https://registry.npmjs.org/@prisma/engines/-/engines-3.8.0-43.34df67547cf5598f5a6cd3eb45f14ee70c3fb86f.tgz",
-      "integrity": "sha512-bHYubuItSN/DGYo36aDu7xJiJmK52JOSHs4MK+KbceAtwS20BCWadRgtpQ3iZ2EXfN/B1T0iCXlNraaNwnpU2w=="
+      "version": "3.15.1-1.461d6a05159055555eb7dfb337c9fb271cbd4d7e",
+      "resolved": "https://registry.npmjs.org/@prisma/engines/-/engines-3.15.1-1.461d6a05159055555eb7dfb337c9fb271cbd4d7e.tgz",
+      "integrity": "sha512-NHlojO1DFTsSi3FtEleL9QWXeSF/UjhCW0fgpi7bumnNZ4wj/eQ+BJJ5n2pgoOliTOGv9nX2qXvmHap7rJMNmg=="
     },
     "@prisma/engines-version": {
       "version": "3.15.1-1.461d6a05159055555eb7dfb337c9fb271cbd4d7e",
