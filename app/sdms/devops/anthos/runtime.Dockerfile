@@ -28,12 +28,10 @@ COPY ./src/cloud/providers/anthos/schema.prisma /service/prisma/schema.prisma
 
 RUN apk --no-cache add --virtual native-deps g++ gcc libgcc libstdc++ linux-headers make python3 \
     && npm install --quiet node-gyp -g \
-	&& npm install --quiet prisma -g \
     && npm install --quiet \
-	&& prisma generate /service/prisma/schema.prisma \
     && npm run build \
     && mkdir artifact \
-    && cp -r package.json dist artifact \
+    && cp -r package.json npm-shrinkwrap.json dist artifact \
     && apk del native-deps
 
 # -------------------------------
