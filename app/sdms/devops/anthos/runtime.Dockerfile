@@ -15,7 +15,7 @@
 # limitations under the License.
 # ============================================================================
 
-ARG docker_node_image_version=14-slim
+ARG docker_node_image_version=14-alpine
 
 # -------------------------------
 # Compilation stage
