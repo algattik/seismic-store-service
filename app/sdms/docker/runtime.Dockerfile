@@ -25,8 +25,6 @@ ADD ./ /service
 WORKDIR /service
 RUN apk --no-cache add --virtual native-deps g++ gcc libgcc libstdc++ linux-headers make python3 \
     && npm install --quiet node-gyp -g \
-    # required from GCP deployments (step to skip for other cloud providers) 
-    && npm install --quiet prisma -g \  
     && npm install --quiet \
     && npm run build \
     && mkdir artifact \
