@@ -27,7 +27,7 @@ WORKDIR /service
 
 RUN apk --no-cache add --virtual native-deps g++ gcc libgcc libstdc++ linux-headers make python3 \
     && npm install --quiet node-gyp -g \
-	&& npm install --quiet prisma@3.8.0 \
+	&& npm install --quiet prisma@3.8.0 -g \
     && npm install --quiet
 RUN prisma generate --schema=/service/src/cloud/providers/anthos/schema.prisma
 RUN npm run build \
