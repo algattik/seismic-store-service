@@ -24,12 +24,13 @@ FROM node:${docker_node_image_version} as runtime-builder
 
 ADD ./ /service
 WORKDIR /service
-COPY ./src/cloud/providers/anthos/schema.prisma /service/prisma/schema.prisma
 
 RUN apk --no-cache add --virtual native-deps g++ gcc libgcc libstdc++ linux-headers make python3 \
     && npm install --quiet node-gyp -g \
-    && npm install --quiet \
-    && npm run build \
+	&& npm install --quiet prisma@3.8.0 \
+    && npm install --quiet
+RUN prisma generate --schema=/service/src/cloud/providers/anthos/schema.prisma
+RUN npm run build \
     && mkdir artifact \
     && cp -r package.json dist artifact \
     && apk del native-deps
