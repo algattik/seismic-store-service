@@ -25,7 +25,7 @@ FROM node:${docker_node_image_version} as runtime-builder
 ADD ./ /service
 WORKDIR /service
 
-RUN apk --no-cache add --virtual native-deps g++ gcc libgcc libstdc++ linux-headers make python3 \
+RUN apk --no-cache add --virtual native-deps g++ gcc libgcc libstdc++ linux-headers make openssl openssl-dev python3 \
     && npm install --quiet node-gyp -g \
 	&& npm install --quiet prisma@3.8.0 -g \
     && npm install --quiet
