@@ -27,7 +27,7 @@ WORKDIR /service
 COPY ./src/cloud/providers/anthos/schema.prisma /service/prisma/schema.prisma
 
 RUN apk --no-cache add --virtual native-deps g++ gcc libgcc libstdc++ linux-headers make python3 \
-    && npm install --quiet node-gyp -g \z
+    && npm install --quiet node-gyp -g \
     && npm install --quiet \
     && npm run build \
     && mkdir artifact \
