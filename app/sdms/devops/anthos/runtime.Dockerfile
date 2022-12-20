@@ -28,7 +28,7 @@ WORKDIR /service
 COPY ./src/cloud/providers/anthos/schema.prisma /service/prisma/schema.prisma
 
 RUN apt update \
-    && apt install g++ gcc build-essential libstdc++6 make python3 \
+    && apt install g++ gcc build-essential libstdc++6 make python3 -y \
     && npm install --quiet node-gyp -g \
     && npm install --quiet \
     && npm run build \
