@@ -220,7 +220,7 @@ sdms_azure_deploy:
       if [ $RESULT == 0 ]; then
         echo "Rollout succeeded."
       else
-        kubectl delete pod -l app=${SDMS_SERVICE_NAME}
+        kubectl delete pod -l app=${SDMS_SERVICE_NAME} -n osdu
         kubectl rollout status deployment.v1.apps/$SDMS_SERVICE_NAME -n osdu --timeout=900s
       fi
     - pod=$(kubectl get pod -n osdu|grep $SDMS_PROJECT_NAME |tail -1 |awk '{print $1}')
