@@ -141,17 +141,17 @@ sdms_azure_deploy:
       -n ${NAMESPACE} -f app/sdms/devops/azure/${SDMS_SERVICE_NAME}.osdu.values.yaml --wait --timeout 10m
     # Wait for service to be running to start
     - |
-      kubectl rollout status deployment.v1.apps/$SDMS_SERVICE_NAME -n osdu --timeout=900s
+      kubectl rollout status deployment.v1.apps/${SDMS_SERVICE_NAME} -n ${NAMESPACE} --timeout=900s
       RESULT=$?
       if [ $RESULT == 0 ]; then
         echo "Rollout succeeded."
       else
-        kubectl delete pod -l app=${SDMS_SERVICE_NAME} -n osdu
-        kubectl rollout status deployment.v1.apps/$SDMS_SERVICE_NAME -n osdu --timeout=900s
+        kubectl delete pod -l app=${SDMS_SERVICE_NAME} -n ${NAMESPACE}
+        kubectl rollout status deployment.v1.apps/${SDMS_SERVICE_NAME} -n ${NAMESPACE} --timeout=900s
       fi
-    - pod=$(kubectl get pod -n osdu|grep $SDMS_PROJECT_NAME |tail -1 |awk '{print $1}')
-    - status=$(kubectl wait -n osdu --for=condition=Ready pod/$pod --timeout=600s)
-    - if [[ "$status" != *"met"* ]]; then echo "POD didn't start correctly" ; exit 1 ; fi
+    - pod=$(kubectl -n ddms-seismic get po -l app=${SDMS_SERVICE_NAME} --no-headers=true -o custom-columns=":metadata.name" | tail -1)
+    - status=$(kubectl wait -n ${NAMESPACE} --for=condition=Ready pod/$pod --timeout=600s)
+    - if [[ "$status" != *"met"* ]]; then echo "${SDMS_SERVICE_NAME} pod didn't start correctly" ; exit 1 ; fi
   only:
     changes:
       - devops/**/*
