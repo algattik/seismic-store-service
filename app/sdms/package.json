@@ -88,7 +88,7 @@
     "ioredis": "^5.1.0",
     "js-yaml": "^4.1.0",
     "json-refs": "^3.0.15",
-    "jsonwebtoken": "8.5.1",
+    "jsonwebtoken": "9.0.0",
     "jwtproxy": "^1.6.8",
     "keycloak-admin": "^1.14.22",
     "log4js": "^6.3.0",
