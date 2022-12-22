@@ -275,8 +275,6 @@ The following software have components provided under the terms of this license:
 ========================================================================
 CC-BY-SA-4.0
 ========================================================================
-The following software have components provided under the terms of this license:
-
 - glob (from https://www.npmjs.com/package/glob)
 - protobufjs (from https://www.npmjs.com/package/protobufjs)
 
@@ -298,13 +296,6 @@ The following software have components provided under the terms of this license:
 - lodash.merge (from https://www.npmjs.com/package/lodash.merge)
 - lodash.once (from https://www.npmjs.com/package/lodash.once)
 - lodash.snakecase (from https://www.npmjs.com/package/lodash.snakecase)
-
-========================================================================
-GPL-1.0-or-later
-========================================================================
-The following software have components provided under the terms of this license:
-
-- node-forge (from https://www.npmjs.com/package/node-forge)
 
 ========================================================================
 GPL-2.0-only
