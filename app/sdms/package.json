@@ -19,9 +19,9 @@
     "test-lcov-automation": "npm run clean && npm ci && npm run build && npm run test-lcov-coverage",
     "test-lcov-coverage": "env UTEST=true nyc mocha -r ts-node/register -r source-map-support/register --recursive -R mocha-bamboo-reporter tests/utest/test.ts",
     "test-e2e-parallel": "node ./tests/e2e/parallel/run_e2e_tests_parallel.js",
-    "copy-static-files": "cpx docs/api/openapi.osdu.yaml ./dist/docs --watch --verbose",
-    "copy-schemas": "cpx docs/schemas/**/*.json ./dist/docs --watch --verbose",
-    "copy-rego-policies": "cpx docs/policies/*.rego ./dist/docs --watch --verbose",
+    "copy-static-files": "cpx docs/api/openapi.osdu.yaml dist/docs",
+    "copy-schemas": "cpx docs/schemas/**/*.json dist/docs",
+    "copy-rego-policies": "cpx docs/policies/*.rego dist/docs",
     "postbuild": "npm run copy-static-files && npm run copy-schemas && npm run copy-rego-policies",
     "prepare": "cd ../.. && husky install ./app/sdms/.husky"
   },
