@@ -39,6 +39,8 @@ FROM mcr.microsoft.com/mirror/docker/library/node:${docker_node_image_version} a
 COPY --from=runtime-builder /service/artifact /seistore-service
 WORKDIR /seistore-service
 
+RUN npm update -g qs
+
 RUN apk --no-cache add --virtual native-deps g++ gcc libgcc libstdc++ linux-headers make python3 \
     && addgroup appgroup \
     && adduser --disabled-password --gecos --shell appuser --ingroup appgroup \
@@ -46,8 +48,6 @@ RUN apk --no-cache add --virtual native-deps g++ gcc libgcc libstdc++ linux-head
     && echo '%appgroup ALL=(ALL) NOPASSWD: /usr/bin/npm' >> /etc/sudoers \
     && echo '%appgroup ALL=(ALL) NOPASSWD: /usr/bin/node' >> /etc/sudoers \
     && npm install --production --quiet \
-    && npm update jwtproxy --depth 5 \
-    && npm audit \
     && apk del native-deps
 
 ENTRYPOINT ["node", "--trace-warnings", "--trace-uncaught", "./dist/server/server-start.js"]
