@@ -46,8 +46,7 @@ RUN apk --no-cache add --virtual native-deps g++ gcc libgcc libstdc++ linux-head
     && echo '%appgroup ALL=(ALL) NOPASSWD: /usr/bin/npm' >> /etc/sudoers \
     && echo '%appgroup ALL=(ALL) NOPASSWD: /usr/bin/node' >> /etc/sudoers \
     && npm install --production --quiet \
-    && npm update @azure/identity --depth 4 \
-    && npm update jwtproxy --depth 4 \
+    && npm update jwtproxy --depth 5 \
     && npm audit \
     && apk del native-deps
 
