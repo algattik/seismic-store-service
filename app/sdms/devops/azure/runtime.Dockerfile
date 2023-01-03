@@ -46,10 +46,10 @@ RUN apk --no-cache add --virtual native-deps g++ gcc libgcc libstdc++ linux-head
     && echo '%appgroup ALL=(ALL) NOPASSWD: /usr/bin/npm' >> /etc/sudoers \
     && echo '%appgroup ALL=(ALL) NOPASSWD: /usr/bin/node' >> /etc/sudoers \
     && npm install --production --quiet \
-    && npm update ansi-regex --depth 6 \
-    && npm update jsonwebtoken --depth 6 \
-    && npm update minimatch --depth 6 \
-    && npm update qs --depth 6 \
+    && npm update formidable --depth 6 \
+    && npm update json5 --depth 4 \
+    && npm update decode-uri-component --depth 3 \
+    && npm update vm2 --depth 10 \
     && apk del native-deps
 
 ENTRYPOINT ["node", "--trace-warnings", "--trace-uncaught", "./dist/server/server-start.js"]
