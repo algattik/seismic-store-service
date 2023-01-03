@@ -43,6 +43,7 @@ sdms_azure_containerize:
     - devops/scripts/detect_unused_packages.sh
     - chmod +x devops/scripts/clean_package_json.sh
     - devops/scripts/clean_package_json.sh
+    - cat package.json
     # Runtime image
     - docker build -t $SDMS_UTEST_RUNTIME_IMAGE --file devops/azure/runtime.Dockerfile .
     # Sidecar image
