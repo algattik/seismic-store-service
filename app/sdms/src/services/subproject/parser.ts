@@ -33,7 +33,7 @@ export class SubProjectParser {
 
         // If not specified, set the acl as empty array. A default acl group will be later created for these.
         subproject.acls = req.body?.acls || { 'admins': [], 'viewers': [] };
-        if(req.body?.acl) {
+        if (req.body?.acl) {
             const aclKeys = Object.keys(req.body.acls);
             subproject.acls['admins'] = ('admins' in aclKeys) ? subproject.acls['admins'].sort() : [];
             subproject.acls['viewers'] = ('viewers' in aclKeys) ? subproject.acls['viewers'].sort() : [];
@@ -47,7 +47,9 @@ export class SubProjectParser {
         Params.checkString(subproject.admin, 'admin', false);
         Params.checkString(subproject.ltag, 'ltag', false);
 
-        subproject.admin = Utils.getUserIdFromUserToken(req.headers.authorization);
+        // get the caller id as subproject admin (admin here has the meaning of created_by)
+        subproject.admin = await Utils.getUserId(
+            req.headers.authorization, req.headers['data-partition-id'] as string);
 
         // This method is temporary required by slb during the migration of sauth from v1 to v2
         // The method replace slb.com domain name with delfiserviceaccount.com

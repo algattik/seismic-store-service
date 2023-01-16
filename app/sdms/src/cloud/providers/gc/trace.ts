@@ -14,9 +14,19 @@
 // limitations under the License.
 // ============================================================================
 
-export * as google from './google';
-export * as gc from './gc';
-export * as azure from './azure';
-export * as ibm from './ibm';
-export * as aws from './aws';
-export * as anthos from './anthos';
+import * as tracer from '@google-cloud/trace-agent';
+import { AbstractTrace, TraceFactory } from '../../trace';
+import { ConfigGoogle } from './config';
+
+@TraceFactory.register('gc')
+export class GoogleTrace extends AbstractTrace {
+
+    public start() {
+        tracer.start({
+            keyFilename: ConfigGoogle.SERVICE_IDENTITY_KEY_FILENAME,
+            projectId: ConfigGoogle.SERVICE_CLOUD_PROJECT,
+            ignoreUrls: [ConfigGoogle.API_BASE_PATH + '/svcstatus']
+        });
+    }
+
+}
