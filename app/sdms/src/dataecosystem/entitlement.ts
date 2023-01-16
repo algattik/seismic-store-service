@@ -73,6 +73,28 @@ export class DESEntitlement {
         return results.data.groups;
     }
 
+    public static async getUserId(
+        userToken: string, dataPartitionID: string, appkey: string): Promise<string> {
+        const dataecosystem = DataEcosystemCoreFactory.build(Config.CLOUDPROVIDER);
+
+        const options = {
+            headers: {
+                'Accept': 'application/json',
+                'AppKey': appkey || Config.DES_SERVICE_APPKEY,
+                'Authorization': userToken.startsWith('Bearer') ? userToken : 'Bearer ' + userToken,
+                'Content-Type': 'application/json'
+            }
+        };
+        const url = Config.DES_SERVICE_HOST_ENTITLEMENT + dataecosystem.getEntitlementBaseUrlPath() + '/groups';
+
+        options.headers[dataecosystem.getDataPartitionIDRestHeaderName()] = dataPartitionID;
+
+        const results = await axios.get(url, options).catch((error) => {
+            throw (Error.makeForHTTPRequest(error, '[entitlement-service]'));
+        });
+        return results.data.memberEmail;
+    }
+
     // ensure strong consistency on cascade operation createGroup -> addMEmber
     // in seismic-dms when a subproject is create an extra admin user can also added to the created group
     // because of the imposed eventual consistency on createGroup (mex declared latency ~2s) we should ensure

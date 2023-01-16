@@ -14,9 +14,18 @@
 // limitations under the License.
 // ============================================================================
 
-export * as google from './google';
-export * as google_osdu from './gc';
-export * as azure from './azure';
-export * as ibm from './ibm';
-export * as aws from './aws';
-export * as anthos from './anthos';
+export { GCS } from './gcs';
+export { Credentials } from './credentials';
+export { DatastoreDAO, DatastoreTransactionDAO } from './datastore';
+export { Logger } from './logger';
+export { ConfigGoogle } from './config';
+export { GoogleTrace } from './trace';
+export { GoogleDataEcosystemServices } from './dataecosystem';
+export { GoogleSeistore } from './seistore';
+
+ /* FIXME: This is a dirty workaround to pass access tokens  
+            Auth.isImpersonationToken can work only with JWT tokens, and since accessTokens are not JWT in GCP, 
+            the original method fails.
+*/
+import { Auth } from '../../../auth/index'
+Auth.isImpersonationToken = (userToken) => {return false };

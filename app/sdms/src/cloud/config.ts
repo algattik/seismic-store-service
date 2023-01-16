@@ -217,6 +217,8 @@ export abstract class Config implements IConfig {
     // data partition id association
     public static DATA_PARTITION_ID: string;
 
+    public static ENTITLEMENTS_AUTHORIZATION: boolean;
+
     public static setCloudProvider(cloudProvider: string) {
         Config.CLOUDPROVIDER = cloudProvider;
         if (Config.CLOUDPROVIDER === undefined) {

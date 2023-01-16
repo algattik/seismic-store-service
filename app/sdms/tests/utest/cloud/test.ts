@@ -27,6 +27,7 @@ import { TestGoogleDatastoreDAO, TestGoogleDatastoreTransactionDAO } from './goo
 import { TestAzureCosmosDbDAO } from './azure/cosmosdb';
 import { TestAzureCosmosDbTransactionDAO } from './azure/cosmosdb-transactions';
 import { TestGCSCore } from './google/gcs';
+import { TestGCSOSDUCore } from './gc/gcs';
 import { TestAzureKeyVault } from './azure/keyvault';
 import { TestAzureStorage } from './azure/cloudstorage';
 import { TestAzureCosmosDbDAORegular } from './azure/azureCosmosDbDAORegular';
@@ -40,6 +41,7 @@ export class TestCloud {
         describe(Tx.title('utest seismic store - cloud core'), () => {
             TestGoogleCredentials.run();
             TestGCSCore.run();
+            TestGCSOSDUCore.run();
             TestGoogleDatastoreDAO.run();
             TestGoogleDatastoreTransactionDAO.run();
             TestAzureCosmosDbDAORegular.run();
