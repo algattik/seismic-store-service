@@ -18,6 +18,7 @@ import * as crypto from 'crypto';
 import * as JsYaml from 'js-yaml';
 import * as JsonRefs from 'json-refs';
 import { Config } from '../cloud';
+import { DESEntitlement } from '../dataecosystem';
 
 export class Utils {
 
@@ -45,6 +46,13 @@ export class Utils {
     public static getUserIdFromUserToken(token: string): string {
         return Utils.getPropertyFromTokenPayload(
             token, Config.USER_ID_CLAIM_FOR_SDMS) || Utils.getSubFromPayload(token);
+    }
+
+    public static async getUserIdFromEntitlements(
+        userToken: string, 
+        dataPartitionId: string, 
+        appKey?): Promise<string> {
+            return await DESEntitlement.getUserId(userToken, dataPartitionId, appKey);
     }
 
     // This method is temporary required by slb during the migration of sauth from v1 to v2
