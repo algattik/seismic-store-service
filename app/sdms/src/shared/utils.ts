@@ -18,6 +18,7 @@ import * as crypto from 'crypto';
 import * as JsYaml from 'js-yaml';
 import * as JsonRefs from 'json-refs';
 import { Config } from '../cloud';
+import { DESEntitlement } from '../dataecosystem';
 
 export class Utils {
 
@@ -38,13 +39,21 @@ export class Utils {
     }
 
     public static getPropertyFromTokenPayload(base64JwtPayload: string, property: string): string {
+        if (Config.USER_ID_FROM_ENTITLEMENTS) {
+            // TODO: Fix it later.
+            return undefined;
+        }
         const payload = this.getPayloadFromStringToken(base64JwtPayload);
         return property in payload ? payload[property] : undefined;
     }
 
-    public static getUserIdFromUserToken(token: string): string {
-        return Utils.getPropertyFromTokenPayload(
-            token, Config.USER_ID_CLAIM_FOR_SDMS) || Utils.getSubFromPayload(token);
+    public static async getUserId(authorization: string, dataPartitionId: string, appKey?: string): Promise<string> {
+        if (Config.USER_ID_FROM_ENTITLEMENTS) {
+            return await DESEntitlement.getUserId(authorization, dataPartitionId, appKey);
+        } else {
+            return Utils.getPropertyFromTokenPayload(
+                authorization, Config.USER_ID_CLAIM_FOR_SDMS) || Utils.getSubFromPayload(authorization);
+        }
     }
 
     // This method is temporary required by slb during the migration of sauth from v1 to v2

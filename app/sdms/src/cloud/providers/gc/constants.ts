@@ -14,9 +14,6 @@
 // limitations under the License.
 // ============================================================================
 
-export * as google from './google';
-export * as gc from './gc';
-export * as azure from './azure';
-export * as ibm from './ibm';
-export * as aws from './aws';
-export * as anthos from './anthos';
+
+export const KEEP_FILE_NAME = '.keep';
+export const GCS_URL_SEPARATOR = '$$';
