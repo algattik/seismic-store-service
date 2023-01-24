@@ -1,5 +1,5 @@
 # ============================================================================
-# Copyright 2017-2021, Schlumberger
+# Copyright 2017-2019, Schlumberger
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,11 +19,13 @@ ARG docker_node_image_version=14-alpine
 # -------------------------------
 # Compilation stage
 # -------------------------------
-FROM mcr.microsoft.com/mirror/docker/library/node:${docker_node_image_version} as runtime-builder
+FROM node:${docker_node_image_version} as runtime-builder
+
+# RUN apt-get install -yqq --no-install-recommends openssl
 
 ADD ./ /service
 WORKDIR /service
-RUN apk --no-cache add --virtual native-deps g++ gcc libgcc libstdc++ linux-headers make python3 \
+RUN apk --no-cache add --virtual native-deps g++ openssl gcc libgcc libstdc++ linux-headers make python3 \
     && npm install --quiet node-gyp -g \
     && npm install --quiet \
     && npm run build \
@@ -34,7 +36,13 @@ RUN apk --no-cache add --virtual native-deps g++ gcc libgcc libstdc++ linux-head
 # -------------------------------
 # Package stage
 # -------------------------------
-FROM mcr.microsoft.com/mirror/docker/library/node:${docker_node_image_version} as release
+FROM node:${docker_node_image_version} as release
+
+#Default to using self signed generated TLS cert
+ENV USE_SELF_SIGNED_SSL_CERT true
+ENV SSL_CERT_PATH "/src/cloud/providers/aws/certs/cert.crt" 
+ENV SSL_KEY_PATH "/src/cloud/providers/aws/certs/cert.key"
+ENV SSL_ENABLED "true"
 
 COPY --from=runtime-builder /service/artifact /seistore-service
 WORKDIR /seistore-service
@@ -48,4 +56,9 @@ RUN apk --no-cache add --virtual native-deps g++ gcc libgcc libstdc++ linux-head
     && npm install --production --quiet \
     && apk del native-deps
 
-ENTRYPOINT ["node", "--trace-warnings", "--trace-uncaught", "./dist/server/server-start.js"]
+COPY src/cloud/providers/aws/build-aws/ssl.sh /seistore-service/ssl.sh
+COPY src/cloud/providers/aws/build-aws/entrypoint.sh /seistore-service/entrypoint.sh
+RUN npm ci --production
+RUN chmod +x /seistore-service/ssl.sh
+RUN chmod +x /seistore-service/entrypoint.sh
+ENTRYPOINT ["/bin/sh", "-c", "/seistore-service/entrypoint.sh"]
