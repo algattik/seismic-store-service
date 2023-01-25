@@ -80,8 +80,10 @@ export class Server {
         this.app.use(express.urlencoded({ extended: false }));
         this.app.use(express.json());
         this.app.disable('x-powered-by');
-        this.app.use(cors(this.corsOptions));
-        this.app.options('*', cors());
+        if (Config.APPLICATION_CORS_ENABLED) {
+            this.app.use(cors(this.corsOptions));
+            this.app.options('*', cors());
+        }
         this.app.use(Config.SDMS_PREFIX + '/swagger-ui.html', swaggerUi.serve, swaggerUi.setup(
             SwaggerManager.swaggerDocument, {
             customCss: '.swagger-ui .topbar { display: none }'

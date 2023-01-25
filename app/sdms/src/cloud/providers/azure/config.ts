@@ -169,7 +169,9 @@ export class AzureConfig extends Config {
                 USER_ID_CLAIM_FOR_SDMS: process.env.USER_ID_CLAIM_FOR_SDMS || 'subid',
                 USER_ID_CLAIM_FOR_ENTITLEMENTS_SVC: process.env.USER_ID_CLAIM_FOR_ENTITLEMENTS_SVC || 'email',
                 USER_ASSOCIATION_SVC_PROVIDER: process.env.USER_ASSOCIATION_SVC_PROVIDER || 'ccm-internal',
-                SDMS_PREFIX: process.env.SDMS_PREFIX || AzureConfig.API_BASE_URL_PATH
+                SDMS_PREFIX: process.env.SDMS_PREFIX || AzureConfig.API_BASE_URL_PATH,
+                APPLICATION_CORS_ENABLED: process.env.APPLICATION_CORS_ENABLED !== undefined ? 
+                    process.env.APPLICATION_CORS_ENABLED === 'true' : true
             });
 
             // initialize app insight
