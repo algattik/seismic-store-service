@@ -14,10 +14,3 @@
 // limitations under the License.
 
 export { AnthosConfig } from './config';
-export { MinIOStorage } from './storage';
-export { AnthosCredentials } from './credentials';
-export { AnthosDataEcosystemServices } from './dataecosystem';
-export { AnthosSeistore } from './seistore';
-export { AnthosLogger } from './logger';
-export { AnthosTrace } from './trace'
-export { PostgreSQLDAO } from './postgresql'
