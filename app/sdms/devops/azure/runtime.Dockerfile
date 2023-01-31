@@ -22,6 +22,7 @@ ARG docker_node_image_version=14-alpine
 FROM mcr.microsoft.com/mirror/docker/library/node:${docker_node_image_version} as runtime-builder
 
 ADD ./ /service
+COPY ./ /service
 WORKDIR /service
 RUN apk --no-cache add --virtual native-deps g++ gcc libgcc libstdc++ linux-headers make python3 \
     && npm install --quiet node-gyp -g \
@@ -47,7 +48,7 @@ RUN apk --no-cache add --virtual native-deps g++ gcc libgcc libstdc++ linux-head
     && echo '%appgroup ALL=(ALL) NOPASSWD: /usr/bin/node' >> /etc/sudoers \
     && npm install --production --quiet \
     && apk del native-deps \
-    && apk add --update --no-cache openssl1.1-compat \
-    && npx prisma generate --schema=/seistore-service/src/cloud/providers/anthos/schema.prisma
+    && apk add --update --no-cache openssl1.1-compat 
+# && npx prisma generate --schema=/seistore-service/src/cloud/providers/anthos/schema.prisma
 
 ENTRYPOINT ["node", "--trace-warnings", "--trace-uncaught", "./dist/server/server-start.js"]
