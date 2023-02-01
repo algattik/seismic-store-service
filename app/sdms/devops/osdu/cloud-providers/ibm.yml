@@ -43,6 +43,8 @@ sdms_ibm-test-py:
   stage: integration
   extends:
     - .ibm-test-py
+  variables:
+    IBM_SEISMIC_E2E_LEGALTAG02: opendes-Test-Legal-Tag-8406053
   needs: ["sdms_ibm-deploy"]
   script:
     - cd app/$SDMS_SERVICE
