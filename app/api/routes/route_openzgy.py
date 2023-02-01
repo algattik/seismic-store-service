@@ -1,9 +1,10 @@
-import openzgycpp as zgy
+# import openzgycpp as zgy
 import os
 import re
 import enum
 import math
 import json
+import csv
 import vector
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -18,7 +19,7 @@ router = APIRouter()
 def internal_server_error(e: Exception): 
     return HTTPException(status_code=HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
-def zgy_error(ze: zgy.ZgyError):
+def zgy_error(ze: Exception):
     message = str(ze)
     matched = re.search('HTTP [0-9][0-9][0-9]', message)
     if(matched):
@@ -149,7 +150,7 @@ async def get_headers(
         bearer: APIKey = Depends(get_bearer),
         api_key: APIKey = Depends(get_api_key)):
     try:
-        with zgy.ZgyReader(sdpath, iocontext={"sdurl": settings.SDMS_URL, "sdapikey": api_key,
+        with csv.reader(sdpath, iocontext={"sdurl": settings.SDMS_URL, "sdapikey": api_key,
                                           "sdtoken": bearer}) as reader:
             headers = {
                 'Guid':                    str(reader.verid),
@@ -178,8 +179,6 @@ async def get_headers(
                 'Histogram':               {'Count': reader.histogram[0], 'Minimum': reader.histogram[1], 'Maximum':reader.histogram[2], 'Bins': reader.histogram[3]}
             }
             return json.dumps(headers, indent=2)
-    except zgy.ZgyError as ze:
-        raise zgy_error(ze)
     except Exception as e:
         raise internal_server_error(e)
 
@@ -190,7 +189,7 @@ async def get_bingrid(
         bearer: APIKey = Depends(get_bearer),
         api_key: APIKey = Depends(get_api_key)):
     try:
-        with zgy.ZgyReader(sdpath, iocontext={"sdurl": settings.SDMS_URL, "sdapikey": api_key,
+        with csv.reader(sdpath, iocontext={"sdurl": settings.SDMS_URL, "sdapikey": api_key,
                                           "sdtoken": bearer}) as r:        
             inline = Line(r.annotstart[0], r.annotinc[0], r.size[0])
             xline = Line(r.annotstart[1], r.annotinc[1], r.size[1])
@@ -204,7 +203,5 @@ async def get_bingrid(
                            round(r.corners[3][0], 2), round(r.corners[3][1], 2))
             zgyToBinGrid = ZGYToBinGrid(point1, point2, point3, point4, inline, xline)
             return zgyToBinGrid.getValusAsJson()
-    except zgy.ZgyError as ze:
-        raise zgy_error(ze)
     except Exception as e:
         raise internal_server_error(e)
