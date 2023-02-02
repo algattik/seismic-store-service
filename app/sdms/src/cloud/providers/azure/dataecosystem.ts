@@ -14,7 +14,7 @@
 // limitations under the License.
 // ============================================================================
 
-import request from 'request-promise';
+import axios from 'axios';
 import { Error, getInMemoryCacheInstance } from '../../../shared';
 import {
     AbstractDataEcosystemCore,
@@ -55,41 +55,36 @@ export class AzureDataEcosystemServices extends AbstractDataEcosystemCore {
         const credentials = AzureCredentials.getCredential()
         const aud = AzureConfig.SP_APP_RESOURCE_ID;
         const accessToken = (await credentials.getToken(`${aud}/.default`)).token
-        const url = AzureConfig.DES_SERVICE_HOST_PARTITION + '/api/partition/v1/partitions/' + dataPartitionID;
         const options = {
             headers: {
                 'Accept': 'application/json',
                 'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json'
-            },
-            url
+            }
         };
-        try {
-            return JSON.parse(await request.get(options));
-        } catch (error) {
+        const url = AzureConfig.DES_SERVICE_HOST_PARTITION + '/api/partition/v1/partitions/' + dataPartitionID;
+        const results = await axios.get(url, options).catch((error) => {
             throw (Error.makeForHTTPRequest(error));
-        }
-
+        });
+        return results.data;
     }
 
     public static async getPartitions(): Promise<string[]> {
         const credentials = AzureCredentials.getCredential()
         const aud = AzureConfig.SP_APP_RESOURCE_ID;
         const accessToken = (await credentials.getToken(`${aud}/.default`)).token
-        const url = AzureConfig.DES_SERVICE_HOST_PARTITION + '/api/partition/v1/partitions';
         const options = {
             headers: {
                 'Accept': 'application/json',
                 'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json'
-            },
-            url
+            }
         };
-        try {
-            return JSON.parse(await request.get(options));
-        } catch (error) {
+        const  url = AzureConfig.DES_SERVICE_HOST_PARTITION + '/api/partition/v1/partitions';
+        const results = await axios.get(url, options).catch((error) => {
             throw (Error.makeForHTTPRequest(error));
-        }
+        });
+        return results.data;
     }
 
     public static async getStorageResourceName(dataPartitionID: string): Promise<string> {
