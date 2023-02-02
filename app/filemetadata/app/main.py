@@ -22,10 +22,11 @@ def start_application():
     application.include_router(api_router)
     application.mount(settings.API_PATH + "static", StaticFiles(directory="static"), name="static")
 
-    application.add_middleware(
-        CORSMiddleware,
-        expose_headers=["Content-Security-Policy"]
-    )
+    if settings.APPLICATION_CORS_ENABLED:
+        application.add_middleware(
+            CORSMiddleware,
+            expose_headers=["Content-Security-Policy"]
+        )
 
     return application
 
