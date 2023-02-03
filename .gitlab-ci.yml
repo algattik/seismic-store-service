@@ -10,16 +10,16 @@ include:
 
   # cloud-providers
   # aws
-  - local: "devops/osdu/cloud-providers/aws.yml"
+  # - local: "devops/osdu/cloud-providers/aws.yml"
 
-  # gcp
-  - local: "devops/osdu/cloud-providers/gcp.yml"
+  # # gcp
+  # - local: "devops/osdu/cloud-providers/gcp.yml"
 
   # azure
   - local: "devops/osdu/cloud-providers/azure.yml"
 
   # ibm
-  - local: "devops/osdu/cloud-providers/ibm.yml"
+  # - local: "devops/osdu/cloud-providers/ibm.yml"
 
   # app
   # sdms
