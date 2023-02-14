@@ -208,10 +208,10 @@ export class AzureCosmosDbDAO extends AbstractJournal {
                 const result = await AzureCosmosDbDAO.axiosInstance.post(url, payload);
                 if (!result.data.records) { return; }
                 const records = result.data.records;
-                const resultsList = [];
+                const resultsList: {path: string}[] = []
                 for (const record of records) {
                     resultsList.push({
-                        path: dataset.path + record.path
+                        path: (dataset.path + record.path).replace('//', '/')
                     });
                 }
                 return Promise.resolve([resultsList]);
