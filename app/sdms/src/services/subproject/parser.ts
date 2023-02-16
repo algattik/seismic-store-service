@@ -54,19 +54,17 @@ export class SubProjectParser {
         // Temporary hardcoded can be removed on 01/22 when sauth v1 will be dismissed.
         // Others service domain won't be affected by this call
         subproject.admin = subproject.admin ? Utils.checkSauthV1EmailDomainName(subproject.admin) : subproject.admin;
+        
+        const seistore = SeistoreFactory.build(Config.CLOUDPROVIDER);
 
         // check if the subproject name is in the correct form
-        if (!subproject.name.match(/^[a-z][a-z\d\-]*[a-z\d]$/g)) {
-            throw (Error.make(Error.Status.BAD_REQUEST,
-                'The subproject name (' + subproject.name + ') ' +
-                'does not match the required pattern [a-z][a-z\\d\\-]*[a-z\\d]'));
-        }
+        seistore.validateSubprojectName(subproject.name);
 
         // check policy corectness
         this.checkAccessPolicy(req.body);
 
         // check extra requirements
-        SeistoreFactory.build(Config.CLOUDPROVIDER).checkExtraSubprojectCreateParams(req.body, subproject);
+        seistore.checkExtraSubprojectCreateParams(req.body, subproject);
 
         return subproject;
     }

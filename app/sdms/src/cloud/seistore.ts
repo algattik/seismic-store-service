@@ -17,7 +17,7 @@
 import { SubProjectModel } from '../services/subproject';
 import { TenantModel } from '../services/tenant';
 import { CloudFactory } from './cloud';
-import { Response as expResponse } from 'express';
+import { Error } from '../shared';
 
 export interface ISeistore {
     checkExtraSubprojectCreateParams(requestBody: any, subproject: SubProjectModel): void;
@@ -28,6 +28,7 @@ export interface ISeistore {
     deleteStorageResources(tenant: TenantModel, subproject: SubProjectModel): Promise<void>;
     handleReadinessCheck(): Promise<boolean>;
     validateAccessPolicy(subproject: SubProjectModel, accessPolicy: string): void;
+    validateSubprojectName(name: string): void;
 }
 
 export abstract class AbstractSeistore implements ISeistore {
@@ -39,6 +40,13 @@ export abstract class AbstractSeistore implements ISeistore {
     public abstract deleteStorageResources(tenant: TenantModel, subproject: SubProjectModel): Promise<void>;
     public abstract handleReadinessCheck(): Promise<boolean>;
     public abstract validateAccessPolicy(subproject: SubProjectModel, accessPolicy: string);
+    public validateSubprojectName(name: string): void {
+        if (!name.match(/^[a-z][a-z\d\-]*[a-z\d]$/g)) {
+            throw (Error.make(Error.Status.BAD_REQUEST,
+                'The subproject name (' + name + ') ' +
+                'does not match the required pattern [a-z][a-z\\d\\-]*[a-z\\d]'));
+        }
+    }
 }
 
 export class SeistoreFactory extends CloudFactory {
