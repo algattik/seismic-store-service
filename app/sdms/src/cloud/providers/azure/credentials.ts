@@ -120,15 +120,22 @@ export class AzureCredentials extends AbstractCredentials {
         return result;
     }
 
-    private async generateSASToken(
-        accountName: string, containerName: string, expiration: Date, readOnly: boolean): Promise<string> {
+        private async generateSASToken(
+        endpoint: string,
+        containerName: string,
+        expiration: Date,
+        readOnly: boolean): Promise<string> {
 
         const blobServiceClient = new BlobServiceClient(
-            `https://${accountName}.blob.core.windows.net`,
+            endpoint,
             this.defaultAzureCredential
         );
 
+        const domain = endpoint.match(/^(?:https?:\/\/)?(?:[^@\n]+@)?(?:www\.)?([^:\/\n\?\=]+)/im);
+        const accountName = domain[1].split('.')[0];
+
         const userDelegationKey = await this.getDelegationKey(blobServiceClient);
+
 
         const permissions = new ContainerSASPermissions();
         permissions.list = true;
@@ -144,8 +151,9 @@ export class AzureCredentials extends AbstractCredentials {
             expiresOn: expiration
         }, userDelegationKey, // UserDelegationKey
             accountName);
-        return `https://${accountName}.blob.core.windows.net/${containerName}?${containerSAS.toString()}`;
+        return `${endpoint}${containerName}?${containerSAS.toString()}`;
     }
+
 
     private async getDelegationKey(blobServiceClient: BlobServiceClient): Promise<UserDelegationKey> {
         const key = blobServiceClient.accountName;
