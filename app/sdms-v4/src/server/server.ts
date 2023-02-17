@@ -14,7 +14,7 @@
 // Limitations under the License.
 // ============================================================================
 
-import { Error, Response } from '../shared';
+import { Error, Response, Utils } from '../shared';
 
 import { Config } from '../cloud';
 import { Context } from '../shared/context';
@@ -24,17 +24,24 @@ import { corsOptions } from './cors';
 import express from 'express';
 import fs from 'fs';
 import https from 'https';
+import path from 'path';
 import swaggerUi from 'swagger-ui-express';
 
 export class Server {
     private app: express.Express;
 
-    constructor(swaggerDocument: swaggerUi.JsonObject) {
+    constructor() {
         this.app = express();
         this.app.use(express.urlencoded({ extended: false }));
         this.app.use(express.json());
         this.app.disable('x-powered-by');
         this.app.use(cors(corsOptions));
+        this.app.use(this.sdmsMiddleware);
+        this.app.use(ServiceRouter);
+    }
+
+    public async setSwagger() {
+        const swaggerDocument = await Utils.resolveJsonReferences(path.join(__dirname, '..', 'docs', 'openapi.yaml'));
         this.app.use(
             Config.APIS_BASE_PATH + '/swagger-ui.html',
             swaggerUi.serve,
@@ -42,12 +49,10 @@ export class Server {
                 customCss: '.swagger-ui .topbar { display: none }',
             })
         );
-        this.app.use(this.sddmsMiddleware);
-        this.app.use(ServiceRouter);
     }
 
     // Set of operations to perform before serving the request
-    public sddmsMiddleware(req: express.Request, res: express.Response, next: express.NextFunction) {
+    public sdmsMiddleware(req: express.Request, res: express.Response, next: express.NextFunction) {
         // Required data-partition-id header
         if (!req.headers['data-partition-id']) {
             const statusCall = req.url.endsWith('status');

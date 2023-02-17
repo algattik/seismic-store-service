@@ -14,17 +14,17 @@
 // Limitations under the License.
 // ============================================================================
 
-import { StorageCoreService } from '../../services';
 import { Config, CredentialsFactory } from '../../cloud';
 import { Error, Response, Utils } from '../../shared';
 import { Request as expRequest, Response as expResponse } from 'express';
 import { Context } from '../../shared/context';
 import { Operation } from './operations';
 import { Parser } from './parser';
+import { StorageCoreService } from '../../services';
 
 export class ConnectionsHandler {
     public static async handler(req: expRequest, res: expResponse, op: Operation) {
-        if (!Context.schemaEndpoint.hasBulks) {
+        if (Context.schemaEndpoint && Context.schemaEndpoint.hasBulks === false) {
             throw Error.make(
                 Error.Status.BAD_REQUEST,
                 'Connection strings cannot be released for ' + Context.schemaEndpoint.kind
@@ -48,12 +48,18 @@ export class ConnectionsHandler {
         const recordVersion = Parser.getParamRecordVersion(req);
 
         // ensure the record exist (this will enforce dynamic policy check)
-        await StorageCoreService.getRecord(
+        const record = await StorageCoreService.getRecord(
             req.headers.authorization,
             recordId,
             dataPartition,
             recordVersion
         );
+
+        // for upload connection strings only
+        if (!readonly) {
+            // ensure the user is owner by trying upsert an entry (skip-dupes-applies)
+            await StorageCoreService.insertRecords(req.headers.authorization, [record], dataPartition, true);
+        }
 
         const bucketId = Utils.constructBucketID(recordId);
         const storageCredentials = await CredentialsFactory.build(Config.CLOUD_PROVIDER, {
