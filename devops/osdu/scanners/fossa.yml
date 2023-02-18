@@ -3,4 +3,4 @@ include:
   # fossa-global
   - project: "osdu/platform/ci-cd-pipelines"
     file: "scanners/fossa-global.yml"
-    ref: release/0.19
+    ref: v0.19.1
