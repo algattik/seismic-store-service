@@ -31,4 +31,9 @@ router.get('/readiness', async (_req: expRequest, res: expResponse) => {
     await StatusHandler.handler(res, Operation.Readiness);
 });
 
+// Get the service configurations
+router.get('/configs', async (_req: expRequest, res: expResponse) => {
+    await StatusHandler.handler(res, Operation.Configs);
+});
+
 export { router as StatusRouter };

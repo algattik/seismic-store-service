@@ -17,4 +17,5 @@
 export enum Operation {
     Status,
     Readiness,
+    Configs,
 }

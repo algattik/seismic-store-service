@@ -57,7 +57,8 @@ export class Server {
         if (!req.headers['data-partition-id']) {
             const statusCall = req.url.endsWith('status');
             const readinessCall = req.url.endsWith('readiness');
-            if (!(statusCall || readinessCall)) {
+            const configsCall = req.url.endsWith('configs');
+            if (!(statusCall || readinessCall || configsCall)) {
                 Response.writeError(
                     res,
                     Error.make(Error.Status.BAD_REQUEST, 'Missing required request header "data-partition-id".')
