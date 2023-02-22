@@ -32,6 +32,7 @@ import {ExponentialRetryPolicyOptions} from '@azure/core-rest-pipeline'
 import { AccessToken, GetTokenOptions } from '@azure/core-auth';
 import { Keyvault } from './keyvault';
 
+
 const KExpiresMargin = 300; // 5 minutes
 const UserDelegationKeyValidityInMinutes = 3599; // expires at the same time as the sas token
 const ExpirationLeadInMinutes = 15; // expire 15 minutes before actual date
@@ -113,7 +114,7 @@ export class AzureCredentials extends AbstractCredentials {
         const now = new Date();
         const expiration = this.addMinutes(now, SasExpirationInMinutes);
 
-        if(Keyvault.DATA_PARTITION_STORAGE_ACCOUNT_NAME == 'sdms-storage-account-name' && accountName.toLowerCase().indexOf(".") === -1 ){
+        if(Keyvault.DATA_PARTITION_STORAGE_ACCOUNT_NAME == Keyvault.DATA_PARTITION_STORAGE_ACCOUNT_NAME; && accountName.toLowerCase().indexOf(".") === -1 ){
             const sasToken = await this.generateSASToken(accountName, bucket, expiration, readonly);
             console.log("Fetching:: " +sasToken)
             const result = {
