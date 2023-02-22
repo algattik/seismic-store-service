@@ -30,6 +30,7 @@ import { DefaultAzureCredential, TokenCredential, DefaultAzureCredentialOptions 
 import { AzureDataEcosystemServices } from './dataecosystem';
 import {ExponentialRetryPolicyOptions} from '@azure/core-rest-pipeline'
 import { AccessToken, GetTokenOptions } from '@azure/core-auth';
+import { Keyvault } from './keyvault';
 
 const KExpiresMargin = 300; // 5 minutes
 const UserDelegationKeyValidityInMinutes = 3599; // expires at the same time as the sas token
@@ -111,16 +112,60 @@ export class AzureCredentials extends AbstractCredentials {
         const accountName = await AzureDataEcosystemServices.getStorageResourceName(partition);
         const now = new Date();
         const expiration = this.addMinutes(now, SasExpirationInMinutes);
-        const sasToken = await this.generateSASToken(accountName, bucket, expiration, readonly);
-        const result = {
-            access_token: sasToken,
-            expires_in: 3599,
-            token_type: 'SasUrl',
-        };
-        return result;
+
+        if(Keyvault.DATA_PARTITION_STORAGE_ACCOUNT_NAME == 'sdms-storage-account-name' && accountName.toLowerCase().indexOf(".") === -1 ){
+            const sasToken = await this.generateSASToken(accountName, bucket, expiration, readonly);
+            console.log("Fetching:: " +sasToken)
+            const result = {
+                access_token: sasToken,
+                expires_in: 3599,
+                token_type: 'SasUrl',
+            };
+            return result;
+        }else{
+            const sasToken = await this.generateSASTokenDNS(accountName, bucket, expiration, readonly);
+            const result = {
+                access_token: sasToken,
+                expires_in: 3599,
+                token_type: 'SasUrl',
+            };
+            return result;
+        }
     }
 
-        private async generateSASToken(
+    private async generateSASToken(
+        accountName: string,
+        containerName: string,
+        expiration: Date,
+        readOnly: boolean
+    ): Promise<string> {
+        const blobServiceClient = new BlobServiceClient(
+            `https://${accountName}.blob.core.windows.net`,
+            this.defaultAzureCredential
+        );
+
+        const userDelegationKey = await this.getDelegationKey(blobServiceClient);
+        const permissions = new ContainerSASPermissions();
+        permissions.list = true;
+        permissions.write = !readOnly;
+        permissions.create = !readOnly;
+        permissions.delete = !readOnly;
+        permissions.read = true;
+
+        const containerSAS = generateBlobSASQueryParameters(
+            {
+                containerName,
+                permissions,
+                protocol: SASProtocol.Https,
+                expiresOn: expiration,
+            },
+            userDelegationKey,
+            accountName
+        );
+        return `https://${accountName}.blob.core.windows.net/${containerName}?${containerSAS.toString()}`;
+    }
+
+    private async generateSASTokenDNS(
         endpoint: string,
         containerName: string,
         expiration: Date,
