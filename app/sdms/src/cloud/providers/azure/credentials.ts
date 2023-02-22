@@ -114,7 +114,7 @@ export class AzureCredentials extends AbstractCredentials {
         const now = new Date();
         const expiration = this.addMinutes(now, SasExpirationInMinutes);
 
-        if(Keyvault.DATA_PARTITION_STORAGE_ACCOUNT_NAME == Keyvault.DATA_PARTITION_STORAGE_ACCOUNT_NAME; && accountName.toLowerCase().indexOf(".") === -1 ){
+        if(accountName.toLowerCase().indexOf(".") === -1 ){
             const sasToken = await this.generateSASToken(accountName, bucket, expiration, readonly);
             console.log("Fetching:: " +sasToken)
             const result = {
