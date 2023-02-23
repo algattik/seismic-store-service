@@ -110,12 +110,12 @@ export class AzureCredentials extends AbstractCredentials {
     public async getStorageCredentials(
         tenant: string, subproject: string,
         bucket: string,readonly: boolean,partition: string): Promise<IAccessTokenModel> {
-        const accountName = await AzureDataEcosystemServices.getStorageResourceName(partition);
+        const endpoint = await AzureDataEcosystemServices.getStorageResourceName(partition);
         const now = new Date();
         const expiration = this.addMinutes(now, SasExpirationInMinutes);
 
-        if(accountName.toLowerCase().indexOf(".") === -1 ){
-            const sasToken = await this.generateSASToken(accountName, bucket, expiration, readonly);
+        if(endpoint.toLowerCase().indexOf(".") === -1 ){
+            const sasToken = await this.generateSASToken(endpoint, bucket, expiration, readonly);
             console.log("Fetching:: " +sasToken)
             const result = {
                 access_token: sasToken,
@@ -124,7 +124,7 @@ export class AzureCredentials extends AbstractCredentials {
             };
             return result;
         }else{
-            const sasToken = await this.generateSASTokenDNS(accountName, bucket, expiration, readonly);
+            const sasToken = await this.generateSASTokenDNS(endpoint, bucket, expiration, readonly);
             const result = {
                 access_token: sasToken,
                 expires_in: 3599,
