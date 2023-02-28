@@ -116,7 +116,6 @@ export class AzureCredentials extends AbstractCredentials {
 
         if(endpoint.toLowerCase().indexOf(".") === -1 ){
             const sasToken = await this.generateSASToken(endpoint, bucket, expiration, readonly);
-            console.log("Fetching:: " +sasToken)
             const result = {
                 access_token: sasToken,
                 expires_in: 3599,
