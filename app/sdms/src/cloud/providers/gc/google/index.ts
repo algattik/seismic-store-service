@@ -14,7 +14,7 @@
 // limitations under the License.
 // ============================================================================
 
-export { GCS } from './storage';
+export { GCS } from './gcs';
 export { Credentials } from './credentials';
 export { DatastoreDAO, DatastoreTransactionDAO } from './datastore';
 export { Logger } from './logger';

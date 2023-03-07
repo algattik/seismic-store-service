@@ -16,10 +16,10 @@
 
 
 import { Storage, Bucket } from '@google-cloud/storage';
-import { TenantModel } from '../../../services/tenant';
-import { Config } from '../../config';
-import { LoggerFactory } from '../../logger';
-import { AbstractStorage, StorageFactory } from '../../storage';
+import { TenantModel } from '../../../../services/tenant';
+import { Config } from '../../../config';
+import { LoggerFactory } from '../../../logger';
+import { AbstractStorage, StorageFactory } from '../../../storage';
 import { ConfigGoogle } from './config';
 import { v4 as uuidv4 } from 'uuid';
 import { join as path_join }  from 'path';

@@ -14,19 +14,33 @@
 // limitations under the License.
 // ============================================================================
 
-import * as tracer from '@google-cloud/trace-agent';
-import { AbstractTrace, TraceFactory } from '../../../trace';
+import { LoggingWinston } from '@google-cloud/logging-winston';
+import winston from 'winston';
+import { AbstractLogger, LoggerFactory } from '../../../logger';
 import { ConfigGoogle } from './config';
 
-@TraceFactory.register('gc')
-export class GoogleTrace extends AbstractTrace {
 
-    public start() {
-        tracer.start({
-            keyFilename: ConfigGoogle.SERVICE_IDENTITY_KEY_FILENAME,
-            projectId: ConfigGoogle.SERVICE_CLOUD_PROJECT,
-            ignoreUrls: [ConfigGoogle.API_BASE_PATH + '/svcstatus']
-        });
+const loggingWinston = new LoggingWinston();
+const logger = winston.createLogger({
+    level: 'info',
+    transports: [
+        new winston.transports.Console(),
+        loggingWinston,
+    ],
+});
+
+@LoggerFactory.register('gc')
+export class Logger extends AbstractLogger {
+
+    public info(data: any): void {
+        if (!ConfigGoogle.UTEST) { logger.info(data); }
+    }
+    public error(data: any): void {
+        if (!ConfigGoogle.UTEST) { logger.error(data); }
     }
 
+    // [TODO] this method should report a metric using CSP SDK
+    public metric(key: string, data: any): void {
+        return;
+    }
 }
