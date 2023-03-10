@@ -82,7 +82,7 @@ export class ConfigGoogle extends Config {
     public async init(): Promise<void> {
 
         try {
-            Config.ENTITLEMENTS_AUTHORIZATION = process.env.ENTITLEMENTS_AUTHORIZATION === 'true';
+            Config.USER_ID_FROM_ENTITLEMENTS = process.env.USER_ID_FROM_ENTITLEMENTS === 'true';
             ConfigGoogle.GSC_BUCKET = process.env.GSC_BUCKET;
             // load des target audience for service to service communication
             ConfigGoogle.DES_SERVICE_TARGET_AUDIENCE = process.env.SEISTORE_DES_TARGET_AUDIENCE;

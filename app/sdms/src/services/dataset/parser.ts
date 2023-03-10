@@ -47,14 +47,10 @@ export class DatasetParser {
         const dataset = this.createDatasetModelFromRequest(req);
         dataset.ltag = (req.headers.ltag) as string;
         dataset.type = req.body ? req.body.type : undefined;
-        if (Config.ENTITLEMENTS_AUTHORIZATION){
-            dataset.created_by = await Utils.getUserIdFromEntitlements(
-                req.headers.authorization, 
-                req.headers['data-partition-id'] as string
-            );
-        } else {
-            dataset.created_by = Utils.getUserIdFromUserToken(req.headers.authorization);
-        }
+        dataset.created_by = await Utils.getUserId(
+            req.headers.authorization,
+            req.headers['data-partition-id'] as string
+        )
 
         dataset.created_date = dataset.last_modified_date = new Date().toString();
         dataset.gtags = req.body ? req.body.gtags : undefined;

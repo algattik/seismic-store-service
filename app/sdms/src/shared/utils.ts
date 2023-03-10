@@ -43,16 +43,13 @@ export class Utils {
         return property in payload ? payload[property] : undefined;
     }
 
-    public static getUserIdFromUserToken(token: string): string {
-        return Utils.getPropertyFromTokenPayload(
-            token, Config.USER_ID_CLAIM_FOR_SDMS) || Utils.getSubFromPayload(token);
-    }
-
-    public static async getUserIdFromEntitlements(
-        userToken: string, 
-        dataPartitionId: string, 
-        appKey?): Promise<string> {
-            return await DESEntitlement.getUserId(userToken, dataPartitionId, appKey);
+    public static async getUserId(authorization: string, dataPartitionId: string, appKey?: string): Promise<string> {
+        if (Config.USER_ID_FROM_ENTITLEMENTS) {
+            return await DESEntitlement.getUserId(authorization, dataPartitionId, appKey);
+        } else {
+            return Utils.getPropertyFromTokenPayload(
+                authorization, Config.USER_ID_CLAIM_FOR_SDMS) || Utils.getSubFromPayload(authorization);
+        }
     }
 
     // This method is temporary required by slb during the migration of sauth from v1 to v2

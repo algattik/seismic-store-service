@@ -46,13 +46,10 @@ export class SubProjectParser {
         // check user input params
         Params.checkString(subproject.admin, 'admin', false);
         Params.checkString(subproject.ltag, 'ltag', false);
-        if (Config.ENTITLEMENTS_AUTHORIZATION) {
-            const token: string = req.headers.authorization;
-            const dataPartitionId: string = req.headers['data-partition-id'] as string;
-            subproject.admin = await Utils.getUserIdFromEntitlements(token, dataPartitionId);
-        } else {
-            subproject.admin = Utils.getUserIdFromUserToken(req.headers.authorization);
-        }
+        
+        // get the caller id as subproject admin (admin here has the meaning of created_by)
+        subproject.admin = await Utils.getUserId(
+            req.headers.authorization, req.headers['data-partition-id'] as string);
 
         // This method is temporary required by slb during the migration of sauth from v1 to v2
         // The method replace slb.com domain name with delfiserviceaccount.com
