@@ -47,9 +47,7 @@ variables:
 .define_app_version:
   script:
     - >
-      if [[ -f "pom.xml" ]];
-      then APP_VERSION=$(yq -p=xml '.project.version' pom.xml);
-      elif [[ "$CI_COMMIT_TAG" != "" ]];
+      if [[ "$CI_COMMIT_TAG" != "" ]];
       then APP_VERSION=$(echo $CI_COMMIT_TAG | sed "s/^v//");
       fi
 
@@ -64,7 +62,7 @@ variables:
 .set_image_name:
   script:
     - >
-      if echo $CI_COMMIT_REF_NAME | grep -Eq "release";
+      if echo $CI_COMMIT_REF_NAME | grep -Eq "^release\/[0-9]{1,2}.[0-9]{1,2}$";
       then
         export IMAGE_NAME=$IMAGE_NAME-release;
         export IMAGE_BOOTSTRAP_NAME=$IMAGE_BOOTSTRAP_NAME-release;
