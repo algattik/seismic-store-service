@@ -93,7 +93,7 @@ variables:
   stage: build
   tags: ["osdu-small"]
   image:
-    name: alpine/helm:3.6.3
+    name: alpine/helm:3.9.0
     entrypoint: [""]
   before_script:
     - helm registry login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
@@ -115,7 +115,7 @@ variables:
   stage: build
   tags: ["osdu-small"]
   image:
-    name: alpine/helm:3.6.3
+    name: alpine/helm:3.9.0
     entrypoint: [""]
   before_script:
     - helm registry login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
