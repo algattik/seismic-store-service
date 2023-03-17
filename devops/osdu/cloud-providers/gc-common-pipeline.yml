@@ -1,6 +1,6 @@
 variables:
   GC_GCR_REGISTRY: "gcr.io/osdu-anthos"
-  APP_VERSION: "0.20.0-latest"
+  APP_VERSION: "$GC_HELM_PACKAGE_VERSION-SNAPSHOT"
   
 .common:
   script:
