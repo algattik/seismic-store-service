@@ -171,7 +171,7 @@ variables:
   stage: build
   tags: ["osdu-small"]
   image:
-    name: alpine/helm:3.6.3
+    name: alpine/helm:3.9.0
     entrypoint: [""]
   before_script:
     - cat $GC_DEPLOY_FILE | helm registry login -u _json_key --password-stdin https://gcr.io
