@@ -261,10 +261,9 @@ variables:
     - !reference [.common-dev2, script]
     - !reference [.define_version, script]
     - !reference [.set_image_name, script]
-    - helm repo add $SEISMIC_GC_SERVICE ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/helm/stable
     - >
       helm upgrade $SEISMIC_GC_HELM_DEPLOYMENT_SERVICE oci://$CI_REGISTRY_IMAGE/gc-helm/gc-$SEISMIC_GC_SERVICE-deploy
-      --version $GC_HELM_PACKAGE_VERSION-$IMAGE_TAG
+      --version $VERSION
       --install
       --create-namespace
       --namespace=$GC_HELM_NAMESPACE
@@ -291,9 +290,9 @@ variables:
     - !reference [.common-preship, script]
     - !reference [.define_version, script]
     - !reference [.set_image_name, script]
-    - helm repo add $SEISMIC_GC_SERVICE ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/helm/stable
     - >
-      helm upgrade $SEISMIC_GC_HELM_DEPLOYMENT_SERVICE $SEISMIC_GC_HELM_DEPLOYMENT_DIR --version $VER
+      helm upgrade $SEISMIC_GC_HELM_DEPLOYMENT_SERVICE oci://$CI_REGISTRY_IMAGE/gc-helm/gc-$SEISMIC_GC_SERVICE-deploy 
+      --version $VERSION
       --install
       --create-namespace
       --namespace=$GC_HELM_NAMESPACE
