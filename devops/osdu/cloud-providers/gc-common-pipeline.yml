@@ -10,6 +10,7 @@ variables:
     - export USE_GKE_GCLOUD_AUTH_PLUGIN=True
     - gcloud container clusters get-credentials $GC_CLUSTER --zone $GC_ZONE --project $GC_PROJECT
     - curl https://get.helm.sh/helm-v3.9.0-linux-amd64.tar.gz -s -o helm.tgz; tar -zxf helm.tgz; mv linux-amd64/helm /usr/local/bin/
+    - apk update && apk add jq
     - >
       if helm status $SEISMIC_GC_HELM_DEPLOYMENT_SERVICE -n $GC_HELM_NAMESPACE;
       then
@@ -25,6 +26,7 @@ variables:
     - export USE_GKE_GCLOUD_AUTH_PLUGIN=True
     - gcloud container clusters get-credentials $GC_CLUSTER --zone $GC_ZONE --project $GC_PROJECT
     - curl https://get.helm.sh/helm-v3.9.0-linux-amd64.tar.gz -s -o helm.tgz; tar -zxf helm.tgz; mv linux-amd64/helm /usr/local/bin/
+    - apk update && apk add jq
     - >
       if helm status $SEISMIC_GC_HELM_DEPLOYMENT_SERVICE -n $GC_HELM_NAMESPACE;
       then
@@ -40,6 +42,13 @@ variables:
     - export USE_GKE_GCLOUD_AUTH_PLUGIN=True
     - gcloud container clusters get-credentials $GC_CLUSTER --zone $GC_ZONE --project $GC_PROJECT
     - curl https://get.helm.sh/helm-v3.9.0-linux-amd64.tar.gz -s -o helm.tgz; tar -zxf helm.tgz; mv linux-amd64/helm /usr/local/bin/
+    - apk update && apk add jq
+    - >
+      if helm status $SEISMIC_GC_HELM_DEPLOYMENT_SERVICE -n $GC_HELM_NAMESPACE;
+      then
+        HELM_REVISION=$(helm history $SEISMIC_GC_HELM_DEPLOYMENT_SERVICE -o json | jq '.[] | select(.status == "pending-upgrade").revision')
+        if [[ ! -z "$HELM_REVISION" ]]; then kubectl delete secret sh.helm.release.v1.$SEISMIC_GC_HELM_DEPLOYMENT_SERVICE.v$HELM_REVISION; fi
+      fi
 
 .common-anthos:
   script:
@@ -49,6 +58,7 @@ variables:
     - export USE_GKE_GCLOUD_AUTH_PLUGIN=True
     - gcloud container clusters get-credentials $GC_CLUSTER --zone $GC_ZONE --project $GC_PROJECT
     - curl https://get.helm.sh/helm-v3.9.0-linux-amd64.tar.gz -s -o helm.tgz; tar -zxf helm.tgz; mv linux-amd64/helm /usr/local/bin/
+    - apk update && apk add jq
     - >
       if helm status $SEISMIC_GC_HELM_DEPLOYMENT_SERVICE -n $GC_HELM_NAMESPACE;
       then
