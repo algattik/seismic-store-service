@@ -10,23 +10,23 @@ include:
 
   # cloud-providers
   # aws
-  - local: "devops/osdu/cloud-providers/aws.yml"
+  # - local: "devops/osdu/cloud-providers/aws.yml"
 
   # Google Cloud
   - local: "devops/osdu/cloud-providers/gc.yml"
 
   # azure
-  - local: "devops/osdu/cloud-providers/azure.yml"
+  # - local: "devops/osdu/cloud-providers/azure.yml"
 
   # ibm
-  - local: "devops/osdu/cloud-providers/ibm.yml"
+  # - local: "devops/osdu/cloud-providers/ibm.yml"
 
   # app
   # sdms
   - local: "app/sdms/.gitlab-ci.yml"
 
   # sdms v4
-  - local: "app/sdms-v4/.gitlab-ci.yml"
+  # - local: "app/sdms-v4/.gitlab-ci.yml"
 
   # file metadata service
-  - local: "app/filemetadata/.gitlab-ci.yml"
+  # - local: "app/filemetadata/.gitlab-ci.yml"
