@@ -32,6 +32,15 @@ variables:
         if [[ ! -z "$HELM_REVISION" ]]; then kubectl delete secret sh.helm.release.v1.$SEISMIC_GC_HELM_DEPLOYMENT_SERVICE.v$HELM_REVISION; fi
       fi
 
+.common-preship:
+  script:
+    - gcloud auth activate-service-account --key-file $GC_PRESHIP_DEPLOY_FILE
+    - gcloud config set project $GC_PROJECT
+    - gcloud components install kubectl --quiet
+    - export USE_GKE_GCLOUD_AUTH_PLUGIN=True
+    - gcloud container clusters get-credentials $GC_CLUSTER --zone $GC_ZONE --project $GC_PROJECT
+    - curl https://get.helm.sh/helm-v3.9.0-linux-amd64.tar.gz -s -o helm.tgz; tar -zxf helm.tgz; mv linux-amd64/helm /usr/local/bin/
+
 .common-anthos:
   script:
     - gcloud auth activate-service-account --key-file $GC_ANTHOS_DEPLOY_FILE
@@ -82,7 +91,6 @@ variables:
       if echo $CI_COMMIT_REF_NAME | grep -Eq "^release\/[0-9]{1,2}.[0-9]{1,2}$";
       then
         export IMAGE_NAME=$IMAGE_NAME-release;
-        export IMAGE_BOOTSTRAP_NAME=$IMAGE_BOOTSTRAP_NAME-release;
       fi
     - >
       if [[ "$CI_COMMIT_TAG" != "" ]];
@@ -262,6 +270,36 @@ variables:
       when: on_success
     - if: '$GC == "1" && $CI_COMMIT_TAG'
       when: on_success
+
+.gc-preship-deploy:
+  stage: deploy_preship
+  retry: 1
+  tags: ["osdu-small"]
+  extends: .gc-preship-variables
+  image: gcr.io/google.com/cloudsdktool/cloud-sdk:alpine
+  script:
+    - !reference [.common-preship, script]
+    - !reference [.define_VER, script]
+    - !reference [.set_image_name, script]
+    - helm repo add $SEISMIC_GC_SERVICE ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/helm/stable
+    - >
+      helm upgrade $SEISMIC_GC_HELM_DEPLOYMENT_SERVICE $SEISMIC_GC_HELM_DEPLOYMENT_DIR --version $VER
+      --install
+      --create-namespace
+      --namespace=$GC_HELM_NAMESPACE
+      --wait
+      --history-max=3
+      --set data.image=$CI_REGISTRY_IMAGE/$IMAGE_NAME:${CI_COMMIT_TAG:-$CI_COMMIT_SHORT_SHA}
+      --set data.imagePullPolicy=Always
+      --set data.serviceAccountName=$SEISMIC_GC_SERVICE-k8s
+    - !reference [.verify_deploy, script]
+  rules:
+    - if: '$GC == "1" && $CI_COMMIT_TAG'
+      when: manual
+      allow_failure: true
+    - if: '$GC == "1" && $CI_COMMIT_BRANCH =~ /^release/'
+      when: manual
+      allow_failure: true
 
 .gc-anthos-deploy:
   stage: deploy
