@@ -279,7 +279,7 @@ variables:
   image: gcr.io/google.com/cloudsdktool/cloud-sdk:alpine
   script:
     - !reference [.common-preship, script]
-    - !reference [.define_VER, script]
+    - !reference [.define_version, script]
     - !reference [.set_image_name, script]
     - helm repo add $SEISMIC_GC_SERVICE ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/helm/stable
     - >
