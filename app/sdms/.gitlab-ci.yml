@@ -23,13 +23,13 @@ include:
 
   # deploy
   # azure
-  - local: "app/sdms/devops/osdu/cloud-providers/azure.yml"
+  # - local: "app/sdms/devops/osdu/cloud-providers/azure.yml"
 
   # aws
-  - local: "app/sdms/devops/osdu/cloud-providers/aws.yml"
+  # - local: "app/sdms/devops/osdu/cloud-providers/aws.yml"
 
   # Google Cloud
   - local: "app/sdms/devops/osdu/cloud-providers/gc.yml"
 
   # ibm
-  - local: "app/sdms/devops/osdu/cloud-providers/ibm.yml"
+  # - local: "app/sdms/devops/osdu/cloud-providers/ibm.yml"
