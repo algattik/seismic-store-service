@@ -12,8 +12,9 @@ import { Config } from '../../config';
 import { Utils } from '../../../shared/utils'
 import { IbmConfig } from './config';
 import { logger } from './logger';
+//import cloudant from '@cloudant/cloudant';
+import {CloudantV1} from '@ibm-cloud/cloudant';//c
 
-import cloudant from '@cloudant/cloudant';
 
 // [TODO] all logger.info looks more DEBUG message should not be executed in production code
 // [TODO] don't use any! use types
@@ -21,7 +22,10 @@ import cloudant from '@cloudant/cloudant';
 export class DatastoreDAO extends AbstractJournal {
     public KEY = Symbol('id');
     private dataPartition: string;
-    private docDb: any;
+    //private docDb: any;
+    private docDb: CloudantV1;//c
+    private docParams: CloudantV1.GetDocumentParams;//c
+
 
     public constructor(tenant: TenantModel) {
         super();
@@ -32,18 +36,30 @@ export class DatastoreDAO extends AbstractJournal {
     public async initDb(dataPartition: string) {
         logger.info('In datastore.initDb.');
         const dbUrl = IbmConfig.DOC_DB_URL;
-        const cloudantOb = cloudant(dbUrl);
+        //const cloudantOb = cloudant(dbUrl);
+        ////const cloudantOb = CloudantV1.newInstance({ serviceUrl: dbUrl });//c
+        const cloudantOb = CloudantV1.newInstance({
+            serviceName: 'CLOUDANTDB'
+        });//c
+
+        const CLOUDANTDB_AUTH_TYPE="BASIC"
+        const CLOUDANTDB_URL="https://couchdb-osdu-couchdb.osdu-qa-16x64-ba8e38d4c011d627379af1a4280c4e35-0000.sjc03.containers.appdomain.cloud"
+        const CLOUDANTDB_USERNAME="ibm"
+        const CLOUDANTDB_PASSWORD="t4MXrPJFBVLjgnV"
+
         logger.info('DB initialized. cloudantOb-');
 
         try {
             logger.debug('Before DB connection');
-            this.docDb = await cloudantOb.db.get(IbmConfig.DOC_DB_COLLECTION + '-' + dataPartition);
+            //this.docDb = await cloudantOb.db.get(IbmConfig.DOC_DB_COLLECTION + '-' + dataPartition);
+            await cloudantOb.getDatabaseInformation({ db: IbmConfig.DOC_DB_COLLECTION + '-' + dataPartition });
             logger.debug('Got DB connection');
         } catch (err) {
             if(err.statusCode === 404)
             {
                 logger.debug('Database does not exist. Creating database.');
-                await cloudantOb.db.create(IbmConfig.DOC_DB_COLLECTION + '-' + dataPartition)
+                //await cloudantOb.db.create(IbmConfig.DOC_DB_COLLECTION + '-' + dataPartition)
+                await cloudantOb.putDatabase({ db: IbmConfig.DOC_DB_COLLECTION + '-' + dataPartition } )//c
                 logger.debug('Database created.');
             }
             else
@@ -53,7 +69,12 @@ export class DatastoreDAO extends AbstractJournal {
             }
         }
 
-        this.docDb = cloudantOb.db.use(IbmConfig.DOC_DB_COLLECTION + '-' + dataPartition);
+        //this.docDb = cloudantOb.db.use(IbmConfig.DOC_DB_COLLECTION + '-' + dataPartition);
+        this.docDb = cloudantOb;//c
+        this.docParams = {
+            db: IbmConfig.DOC_DB_COLLECTION + '-' + dataPartition,
+            docId: '',
+        };//c
 
     }
 
@@ -63,7 +84,9 @@ export class DatastoreDAO extends AbstractJournal {
         let entityDocument: any;
         await this.initDb(this.dataPartition);
         // using the field 'name' to fetch the document. Note: the get() is expecting the field _id
-        entityDocument = await this.docDb.get(key.name).then(
+        this.docParams.docId = key.name;//c
+        //entityDocument = await this.docDb.get(key.name).then(
+        entityDocument = await this.docDb.getDocument(this.docParams).then(
             (result: any) => {
                 result[this.KEY] = result[this.KEY.toString()];
                 delete result[this.KEY.toString()];
@@ -90,9 +113,16 @@ export class DatastoreDAO extends AbstractJournal {
         logger.info('Fetching document.');
 
         try{
-            const getResponse = await this.docDb.get(entity.key.name, { revs_info: true });
+            //const getResponse = await this.docDb.get(entity.key.name, { revs_info: true });
+            this.docParams.docId = entity.key.name;//c
+            this.docParams.revsInfo = true;//c
+            let existingDoc: CloudantV1.Document;//c
+            await this.docDb.getDocument(this.docParams)
+            .then((docResult) => {
+                existingDoc = docResult.result;
+            });//c
             logger.info('Document exists in db.');
-            const existingDoc = getResponse;
+            //const existingDoc = getResponse;
             const docTemp = JSON.parse(JSON.stringify(existingDoc));
             // have to add if condition. before that check the dataset object structure
             docTemp.ltag = entity.ltag;
@@ -101,7 +131,12 @@ export class DatastoreDAO extends AbstractJournal {
 
             Object.assign(docTemp, entity.data);
             logger.debug(docTemp);
-            await this.docDb.insert(docTemp, entity.key.name);
+            //await this.docDb.insert(docTemp, entity.key.name);
+            const postDocumentParams: CloudantV1.PostDocumentParams = {
+                db: this.docParams.db,
+                document: docTemp
+            };//c
+            await this.docDb.postDocument(postDocumentParams);//c
             logger.info('Document updated.');
         } catch(err){
             if(err.statusCode === 404)
@@ -117,7 +152,13 @@ export class DatastoreDAO extends AbstractJournal {
                                     customizedOb[element] = entity.data[element];
                 };
                 logger.debug(customizedOb);
-                await this.docDb.insert(customizedOb, entity.key.name);
+                //await this.docDb.insert(customizedOb, entity.key.name);
+                const postDocumentParams: CloudantV1.PutDocumentParams = {
+                    db: this.docParams.db,
+                    docId: this.docParams.docId,
+                    document: customizedOb
+                };//c
+                await this.docDb.putDocument(postDocumentParams);//c
                 logger.info('Document inserted.');
             }
         }
@@ -129,15 +170,33 @@ export class DatastoreDAO extends AbstractJournal {
         logger.info('In datastore.delete.');
         logger.info('Connecting to DB.');
         await this.initDb(this.dataPartition);
-        const doc = await this.docDb.get(key.name);
-        try {
+        //const doc = await this.docDb.get(key.name);
+        /*try {
             this.docDb.destroy(doc._id, doc._rev);
             logger.info('Document deleted.');
         }
         catch (err) {
             logger.error('Deletion failed. Error - ');
             logger.error(err);
-        }
+        }*/
+
+        this.docParams.docId = key.name;//c
+        this.docParams.revsInfo = true;//c
+        await this.docDb.getDocument(this.docParams)
+        .then(async(docResult) =>  {
+            const document: CloudantV1.Document = docResult.result;
+            await this.docDb.deleteDocument({
+                db: this.docParams.db,
+                docId: document._id,
+                rev: document._rev
+            }).then(() => {
+                logger.info('Document deleted.');
+            });
+        }).catch ((err) => {
+            logger.error('Deletion failed. Error - ');
+            logger.error(err);
+        });//c
+
         logger.info('Returning from datastore.delete.');
     }
 
@@ -159,19 +218,26 @@ export class DatastoreDAO extends AbstractJournal {
         let docs;
         logger.info('Connecting to DB.');
         await this.initDb(this.dataPartition);
-        await this.docDb.find(mangoQuery).then((doc) => {
+        /*await this.docDb.find(mangoQuery).then((doc) => {
             docs = doc.docs;
             logger.debug(doc.docs);
-        });
+        });*/
+        await this.docDb.postSearch(mangoQuery).then((doc) => {
+            docs = doc.result?.rows;
+            logger.debug(docs);
+        });//c
         logger.info('Find query executed.');
 
         const results = docs.map(result => {
             if (!result) {
                 return result;
             } else {
-                if (result[this.KEY.toString()]) {
-                    result[this.KEY] = result[this.KEY.toString()];
-                    delete result[this.KEY.toString()];
+                //if (result[this.KEY.toString()]) {
+                if (result?.doc[this.KEY.toString()]) {//c
+                    //result[this.KEY] = result[this.KEY.toString()];
+                    //delete result[this.KEY.toString()];
+                    result.doc[this.KEY] = result.doc[this.KEY.toString()];//c
+                    delete result.doc[this.KEY.toString()];//c
                     return result;
                 } else {
                     return result;

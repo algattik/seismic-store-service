@@ -72,6 +72,7 @@
     "@google-cloud/secret-manager": "^4.0.0",
     "@google-cloud/storage": "^6.1.0",
     "@google-cloud/trace-agent": "^5.1.6",
+    "@ibm-cloud/cloudant": "^0.2.0",
     "@prisma/client": "^3.8.0",
     "ajv": "^8.8.0",
     "ajv-formats": "^2.1.1",
