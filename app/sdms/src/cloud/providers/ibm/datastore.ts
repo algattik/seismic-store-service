@@ -42,11 +42,6 @@ export class DatastoreDAO extends AbstractJournal {
             serviceName: 'CLOUDANTDB'
         });//c
 
-        const CLOUDANTDB_AUTH_TYPE="BASIC"
-        const CLOUDANTDB_URL="https://couchdb-osdu-couchdb.osdu-qa-16x64-ba8e38d4c011d627379af1a4280c4e35-0000.sjc03.containers.appdomain.cloud"
-        const CLOUDANTDB_USERNAME="ibm"
-        const CLOUDANTDB_PASSWORD="t4MXrPJFBVLjgnV"
-
         logger.info('DB initialized. cloudantOb-');
 
         try {
@@ -92,7 +87,7 @@ export class DatastoreDAO extends AbstractJournal {
                 delete result[this.KEY.toString()];
                 logger.info('Deleted field');
                 logger.debug(result[this.KEY.toString()]);
-                return [result];
+                return [result.result];
             }
         ).catch((error: any) => {
             logger.error('Get failed to fetch the document.');
