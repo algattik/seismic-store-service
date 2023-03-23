@@ -15,7 +15,7 @@
 // ============================================================================
 
 import { Request as expRequest, Response as expResponse } from 'express';
-
+import url from 'url';
 import { DatasetModel, DatasetUtils } from '.';
 import { Auth, AuthRoles } from '../../auth';
 import { Config, JournalFactoryTenantClient, LoggerFactory, StorageFactory } from '../../cloud';
@@ -390,6 +390,38 @@ export class DatasetHandler {
                     item.created_by, dataPartition);
             }
         }
+
+        const searchParam: string  = req.query.name as string | undefined;
+        const selectParam: string = req.query.select as string  | undefined;
+
+        // Apply the search parameter to filter the dataset list
+        if (searchParam) {
+          const regex = new RegExp(searchParam.replace("*", ".*")); // convert wildcard to regex
+          output.datasets = output.datasets.filter(d => regex.test(d.name));
+        }
+
+        // Apply the select parameter to limit the returned properties
+        let properties: string[] | undefined = undefined;
+        if (selectParam) {
+            const selectObj = selectParam.substring(1, selectParam.length - 1).split(",");
+            if (Array.isArray(selectObj)) {
+              properties = selectObj;
+            }
+        }
+
+        if (properties) {
+            output.datasets = output.datasets.map(d => {
+            const result: any = {};
+            properties.forEach(prop => {
+              if (d.hasOwnProperty(prop)) {
+                result[prop] = d[prop];
+              }
+            });
+            return result;
+          });
+        }
+
+        output.datasets = output.datasets.filter(obj => Object.keys(obj).length > 0);
 
         // Retrieve the list of datasets metadata
         if (pagination) {
