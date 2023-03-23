@@ -119,12 +119,18 @@ azure-publish:
     - az login --service-principal -u $AZURE_PRINCIPAL_ID -p $AZURE_PRINCIPAL_SECRET --tenant $AZURE_TENANT_ID
     - az aks get-credentials -g $AZURE_UNIQUE-rg -n $AZURE_UNIQUE-aks
     - az acr login -n ${AZURE_REGISTRY}
+    - |
+      echo "AZURE_REGISTRY_TOKEN=$(az acr login -n $AZURE_REGISTRY --expose-token --query 'accessToken' -otsv)" >> acr_tokens.env
+      echo "DST_REGISTRY_TOKEN=$(az acr login -n msosdu --expose-token --query 'accessToken' -otsv)" >> acr_tokens.env
   only:
     variables:
       - $AZURE == '1'
   except:
     variables:
       - $AZURE_SKIP_DEPLOY == 'true'
+  artifacts:
+    reports:
+      dotenv: ${CI_PROJECT_DIR}/acr_tokens.env
 
 .azure_test:
   tags: ["osdu-medium"]
