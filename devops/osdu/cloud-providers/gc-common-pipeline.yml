@@ -332,7 +332,7 @@ variables:
       --set data.cloudProvider=anthos
       --set data.image=$CI_REGISTRY_IMAGE/gc-$SEISMIC_GC_SERVICE:$CI_COMMIT_SHORT_SHA
       --set data.serviceAccountName=$SEISMIC_GC_SERVICE
-      --set global.domain=$DOMAIN
+      --set global.domain=$GC_DOMAIN
       --set global.onPremEnabled=true
     - !reference [.verify_deploy, script]
   rules:
