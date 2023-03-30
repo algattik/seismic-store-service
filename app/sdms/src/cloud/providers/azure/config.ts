@@ -41,6 +41,9 @@ export class AzureConfig extends Config {
     public static API_VERSION = 'v3';
     public static API_BASE_URL_PATH = '/seistore-svc/api/' + AzureConfig.API_VERSION;
 
+    //data partition url 
+    public static DataPartitionSvcBaseUrlPath = '/api/partition/v1/partitions';
+
     // max len for a group name in DE
     public static DES_GROUP_CHAR_LIMIT = 256;
 
