@@ -17,4 +17,4 @@ response = requests.request("POST", full_url, data=payload, headers=headers)
 
 result = response.json()
 token = result['access_token']
-print(token)
+#print(token)
