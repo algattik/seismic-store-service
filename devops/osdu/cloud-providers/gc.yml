@@ -2,17 +2,21 @@ include:
   # gc-community
   - project: "osdu/platform/ci-cd-pipelines"
     file: "cloud-providers/gc-com-variables.yml"
+    ref: release/0.20
 
   # gc-dev2
   - project: "osdu/platform/ci-cd-pipelines"
     file: "cloud-providers/gc-dev2-variables.yml"
+    ref: release/0.20
 
   # anthos
   - project: "osdu/platform/ci-cd-pipelines"
     file: "cloud-providers/gc-anthos-variables.yml"
+    ref: release/0.20
 
   # preship
   - project: "osdu/platform/ci-cd-pipelines"
     file: "cloud-providers/gc-preship-variables.yml"
+    ref: release/0.20
 
   - local: "devops/osdu/cloud-providers/gc-common-pipeline.yml"
