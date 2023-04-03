@@ -61,7 +61,6 @@ export class AzureInsightsLogger extends AbstractLogger {
                     }
                 } catch (e) {
                     console.error('Telemetry process error - unrecognized header format');
-                    console.error(httpRequest.headers);
                     console.error(e);
                     return false;
                 }
@@ -111,8 +110,18 @@ export class AzureInsightsLogger extends AbstractLogger {
                 appinsights.defaultClient.trackException({ exception: data });
             }
             // tslint:disable-next-line
-            console.log(data);
+            console.log(omitDeep(data));
         }
+    }
+
+    function omitDeep(obj: any, keyToOmit: string= 'authorization') {
+        _.forIn(obj, function(value, key) {
+          if (_.isObject(value)) {
+            omitDeep(value);
+          } else if (key === keyToOmit) {
+            delete obj[key];
+          }
+        });
     }
 
     public metric(key: string, data: any) {

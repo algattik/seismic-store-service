@@ -16,7 +16,6 @@ def get_id_token():
     try:
         app = msal.ConfidentialClientApplication(client_id=client_id, authority=authority_uri, client_credential=client_secret)
         result = app.acquire_token_for_client(scopes=scopes)
-        print(result.get('access_token'))
         return result.get('access_token')
     except Exception as e:
         print(e)
