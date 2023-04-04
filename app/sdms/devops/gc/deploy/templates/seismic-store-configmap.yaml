@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels:
+    app: {{ .Values.conf.appName | quote }}
+  name: {{  printf "%s-config" .Values.conf.appName | quote }}
+  namespace: {{ .Release.Namespace | quote }}
+data:
+  CLOUDPROVIDER: {{ .Values.data.cloudProvider | quote }}
+  DES_SERVICE_HOST: {{ .Values.data.desServiceHost | quote }}
+  APP_ENVIRONMENT_IDENTIFIER: {{ .Values.data.appEnvironmentIdentifier | quote }}
+  PORT: {{ .Values.data.port | quote }}
+  SDMS_PREFIX: {{ .Values.data.urlPrefix | quote }}
+  LOG_LEVEL: {{ .Values.data.logLevel | quote }}
+  DES_SERVICE_HOST_PARTITION: {{ ternary .Values.data.partitionHost (printf "%s/api/partition/v1/" .Values.data.partitionHost) .Values.global.onPremEnabled | quote}}
+  ENTITLEMENT_BASE_URL_PATH: {{ .Values.data.entitlementBaseUrlPath | quote }}
+  DATA_PARTITION_REST_HEADER_KEY: {{ .Values.data.dataPartitionRestHeaderKey | quote }}
+  DES_SERVICE_HOST_STORAGE: {{ ternary .Values.data.storageHost (printf "%s/api" .Values.data.storageHost) .Values.global.onPremEnabled | quote}}
+  DES_SERVICE_HOST_COMPLIANCE: {{ ternary .Values.data.legalHost (printf "%s/api" .Values.data.legalHost) .Values.global.onPremEnabled | quote}}
+  {{- if not .Values.global.onPremEnabled }}
+  IMP_SERVICE_ACCOUNT_SIGNER: {{ .Values.data.impServiceAccountSigner | quote }}
+  SEISTORE_DES_APPKEY: {{ .Values.data.seistoreDesAppkey | quote }}
+  SEISTORE_DES_TARGET_AUDIENCE: {{ .Values.data.googleAudiences | quote }}
+  SERVICE_CLOUD_PROJECT: {{ .Values.data.serviceCloudProject | quote }}
+  {{- end }}
+  {{- if .Values.data.redisSdmsHost }}
+  DES_REDIS_INSTANCE_ADDRESS: {{ .Values.data.redisSdmsHost | quote }}
+  LOCKSMAP_REDIS_INSTANCE_ADDRESS: {{ .Values.data.redisSdmsHost | quote }}
+  {{- else }}
+  DES_REDIS_INSTANCE_ADDRESS: {{ printf "redis-%s" .Values.conf.appName | quote }}
+  LOCKSMAP_REDIS_INSTANCE_ADDRESS: {{ printf "redis-%s" .Values.conf.appName | quote }}
+  {{- end}}
+  DES_SERVICE_HOST_ENTITLEMENT: {{ ternary .Values.data.entitlementsHost (printf "%s/api" .Values.data.entitlementsHost) .Values.global.onPremEnabled | quote}}
+  DES_REDIS_INSTANCE_PORT: {{ .Values.data.redisSdmsPort | quote }}
+  DES_REDIS_INSTANCE_TLS_DISABLE: {{ .Values.data.redisSdmsTlsDisabled | quote }}
+  LOCKSMAP_REDIS_INSTANCE_PORT: {{ .Values.data.redisSdmsPort | quote }}
+  LOCKSMAP_REDIS_INSTANCE_TLS_DISABLE: {{ .Values.data.redisSdmsTlsDisabled | quote }}
+  {{- if .Values.global.onPremEnabled }}
+  SERVICE_ENV: {{ .Values.data.serviceEnv | quote }}
+  API_BASE_PATH: {{ .Values.data.apiBasePath | quote }}
+  {{- end }}
