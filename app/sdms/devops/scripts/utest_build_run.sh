@@ -14,6 +14,7 @@ if [ ! -f "docs/api/openapi.yaml" ]; then
     exit 1
 fi
 
+npm install
 npm install fs-jetpack
 npm install inline-css
 
