@@ -110,7 +110,7 @@ export class AzureInsightsLogger extends AbstractLogger {
                 appinsights.defaultClient.trackException({ exception: data });
             }
             // tslint:disable-next-line
-            console.log(omitDeep(data));
+            console.log(this.omitDeep(data));
         }
     }
 
@@ -124,7 +124,7 @@ export class AzureInsightsLogger extends AbstractLogger {
         }
     }
 
-    function omitDeep(obj: any, keyToOmit: string= 'authorization') {
+    private omitDeep(obj: any, keyToOmit: string= 'authorization') {
         _.forIn(obj, function(value, key) {
           if (_.isObject(value)) {
             omitDeep(value);
