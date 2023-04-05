@@ -19,6 +19,8 @@ import { Utils } from '../../../shared';
 import { Config } from '../../config';
 import { AbstractLogger, LoggerFactory } from '../../logger';
 import { AzureConfig } from './config';
+import _ from 'lodash';
+
 
 @LoggerFactory.register('azure')
 export class AzureInsightsLogger extends AbstractLogger {
