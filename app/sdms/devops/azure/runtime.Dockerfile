@@ -14,37 +14,42 @@
 # limitations under the License.
 # ============================================================================
 
-#ARG docker_node_image_version=14-alpine
+ARG docker_node_image_version=14-alpine
 
 # -------------------------------
 # Compilation stage
 # -------------------------------
-FROM mcr.microsoft.com/cbl-mariner/base/nodejs:16.14 as runtime-builder
+FROM mcr.microsoft.com/mirror/docker/library/node:${docker_node_image_version} as runtime-builder
 
 ADD ./ /service
+COPY ./ /service
 WORKDIR /service
-
-RUN npm install --quiet node-gyp -g \
+RUN apk --no-cache add --virtual native-deps g++ gcc libgcc libstdc++ linux-headers make python3 \
+    && npm install --quiet node-gyp -g \
     && npm install --quiet \
     && npm run build \
     && mkdir artifact \
-    && cp -r package.json npm-shrinkwrap.json dist artifact
+    && cp -r package.json npm-shrinkwrap.json dist artifact \
+    && apk del native-deps
+
+
 # -------------------------------
 # Package stage
 # -------------------------------
-FROM mcr.microsoft.com/cbl-mariner/base/nodejs:16.14 as release
+FROM mcr.microsoft.com/mirror/docker/library/node:${docker_node_image_version} as release
 
 COPY --from=runtime-builder /service/artifact /seistore-service
 WORKDIR /seistore-service
 
-RUN tdnf upgrade --security \
-    && tdnf install -y shadow-utils \
-    && tdnf clean all
-RUN groupadd appgroup \
-    && useradd -g appgroup appuser
-RUN chown -R appuser:appgroup /seistore-service \
+RUN apk update && apk upgrade
+RUN apk --no-cache add --virtual native-deps g++ gcc libgcc libstdc++ linux-headers make python3 \
+    && addgroup appgroup \
+    && adduser --disabled-password --gecos --shell appuser --ingroup appgroup \
+    && chown -R appuser:appgroup /seistore-service \
     && echo '%appgroup ALL=(ALL) NOPASSWD: /usr/bin/npm' >> /etc/sudoers \
     && echo '%appgroup ALL=(ALL) NOPASSWD: /usr/bin/node' >> /etc/sudoers \
-    && npm install --production --quiet 
+    && npm install --production --quiet \
+    && apk del native-deps
+
 
 ENTRYPOINT ["node", "--trace-warnings", "--trace-uncaught", "./dist/server/server-start.js"]
