@@ -129,7 +129,7 @@ export class AzureInsightsLogger extends AbstractLogger {
     private omitDeep(obj: any, keyToOmit: string= 'authorization') {
         _.forIn(obj, function(value, key) {
           if (_.isObject(value)) {
-            omitDeep(value);
+            this.omitDeep(value);
           } else if (key === keyToOmit) {
             delete obj[key];
           }
