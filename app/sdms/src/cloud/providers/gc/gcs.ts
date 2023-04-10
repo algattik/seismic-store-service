@@ -1,5 +1,7 @@
 // ============================================================================
 // Copyright 2017-2019, Schlumberger
+// Copyright 2023 Google LLC
+// Copyright 2023 EPAM Systems
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -54,7 +56,7 @@ export class SubProjectPath {
      * Create a new subproject path object.
      * The subproject path could point either to the separate google storage bucket
      * or to the separate folder in the bucket got form Partition service by dataPartitionId
-     * If the last option is chosen than the path should look like "<dataPartitionId>://<folder>".
+     * If the last option is chosen than the path should look like "<bucketName>$$<subprojectFolderName>".
      * @param gcs_path
      * @returns
      */
@@ -106,7 +108,7 @@ export class GCS extends AbstractStorage {
     // It has the following structure
     public async randomBucketName(): Promise<string> {
         /**
-         * Return a new subproject path with the following structure <data-partition-id>://<folder-name>/
+         * Return a new subproject path with the following structure <bucketName>$$<subprojectFolderName>/
          * We use the data-partition-id to acquire the information about the bucker from Partition service
          */
         const randomFolderName = uuidv4();
@@ -151,7 +153,7 @@ export class GCS extends AbstractStorage {
     /**
      * Delete a dataset's subfolder from the bucket;
      *
-     * @param subprojectURI: "<dataPartitionId>://<folder>"
+     * @param subprojectURI: "<bucketName>$$<subprojectFolderName>"
      * @param datasetFolder: The dataset's subfolder
      */
     public async deleteObjects(subprojectURI: string, datasetFolder: string): Promise<void> {
@@ -159,7 +161,7 @@ export class GCS extends AbstractStorage {
         const bucket = this.getStorageClient().bucket(subprojectPath.bucketname);
         const datasetObjectsPath = path_join(subprojectPath.subprojectFolder, datasetFolder, '/');
 
-        const deleteQuery = { datasetObjectsPath, force: true };
+        const deleteQuery = { prefix: datasetObjectsPath, force: true };
         // tslint:disable-next-line: no-floating-promises
         await bucket.deleteFiles(deleteQuery).catch(
             // tslint:disable-next-line: no-console
@@ -175,12 +177,12 @@ export class GCS extends AbstractStorage {
         ownerEmail: string
     ) {
 
-        datasetFolderFrom = datasetFolderFrom.replace('//', '/');
-        datasetFolderTo = datasetFolderTo.replace('//', '/');
         const subprojectPathFrom = await this.getSubprojectPath(subprojectURIFrom);
         const subprojectPathTo = await this.getSubprojectPath(subprojectURITo);
         const bucketFrom = this.getStorageClient().bucket(subprojectPathFrom.bucketname);
         const bucketTo = this.getStorageClient().bucket(subprojectPathTo.bucketname);
+        datasetFolderFrom = path_join(subprojectPathFrom.subprojectFolder, datasetFolderFrom);
+        datasetFolderTo = path_join(subprojectPathFrom.subprojectFolder, datasetFolderTo);
 
         const rmDatasetFolderFrom = datasetFolderFrom ? datasetFolderFrom !== '/' : false;
 
