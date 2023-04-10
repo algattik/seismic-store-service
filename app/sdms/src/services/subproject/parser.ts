@@ -49,11 +49,9 @@ export class SubProjectParser {
 
         if (Config.USER_ID_HEADER_KEY_NAME) {
             subproject.admin = req.get(Config.USER_ID_HEADER_KEY_NAME) 
-        } else if (Config.USER_ID_FROM_ENTITLEMENTS) {
+        } else {
             subproject.admin = await Utils.getUserId(
                 req.headers.authorization, req.headers['data-partition-id'] as string);
-        } else {
-            Utils.getUserIdFromUserToken(req.headers.authorization);
         } 
 
         // This method is temporary required by slb during the migration of sauth from v1 to v2

@@ -128,7 +128,7 @@ export class Auth {
         // 1. Do we really need IMP tokens
         // 2. If we do need, why do we need to check the issuer?
         //
-        if (Config.USER_ID_FROM_ENTITLEMENTS) {
+        if (Config.USER_ID_FROM_PROVIDER_API) {
             return await Auth.isUserAuthorized(authToken, authGroupsName, tenant.esd, appkey, mustThrow);
         }
         else if (Auth.isObsoleteImpersonationToken(authToken)) {
@@ -154,8 +154,8 @@ export class Auth {
         // 3. What does the impersonation means for us at all?
         //
         LoggerFactory.build(Config.CLOUDPROVIDER).info('Entitlements userID');
-        LoggerFactory.build(Config.CLOUDPROVIDER).info(Config.USER_ID_FROM_ENTITLEMENTS);
-        if (Config.USER_ID_FROM_ENTITLEMENTS) {
+        LoggerFactory.build(Config.CLOUDPROVIDER).info(Config.USER_ID_FROM_PROVIDER_API);
+        if (Config.USER_ID_FROM_PROVIDER_API) {
             return await Auth.isUserAuthorized(authToken, authGroupsName, tenant.esd, appkey, mustThrow);
         }
         else if (Auth.isObsoleteImpersonationToken(authToken)) {

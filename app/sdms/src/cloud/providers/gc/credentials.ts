@@ -1,5 +1,7 @@
 // ============================================================================
 // Copyright 2017-2021, Schlumberger
+// Copyright 2023 Google LLC
+// Copyright 2023 EPAM Systems
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,7 +16,7 @@
 // limitations under the License.
 // ============================================================================
 
-import { DownscopedClient, CredentialAccessBoundary, GoogleAuth } from 'google-auth-library';
+import { DownscopedClient, CredentialAccessBoundary, GoogleAuth, OAuth2Client, auth } from 'google-auth-library';
 import { GCS_URL_SEPARATOR } from './constants'
 import { Error} from '../../../shared';
 import { AbstractCredentials, CredentialsFactory, IAccessTokenModel } from '../../credentials';
@@ -136,4 +138,40 @@ export class Credentials extends AbstractCredentials {
     public getPublicKeyCertificatesUrl(): string {
         return null;
     }
- }
+
+    private async parseAsAccessToken(client: OAuth2Client, userToken: string): Promise<string | undefined> {
+        try {
+            const tokenInfo = await client.getTokenInfo(userToken);
+            return tokenInfo.sub;
+        } catch (error) {
+            return undefined;
+        }
+    }
+
+    private async parseAsIdToken(client: OAuth2Client, userToken: string): Promise<string | undefined> {
+        try {
+            var loginTicket = await client.verifyIdToken({ idToken: userToken });
+            const tokenInfo = loginTicket.getPayload();
+            return tokenInfo.sub;
+        } catch (error) {
+            return undefined;
+        }
+    }
+
+    /// TODO: Think about returning not only the sub field.
+    public async getUserId(userToken: string): Promise<string> {
+        const client = new OAuth2Client();
+
+        const userSub = await this.parseAsAccessToken(client, userToken)
+            || await this.parseAsIdToken(client, userToken);
+        
+        if (!userSub) {
+            const error = Error.make(
+                Error.Status.UNAUTHENTICATED,
+                'Can\'t parse token with Google API'
+            )
+            throw error;
+        }
+        return userSub;
+    }
+}

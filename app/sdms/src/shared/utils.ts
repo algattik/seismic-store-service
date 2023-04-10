@@ -17,7 +17,7 @@
 import * as crypto from 'crypto';
 import * as JsYaml from 'js-yaml';
 import * as JsonRefs from 'json-refs';
-import { Config } from '../cloud';
+import { Config, CredentialsFactory } from '../cloud';
 import { DESEntitlement } from '../dataecosystem';
 
 export class Utils {
@@ -39,7 +39,7 @@ export class Utils {
     }
 
     public static getPropertyFromTokenPayload(base64JwtPayload: string, property: string): string {
-        if (Config.USER_ID_FROM_ENTITLEMENTS) {
+        if (Config.USER_ID_FROM_PROVIDER_API) {
             // TODO: Fix it later.
             return undefined;
         }
@@ -47,9 +47,11 @@ export class Utils {
         return property in payload ? payload[property] : undefined;
     }
 
-    public static async getUserId(authorization: string, dataPartitionId: string, appKey?: string): Promise<string> {
-        if (Config.USER_ID_FROM_ENTITLEMENTS) {
-            return await DESEntitlement.getUserId(authorization, dataPartitionId, appKey);
+    public static async getUserId(authorization: string): Promise<string> {
+        if (Config.USER_ID_FROM_PROVIDER_API) {
+            const cloudProvider = Config.CLOUDPROVIDER;
+            const credClient = CredentialsFactory.build(cloudProvider);
+            return await credClient.getUserId(authorization);
         } else {
             return Utils.getPropertyFromTokenPayload(
                 authorization, Config.USER_ID_CLAIM_FOR_SDMS) || Utils.getSubFromPayload(authorization);

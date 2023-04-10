@@ -1,5 +1,7 @@
 // ============================================================================
 // Copyright 2017-2019, Schlumberger
+// Copyright 2023 Google LLC
+// Copyright 2023 EPAM Systems
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -81,7 +83,7 @@ export class ConfigGoogle extends Config {
     public async init(): Promise<void> {
 
         try {
-            Config.USER_ID_FROM_ENTITLEMENTS = process.env.USER_ID_FROM_ENTITLEMENTS === 'true';
+            Config.USER_ID_FROM_PROVIDER_API = process.env.USER_ID_FROM_ENTITLEMENTS === 'true';
             ConfigGoogle.GCS_BUCKET = process.env.GCS_BUCKET;
             // load des target audience for service to service communication
             ConfigGoogle.DES_SERVICE_TARGET_AUDIENCE = process.env.SEISTORE_DES_TARGET_AUDIENCE;

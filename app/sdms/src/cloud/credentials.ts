@@ -30,6 +30,7 @@ export interface ICredentials {
     getIAMResourceUrl(serviceSigner: string): string;
     getAudienceForImpCredentials(): string;
     getPublicKeyCertificatesUrl(): string;
+    getUserId(userToken: String): Promise<string>;
 }
 
 export abstract class AbstractCredentials implements ICredentials {
@@ -44,6 +45,10 @@ export abstract class AbstractCredentials implements ICredentials {
     public abstract getAudienceForImpCredentials(): string;
     // [OBSOLETE] to remove with /imptoken
     public abstract getPublicKeyCertificatesUrl(): string;
+
+    public async getUserId(userToken: String): Promise<string> {
+        throw new Error('Not implemented ');
+    }
 }
 
 export class CredentialsFactory extends CloudFactory {

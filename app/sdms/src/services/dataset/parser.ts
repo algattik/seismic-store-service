@@ -49,10 +49,6 @@ export class DatasetParser {
         const dataset = this.createDatasetModelFromRequest(req);
         dataset.ltag = (req.headers.ltag) as string;
         dataset.type = req.body ? req.body.type : undefined;
-        dataset.created_by = await Utils.getUserId(
-            req.headers.authorization,
-            req.headers['data-partition-id'] as string
-        )
         if (Auth.isImpersonationToken(req.headers.authorization)) {
             const context = req.get('impersonation-token-context');
             if (context === undefined) {
@@ -64,15 +60,9 @@ export class DatasetParser {
                 dataset.created_by = tokenContext.user;
             }
         }
-        else if (Config.USER_ID_FROM_ENTITLEMENTS) {
-            dataset.created_by = await Utils.getUserId(
-                req.headers.authorization,
-                req.headers['data-partition-id'] as string
-            )
-        }
         else {
             dataset.created_by = req.get(Config.USER_ID_HEADER_KEY_NAME) ||
-            Utils.getUserIdFromUserToken(req.headers.authorization);
+            await Utils.getUserId(req.headers.authorization, req.headers['data-partition-id'] as string);
         }
 
         dataset.created_date = dataset.last_modified_date = new Date().toString();
