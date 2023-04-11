@@ -19,6 +19,7 @@ import { Utils } from '../../../shared';
 import { Config } from '../../config';
 import { AbstractLogger, LoggerFactory } from '../../logger';
 import { AzureConfig } from './config';
+import _ from 'lodash';
 
 @LoggerFactory.register('azure')
 export class AzureInsightsLogger extends AbstractLogger {
@@ -61,7 +62,6 @@ export class AzureInsightsLogger extends AbstractLogger {
                     }
                 } catch (e) {
                     console.error('Telemetry process error - unrecognized header format');
-                    console.error(httpRequest.headers);
                     console.error(e);
                     return false;
                 }
@@ -111,7 +111,7 @@ export class AzureInsightsLogger extends AbstractLogger {
                 appinsights.defaultClient.trackException({ exception: data });
             }
             // tslint:disable-next-line
-            console.log(data);
+            console.log(this.omitDeep(data));
         }
     }
 
@@ -123,6 +123,16 @@ export class AzureInsightsLogger extends AbstractLogger {
             // tslint:disable-next-line
             console.log(data);
         }
+    }
+
+    private omitDeep(obj: any, keyToOmit: string= 'authorization') {
+        _.forIn(obj, function(value, key) {
+          if (_.isObject(value)) {
+            this.omitDeep(value);
+          } else if (key === keyToOmit) {
+            delete obj[key];
+          }
+        });
     }
 
 }
