@@ -45,7 +45,9 @@ export interface IDatasetModel {
 export interface IDatasetListRequest {
     dataset: IDatasetModel,
     pagination: IPaginationModel,
-    userInfo: boolean
+    userInfo: boolean,
+    name: string,
+    select: string[];
 }
 
 export interface IPaginationModel {

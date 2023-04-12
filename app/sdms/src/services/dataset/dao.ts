@@ -71,7 +71,7 @@ export class DatasetDAO {
 
     public static async list(
         journalClient: IJournal,
-        dataset: DatasetModel, pagination: PaginationModel):
+        dataset: DatasetModel, pagination: PaginationModel, searchParam:string, selectParam:string[]):
         Promise<any> {
 
         let query: any;
@@ -90,6 +90,15 @@ export class DatasetDAO {
         if (pagination && pagination.cursor) { query = query.start(pagination.cursor); }
 
         if (pagination && pagination.limit) { query = query.limit(pagination.limit); }
+
+        if (searchParam) {
+            console.log("searchparam " + searchParam); 
+            query = query.filter('name', 'LIKE', searchParam); 
+            }
+        console.log("selectparam -> " + selectParam);
+        if (selectParam){
+            query = query.select(selectParam);
+        }
 
         const [entities, info] = await journalClient.runQuery(query);
 

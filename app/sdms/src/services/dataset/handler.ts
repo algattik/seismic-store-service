@@ -362,6 +362,9 @@ export class DatasetHandler {
         // Retrieve the dataset path information
         const userInput = DatasetParser.list(req);
 
+        const searchParam: string  = userInput.name;
+        const selectParam: string[] = userInput.select;
+        console.log("select param " + selectParam);
         const dataset = userInput.dataset;
         const pagination = userInput.pagination;
         const userInfo = userInput.userInfo;
@@ -376,7 +379,8 @@ export class DatasetHandler {
             req.headers['impersonation-token-context'] as string);
 
         // Retrieve the list of datasets metadata
-        const output = await DatasetDAO.list(journalClient, dataset, pagination) as any;
+        console.log("searchparam in list " + searchParam);
+        const output = await DatasetDAO.list(journalClient, dataset, pagination, searchParam, selectParam) as any;
 
         // attach the gcpid for fast check, access_policy and exchange user-info (if requested)
         const userAssociationService = FeatureFlags.isEnabled(Feature.CCM_INTERACTION) && userInfo ?
@@ -390,38 +394,6 @@ export class DatasetHandler {
                     item.created_by, dataPartition);
             }
         }
-
-        const searchParam: string  = req.query.name as string | undefined;
-        const selectParam: string = req.query.select as string  | undefined;
-
-        // Apply the search parameter to filter the dataset list
-        if (searchParam) {
-          const regex = new RegExp(searchParam.replace("*", ".*")); // convert wildcard to regex
-          output.datasets = output.datasets.filter(d => regex.test(d.name));
-        }
-
-        // Apply the select parameter to limit the returned properties
-        let properties: string[] | undefined = undefined;
-        if (selectParam) {
-            const selectObj = selectParam.substring(1, selectParam.length - 1).split(",");
-            if (Array.isArray(selectObj)) {
-              properties = selectObj;
-            }
-        }
-
-        if (properties) {
-            output.datasets = output.datasets.map(d => {
-            const result: any = {};
-            properties.forEach(prop => {
-              if (d.hasOwnProperty(prop)) {
-                result[prop] = d[prop];
-              }
-            });
-            return result;
-          });
-        }
-
-        output.datasets = output.datasets.filter(obj => Object.keys(obj).length > 0);
 
         // Retrieve the list of datasets metadata
         if (pagination) {

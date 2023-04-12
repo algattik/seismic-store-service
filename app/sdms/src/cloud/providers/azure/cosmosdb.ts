@@ -235,7 +235,7 @@ export class AzureCosmosDbDAO extends AbstractJournal {
     }
 
     public async runQuery(query: IJournalQueryModel): Promise<[any[], { endCursor?: string }]> {
-
+        console.log("RUUN");
         const cosmosQuery = (query as AzureCosmosDbQuery);
 
         let sqlQuery: string;
@@ -245,13 +245,15 @@ export class AzureCosmosDbDAO extends AbstractJournal {
             sqlQuery = 'SELECT * FROM c WHERE c.id LIKE "sp-%"';
             response = await (await this.getCosmoContainer()).items.query(sqlQuery).fetchAll();
         }
+        console.log("query 0 " + sqlQuery);
 
         if (cosmosQuery.kind === Config.DATASETS_KIND) {
-
+            console.log("0 cosmosQuery.projectedFieldNames.length " + cosmosQuery.projectedFieldNames.length);
             // return selected fields
             if (cosmosQuery.projectedFieldNames.length) {
                 let fieldList = '';
                 for (const field of cosmosQuery.projectedFieldNames) {
+                    console.log("0 field " + field);
                     if (fieldList) {
                         fieldList += ', ';
                     }
@@ -261,11 +263,11 @@ export class AzureCosmosDbDAO extends AbstractJournal {
             } else {
                 sqlQuery = 'SELECT *';
             }
-
+            console.log("query 0.1 " + sqlQuery);
             // query using partial partition key
             const partialKey = 'ds' + cosmosQuery.namespace.replace(new RegExp(Config.SEISMIC_STORE_NS, 'g'), '')
             sqlQuery += ' FROM c WHERE RegexMatch(c.id, "^(' + partialKey + '-)([a-z0-9]+)$")'
-
+            console.log("query 0.2 " + sqlQuery);
             // add filters
             for (const filter of cosmosQuery.filters) {
                 if (filter.operator === 'CONTAINS') {
@@ -289,7 +291,7 @@ export class AzureCosmosDbDAO extends AbstractJournal {
                 }
                 sqlQuery += ' GROUP BY ' + groupByList;
             }
-
+            
             if (AzureConfig.SIDECAR_ENABLE_QUERY) {
                 const connectionParams = await AzureDataEcosystemServices.getCosmosConnectionParams(this.dataPartition);
                 const url = AzureConfig.SIDECAR_URL + (sqlQuery.indexOf('SELECT *') > -1 ? '/query' : '/query-path')
@@ -311,10 +313,13 @@ export class AzureCosmosDbDAO extends AbstractJournal {
                     payload['limit'] = cosmosQuery.pagingLimit
                 }
                 try {
+                    console.log("payload -> " + JSON.stringify(payload));
                     const result = await AzureCosmosDbDAO.axiosInstance.post(url, payload);
+                    console.log("result records -> " + JSON.stringify(result.data.records));
                     if (!result.data.records) { return; }
                     const records = result.data.records;
                     const resultsList = [];
+                    console.log("query 0.5 " + sqlQuery);
                     if (sqlQuery.indexOf('SELECT *') > -1) {
                         for (const record of records) {
                             const data = record.data;
@@ -339,11 +344,13 @@ export class AzureCosmosDbDAO extends AbstractJournal {
                 }
             } else {
                 if (cosmosQuery.pagingStart || cosmosQuery.pagingLimit) {
+                    console.log("query 1 " + sqlQuery);
                     response = await (await this.getCosmoContainer()).items.query(sqlQuery, {
                         continuationToken: cosmosQuery.pagingStart,
                         maxItemCount: cosmosQuery.pagingLimit
                     }).fetchNext();
                 } else {
+                    console.log("query 2 " + sqlQuery);
                     response = await (await this.getCosmoContainer()).items.query(sqlQuery).fetchAll();
                 }
             }
@@ -411,7 +418,7 @@ export class AzureCosmosDbDAO extends AbstractJournal {
 
 }
 
-declare type Operator = '=' | '<' | '>' | '<=' | '>=' | 'HAS_ANCESTOR' | 'CONTAINS' | 'RegexMatch';
+declare type Operator = '=' | '<' | '>' | '<=' | '>=' | 'HAS_ANCESTOR' | 'CONTAINS' | 'RegexMatch' | 'LIKE';
 
 export class AzureCosmosDbQuery implements IJournalQueryModel {
 

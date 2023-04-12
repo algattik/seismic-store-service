@@ -136,6 +136,20 @@ export class DatasetParser {
             throw (Error.make(Error.Status.BAD_REQUEST,
                 'The \'cursor\' query parameter can not be empty if supplied'));
         }
+        console.log("name in listget " + req.query.name)
+        if (req.query?.name) {
+            console.log("Nameee " + req.query.name);
+            input.name = req.query.name as string;
+        }
+        console.log("TYPEEEE");
+        console.log(typeof req.query.select);
+        if (req.query?.select && typeof req.query.select === 'string') {
+            console.log("AQQQ");
+            input.select = req.query.select.slice(1,-1).split(",");
+        }
+        console.log("TYPEEEE 2");
+        console.log(typeof input.select);
+        console.log(input.select);
         return input;
 
     }
