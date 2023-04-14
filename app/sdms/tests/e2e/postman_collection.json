@@ -1,9 +1,8 @@
 {
 	"info": {
-		"_postman_id": "b2f6393c-b1f2-4ab7-b2d1-d090957ec952",
+		"_postman_id": "e75df542-7462-42e6-b07c-c94aebe91f0c",
 		"name": "SDMS-E2E ver.M18 - Release 0.21",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "11702291"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -22,7 +21,7 @@
 									"});",
 									"",
 									"pm.environment.set('appAdminEmail', pm.environment.get('adminEmail'));",
-									"if(pm.environment.get('serviceCloudProvider') !== 'google' && pm.environment.get('serviceCloudProvider') !== 'ibm') {",
+									"if( pm.environment.get('serviceCloudProvider') !== 'gc' && pm.environment.get('serviceCloudProvider') !== 'google' && pm.environment.get('serviceCloudProvider') !== 'ibm') {",
 									"    pm.environment.set('adminEmail', pm.environment.get('adminEmail').split('@')[0]);",
 									"};",
 									"",
@@ -159,6 +158,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -227,6 +230,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -259,7 +266,8 @@
 									"if (responseCode.code != 200) {",
 									"    console.log(pm.response.text())",
 									"    _.retryOnFailure(postman, pm.response.code, request.name, pm.environment.get(\"maxAmountOfRetries\"));",
-									"",
+									"} else if (pm.environment.get('serviceCloudProvider') === 'gc'){ ",
+									"    console.log(\"skip due to 'gc' provider\");",
 									"} else {",
 									"    pm.test(\"Status code is 200\", function () {",
 									"        pm.response.to.have.status(200);",
@@ -375,6 +383,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -443,6 +455,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -528,6 +544,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -599,6 +619,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -679,6 +703,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -763,6 +791,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -852,6 +884,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "Content-Type",
 								"value": "application/json"
 							},
@@ -931,6 +967,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -1021,6 +1061,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -1206,6 +1250,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -1355,6 +1403,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -1443,6 +1495,10 @@
 								"key": "Authorization",
 								"type": "text",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -1629,6 +1685,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -1718,8 +1778,13 @@
 									"    });",
 									"",
 									"    pm.test(\"gcsurl\", () => {",
-									"        postman.setEnvironmentVariable(\"gcsBucketName\", jsonData.gcsurl.split('/')[0]);",
-									"        postman.setEnvironmentVariable(\"gcsObjectPrefix\", jsonData.gcsurl.split('/')[1]);",
+									"        if (pm.environment.get('serviceCloudProvider') === 'gc') {",
+									"            postman.setEnvironmentVariable(\"gcsBucketName\", jsonData.gcsurl.split('$$')[0]);",
+									"            postman.setEnvironmentVariable(\"gcsObjectPrefix\", encodeURIComponent(jsonData.gcsurl.split('$$')[1]));",
+									"        } else {",
+									"            postman.setEnvironmentVariable(\"gcsBucketName\", jsonData.gcsurl.split('/')[0]);",
+									"            postman.setEnvironmentVariable(\"gcsObjectPrefix\", jsonData.gcsurl.split('/')[1]);",
+									"        }",
 									"    });",
 									"",
 									"    pm.test(\"Check gtag\", function () {",
@@ -1747,6 +1812,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -1820,6 +1889,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -1916,6 +1989,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -1977,6 +2054,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -2066,6 +2147,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -2149,6 +2234,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -2225,6 +2314,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -2295,6 +2388,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -2375,6 +2472,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -2453,6 +2554,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -2519,6 +2624,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -2598,6 +2707,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -2663,6 +2776,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -2742,6 +2859,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -2976,6 +3097,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -3047,6 +3172,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -3123,6 +3252,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -3207,6 +3340,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -3295,6 +3432,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -3377,6 +3518,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -3462,6 +3607,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -3565,6 +3714,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -3635,6 +3788,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -3717,6 +3874,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -3795,6 +3956,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -3883,6 +4048,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -3965,6 +4134,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -4050,6 +4223,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -4153,6 +4330,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -4220,6 +4401,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -4306,6 +4491,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -4387,6 +4576,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -4475,6 +4668,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -4558,6 +4755,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -4661,6 +4862,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -4720,6 +4925,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -4819,6 +5028,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -4896,6 +5109,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -4979,6 +5196,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -5046,6 +5267,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -5128,6 +5353,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -5202,6 +5431,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -5440,6 +5673,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -5579,6 +5816,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -5707,6 +5948,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -5851,6 +6096,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -5920,6 +6169,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -6039,6 +6292,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -6121,6 +6378,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -6271,6 +6532,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -6340,6 +6605,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -6445,6 +6714,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -6527,6 +6800,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -6643,6 +6920,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -6714,6 +6995,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -6780,6 +7065,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -6863,6 +7152,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -6940,6 +7233,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -7218,6 +7515,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -7331,6 +7632,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -7467,6 +7772,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -7590,6 +7899,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -7729,6 +8042,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -7795,6 +8112,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -7853,6 +8174,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -7923,6 +8248,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -8024,6 +8353,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -8136,6 +8469,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -8196,6 +8533,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -8289,6 +8630,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -8402,6 +8747,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -8462,6 +8811,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -8701,6 +9054,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -8786,6 +9143,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -8868,6 +9229,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -8945,6 +9310,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -9032,6 +9401,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -9117,6 +9490,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -9199,6 +9576,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -9276,6 +9657,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -9364,6 +9749,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -9449,6 +9838,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -9523,6 +9916,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -9614,6 +10011,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -9699,6 +10100,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -9788,6 +10193,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -9865,6 +10274,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -9964,6 +10377,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -10048,6 +10465,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -10119,6 +10540,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -10202,6 +10627,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -10281,6 +10710,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -10350,6 +10783,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -10417,6 +10854,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -10482,6 +10923,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -10718,8 +11163,13 @@
 									"    });",
 									"",
 									"    pm.test(\"gcsurl\", () => {",
-									"        postman.setEnvironmentVariable(\"gcsBucketName\", jsonData.gcsurl.split('/')[0]);",
-									"        postman.setEnvironmentVariable(\"gcsObjectPrefix\", jsonData.gcsurl.split('/')[1]);",
+									"         if (pm.environment.get('serviceCloudProvider') === 'gc') {",
+									"            postman.setEnvironmentVariable(\"gcsBucketName\", jsonData.gcsurl.split('$$')[0]);",
+									"            postman.setEnvironmentVariable(\"gcsObjectPrefix\", encodeURIComponent(jsonData.gcsurl.split('$$')[1]));",
+									"        } else {",
+									"            postman.setEnvironmentVariable(\"gcsBucketName\", jsonData.gcsurl.split('/')[0]);",
+									"            postman.setEnvironmentVariable(\"gcsObjectPrefix\", jsonData.gcsurl.split('/')[1]);",
+									"        }",
 									"    });",
 									"",
 									"    // Reset environment variables if _.retryOnFailure function was used before",
@@ -10738,6 +11188,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -10797,7 +11251,7 @@
 									"        pm.response.to.have.status(200);",
 									"    });",
 									"",
-									"    if ( (pm.environment.get('serviceCloudProvider') != 'azure') && (pm.environment.get('serviceCloudProvider') != 'google') ){",
+									"    if ( (pm.environment.get('serviceCloudProvider') != 'azure') && (pm.environment.get('serviceCloudProvider') != 'google') && (pm.environment.get('serviceCloudProvider') != 'gc') ){",
 									"        postman.setNextRequest(\"UTILITY DATASET DELETE\");",
 									"    }",
 									"",
@@ -10826,6 +11280,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -10900,7 +11358,7 @@
 									"        postman.setEnvironmentVariable(\"gcsAccessToken\", jsonData.access_token);",
 									"    })",
 									"",
-									"    if (pm.environment.get('serviceCloudProvider') === 'google') {",
+									"    if (pm.environment.get('serviceCloudProvider') === 'google' || pm.environment.get('serviceCloudProvider') === 'gc') {",
 									"        postman.setNextRequest(\"UPLOAD NEW TO GCS\");",
 									"    }  ",
 									"}"
@@ -10915,6 +11373,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -10982,7 +11444,7 @@
 									"",
 									"    if (pm.environment.get('serviceCloudProvider') === 'azure') {",
 									"        postman.setNextRequest(\"UPLOAD NEW TO ACS\");",
-									"    } else if (pm.environment.get('serviceCloudProvider') === 'google') {",
+									"    } else if (pm.environment.get('serviceCloudProvider') === 'google' || pm.environment.get('serviceCloudProvider') === 'gc') {",
 									"        pm.expect(jsonData.token_type).to.eql('Bearer');",
 									"        postman.setNextRequest(\"UPLOAD NEW TO GCS\");",
 									"    } else {",
@@ -11000,6 +11462,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -11493,6 +11959,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -11553,6 +12023,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -11627,6 +12101,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -11710,6 +12188,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -11814,6 +12296,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -11899,6 +12385,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -11976,6 +12466,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -12057,6 +12551,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -12117,6 +12615,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -12186,6 +12688,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -12251,6 +12757,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -12320,6 +12830,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -12385,6 +12899,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -12657,6 +13175,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -13060,7 +13582,7 @@
 									"\r",
 									"    // if there is a next page token re-execute this call for retrieve the new page otherwise check the results and move to the next call\r",
 									"    const provider = pm.environment.get('serviceCloudProvider');\r",
-									"    const pageTerminator = provider == 'google' ? \"\" : null;\r",
+									"    const pageTerminator = provider == 'google' || provider == 'gc' ? \"\" : null;\r",
 									"    if (jsonData.nextPageCursor != pageTerminator) {\r",
 									"        postman.setNextRequest('MULTI LS DATASET PAGE');\r",
 									"    } else {\r",
@@ -13213,6 +13735,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -13423,6 +13949,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "Content-Type",
 								"value": "application/json"
 							},
@@ -13487,6 +14017,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "Content-Type",
@@ -13569,6 +14103,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "Content-Type",
 								"value": "application/json"
 							},
@@ -13632,6 +14170,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "Content-Type",
@@ -13711,6 +14253,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "Content-Type",
 								"value": "application/json"
 							},
@@ -13774,6 +14320,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "Content-Type",
@@ -13855,6 +14405,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "Content-Type",
 								"value": "application/json"
 							},
@@ -13918,6 +14472,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "Content-Type",
@@ -13996,6 +14554,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "Content-Type",
 								"value": "application/json"
 							},
@@ -14064,6 +14626,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -14147,6 +14713,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -14206,6 +14776,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -14272,6 +14846,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -14367,6 +14945,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -14522,6 +15104,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -14586,6 +15172,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -14675,6 +15265,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -14769,6 +15363,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -15178,6 +15776,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -15370,6 +15972,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -15649,6 +16255,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -15734,6 +16344,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -15866,6 +16480,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -15931,6 +16549,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -16167,6 +16789,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -16264,8 +16890,13 @@
 									"    });",
 									"",
 									"    pm.test(\"gcsurl\", () => {",
-									"        postman.setEnvironmentVariable(\"gcsBucketName\", jsonData.gcsurl.split('/')[0]);",
-									"        postman.setEnvironmentVariable(\"gcsObjectPrefix\", jsonData.gcsurl.split('/')[1]);",
+									"        if (pm.environment.get('serviceCloudProvider') === 'gc') {",
+									"            postman.setEnvironmentVariable(\"gcsBucketName\", jsonData.gcsurl.split('$$')[0]);",
+									"            postman.setEnvironmentVariable(\"gcsObjectPrefix\", encodeURIComponent(jsonData.gcsurl.split('$$')[1]));",
+									"        } else {",
+									"            postman.setEnvironmentVariable(\"gcsBucketName\", jsonData.gcsurl.split('/')[0]);",
+									"            postman.setEnvironmentVariable(\"gcsObjectPrefix\", jsonData.gcsurl.split('/')[1]);",
+									"        }",
 									"    })",
 									"",
 									"",
@@ -16299,6 +16930,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -16382,6 +17017,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -16462,7 +17101,7 @@
 									"        postman.setEnvironmentVariable('execCounter', 1);",
 									"        if(pm.environment.get('serviceCloudProvider') === 'azure') {",
 									"            postman.setNextRequest(\"UPLOAD OBJECT X1 IN ACS\");",
-									"        } else if(pm.environment.get('serviceCloudProvider') === 'google') {",
+									"        } else if(pm.environment.get('serviceCloudProvider') === 'google' || pm.environment.get('serviceCloudProvider') === 'gc') {",
 									"            pm.expect(jsonData.token_type).to.eql('Bearer');",
 									"            postman.setNextRequest(\"UPLOAD OBJECT X1 IN GCS\");",
 									"        } else {",
@@ -16481,6 +17120,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -16714,6 +17357,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -16794,7 +17441,11 @@
 									"    });",
 									"",
 									"    pm.test(\"Verify gcsBucket\", function () {",
-									"        pm.expect(jsonData.gcsurl.split('/')[0]).to.eql(pm.environment.get(\"gcsBucketName\"));",
+									"        if (pm.environment.get('serviceCloudProvider') === 'gc') {",
+									"            pm.expect(jsonData.gcsurl.split('$$')[0]).to.eql(pm.environment.get(\"gcsBucketName\"));",
+									"        } else {",
+									"            pm.expect(jsonData.gcsurl.split('/')[0]).to.eql(pm.environment.get(\"gcsBucketName\"));",
+									"        }",
 									"    });",
 									"",
 									"    pm.test(\"Check seismicmetadata\", () => {",
@@ -16827,6 +17478,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -16893,7 +17548,11 @@
 									"    });",
 									"",
 									"    pm.test(\"Verify gcsBucket\", function () {",
-									"        pm.expect(jsonData.gcsurl.split('/')[0]).to.eql(pm.environment.get(\"gcsBucketName\"));",
+									"        if (pm.environment.get('serviceCloudProvider') === 'gc') {",
+									"            pm.expect(jsonData.gcsurl.split('$$')[0]).to.eql(pm.environment.get(\"gcsBucketName\"));",
+									"        } else {",
+									"            pm.expect(jsonData.gcsurl.split('/')[0]).to.eql(pm.environment.get(\"gcsBucketName\"));",
+									"        }",
 									"    });",
 									"",
 									"    pm.test(\"Verify Tenant\", function () {",
@@ -16909,8 +17568,13 @@
 									"    });",
 									"",
 									"    pm.test(\"gcsurl\", () => {",
-									"        postman.setEnvironmentVariable(\"gcsBucketName\", jsonData.gcsurl.split('/')[0]);",
-									"        postman.setEnvironmentVariable(\"gcsObjectPrefix\", jsonData.gcsurl.split('/')[1]);",
+									"        if (pm.environment.get('serviceCloudProvider') === 'gc') {",
+									"            postman.setEnvironmentVariable(\"gcsBucketName\", jsonData.gcsurl.split('$$')[0]);",
+									"            postman.setEnvironmentVariable(\"gcsObjectPrefix\", encodeURIComponent(jsonData.gcsurl.split('$$')[1]));",
+									"        } else {",
+									"            postman.setEnvironmentVariable(\"gcsBucketName\", jsonData.gcsurl.split('/')[0]);",
+									"            postman.setEnvironmentVariable(\"gcsObjectPrefix\", jsonData.gcsurl.split('/')[1]);",
+									"        }",
 									"    });",
 									"",
 									"    // Reset environment variables if _.retryOnFailure function was used before",
@@ -16935,6 +17599,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -17139,6 +17807,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -17204,6 +17876,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -17473,6 +18149,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -17598,6 +18278,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -17693,6 +18377,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -17782,6 +18470,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -17861,6 +18553,10 @@
 								"value": "Bearer {{STOKEN}}"
 							},
 							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
+							},
+							{
 								"key": "x-api-key",
 								"value": "{{SVC_API_KEY}}"
 							},
@@ -17926,6 +18622,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
@@ -18062,6 +18762,10 @@
 							{
 								"key": "Authorization",
 								"value": "Bearer {{STOKEN}}"
+							},
+							{
+								"key": "data-partition-id",
+								"value": "{{datapartition}}"
 							},
 							{
 								"key": "x-api-key",
