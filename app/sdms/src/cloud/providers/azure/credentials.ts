@@ -220,7 +220,6 @@ class RetriableAzureCredential extends DefaultAzureCredential {
     public constructor(tokenCredentialOptions?: DefaultAzureCredentialOptions) {
         super(tokenCredentialOptions);
         const retryOptions = tokenCredentialOptions?.retryOptions;
-        retryOptions.maxRetries = 8;
         this.options = {...this.options, ...retryOptions}
         this.credentials = new DefaultAzureCredential();
     }
