@@ -21,4 +21,4 @@ export { TraceLog } from './tracelog';
 export { Response } from './response';
 export { SDPath, ISDPathModel as SDPathModel } from './sdpath';
 export { FeatureFlags, Feature } from './featureflags';
-export { getInMemoryCacheInstance } from './node-cache';
+export { getInMemoryCacheInstance, InMemoryCache } from './node-cache';

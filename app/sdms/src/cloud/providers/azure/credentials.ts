@@ -17,7 +17,7 @@
 import axios from 'axios';
 import qs from 'qs';
 
-import { Error } from '../../../shared';
+import { Error, getInMemoryCacheInstance, InMemoryCache } from '../../../shared';
 import { AbstractCredentials, CredentialsFactory, IAccessTokenModel } from '../../credentials';
 import {
     ContainerSASPermissions,
@@ -201,6 +201,7 @@ class RetriableAzureCredential extends DefaultAzureCredential {
     private static DefaultRetryInterval = 1000;
     private static DefaultMaxRetryInterval = 64 * 1000;
     private static DefaultRequestTimeout = 5 * 1000;
+    private static TokenCache: InMemoryCache;
 
     private options:ExponentialRetryPolicyOptions  = {
         maxRetries: RetriableAzureCredential.DefaultRetryCount,
@@ -219,13 +220,31 @@ class RetriableAzureCredential extends DefaultAzureCredential {
     public constructor(tokenCredentialOptions?: DefaultAzureCredentialOptions) {
         super(tokenCredentialOptions);
         const retryOptions = tokenCredentialOptions?.retryOptions;
+        retryOptions.maxRetries = 8;
         this.options = {...this.options, ...retryOptions}
         this.credentials = new DefaultAzureCredential();
     }
 
     public getToken(scopes: string | string[], options?: GetTokenOptions): Promise<AccessToken | null> {
+    
+        if(!RetriableAzureCredential.TokenCache) {
+            RetriableAzureCredential.TokenCache = getInMemoryCacheInstance();
+        }
+
+        const key = ((typeof scopes === 'string' || scopes instanceof String) ? scopes : scopes.join(',')) as string;
+
+        const res = RetriableAzureCredential.TokenCache.get<string>(key);
+        if (res !== undefined) {
+            return JSON.parse(res);
+        };
+
         const requestOptions = {...options, ...this.defaultRequestOptions};
-        return this.retry(() => this.credentials.getToken(scopes, requestOptions));
+        const accessToken =  this.retry(() => this.credentials.getToken(scopes, requestOptions));
+
+        if (accessToken) {
+            RetriableAzureCredential.TokenCache.set<string>(key, JSON.stringify(accessToken), 3600);
+        }
+
     }
 
     private async retry <T> (fn: () => Promise<T>, retries: number = this.options.maxRetries): Promise<T> {
