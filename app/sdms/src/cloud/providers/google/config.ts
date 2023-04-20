@@ -172,7 +172,7 @@ export class ConfigGoogle extends Config {
                     process.env.USER_ASSOCIATION_SVC_PROVIDER
                     : 'ccm-internal',
                 SDMS_PREFIX: process.env.SDMS_PREFIX ? process.env.SDMS_PREFIX : '/seistore-svc/api/v3',
-                APPLICATION_CORS_ENABLED: process.env.APPLICATION_CORS_ENABLED !== undefined ? 
+                APPLICATION_CORS_ENABLED: process.env.APPLICATION_CORS_ENABLED !== undefined ?
                     process.env.APPLICATION_CORS_ENABLED === 'true' : true
             });
 

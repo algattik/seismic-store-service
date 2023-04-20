@@ -41,7 +41,7 @@ export class AzureConfig extends Config {
     public static API_VERSION = 'v3';
     public static API_BASE_URL_PATH = '/seistore-svc/api/' + AzureConfig.API_VERSION;
 
-    //data partition url 
+    // data partition url
     public static DataPartitionSvcBaseUrlPath = '/api/partition/v1/partitions';
 
     // max len for a group name in DE
@@ -184,7 +184,7 @@ export class AzureConfig extends Config {
                 USER_ID_CLAIM_FOR_ENTITLEMENTS_SVC: process.env.USER_ID_CLAIM_FOR_ENTITLEMENTS_SVC || 'email',
                 USER_ASSOCIATION_SVC_PROVIDER: process.env.USER_ASSOCIATION_SVC_PROVIDER || 'ccm-internal',
                 SDMS_PREFIX: process.env.SDMS_PREFIX || AzureConfig.API_BASE_URL_PATH,
-                APPLICATION_CORS_ENABLED: process.env.APPLICATION_CORS_ENABLED !== undefined ? 
+                APPLICATION_CORS_ENABLED: process.env.APPLICATION_CORS_ENABLED !== undefined ?
                     process.env.APPLICATION_CORS_ENABLED === 'true' : true
             });
 

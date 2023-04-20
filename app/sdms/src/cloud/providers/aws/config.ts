@@ -84,7 +84,7 @@ export class AWSConfig extends Config {
             USER_ASSOCIATION_SVC_PROVIDER: process.env.USER_ASSOCIATION_SVC_PROVIDER,
             SDMS_PREFIX: process.env.SDMS_PREFIX ? process.env.SDMS_PREFIX : '/seistore-svc/api/v3',
             DES_POLICY_SERVICE_HOST: process.env.DES_POLICY_SERVICE_HOST || process.env.DES_SERVICE_HOST,
-            APPLICATION_CORS_ENABLED: process.env.APPLICATION_CORS_ENABLED !== undefined ? 
+            APPLICATION_CORS_ENABLED: process.env.APPLICATION_CORS_ENABLED !== undefined ?
                     process.env.APPLICATION_CORS_ENABLED === 'true' : true
         });
 

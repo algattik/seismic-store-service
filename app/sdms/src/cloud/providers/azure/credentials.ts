@@ -114,7 +114,7 @@ export class AzureCredentials extends AbstractCredentials {
         const now = new Date();
         const expiration = this.addMinutes(now, SasExpirationInMinutes);
 
-        const sasToken = endpoint.toLowerCase().indexOf(".") === -1 ? 
+        const sasToken = endpoint.toLowerCase().indexOf('.') === -1 ?
                             await this.generateSASToken(endpoint, bucket, expiration, readonly):
                             await this.generateSASTokenDNS(endpoint, bucket, expiration, readonly);
         const result = {
