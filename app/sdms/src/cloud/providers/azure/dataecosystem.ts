@@ -57,7 +57,7 @@ export class AzureDataEcosystemServices extends AbstractDataEcosystemCore {
         const config = await AzureDataEcosystemServices.getPartitionConfiguration(dataPartitionID).catch((error) => {
             throw (Error.makeForHTTPRequest(error));
         });
-        
+
         if (!config) {
             throw Error.makeForHTTPRequest(`Storage endpoint is null`);
         }
