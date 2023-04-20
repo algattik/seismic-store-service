@@ -97,6 +97,8 @@ export class AnthosConfig extends Config {
             SDMS_PREFIX: process.env.SDMS_PREFIX ? process.env.SDMS_PREFIX : '/seistore-svc/api/v3',
             DES_POLICY_SERVICE_HOST: process.env.DES_POLICY_SERVICE_HOST || process.env.DES_SERVICE_HOST,
             FEATURE_FLAG_POLICY_SVC_INTERACTION: process.env.FEATURE_FLAG_POLICY_SVC_INTERACTION === 'true',
+            APPLICATION_CORS_ENABLED: process.env.APPLICATION_CORS_ENABLED !== undefined ? 
+                    process.env.APPLICATION_CORS_ENABLED === 'true' : true
         });
     }
 
