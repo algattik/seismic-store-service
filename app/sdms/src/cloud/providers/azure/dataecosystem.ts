@@ -24,6 +24,7 @@ import {
 import { AzureConfig } from './config';
 import { AzureCredentials } from './credentials';
 import { Keyvault } from './keyvault';
+import request from 'request-promise';
 
 @DataEcosystemCoreFactory.register('azure')
 export class AzureDataEcosystemServices extends AbstractDataEcosystemCore {
@@ -34,6 +35,7 @@ export class AzureDataEcosystemServices extends AbstractDataEcosystemCore {
     public getComplianceBaseUrlPath(): string { return '/api/legal/v1'; };
     public getStorageBaseUrlPath(): string { return '/api/storage/v2'; };
     public getPolicySvcBaseUrlPath(): string { return '/api/policy/v1'; }
+    
 
     public async getAuthorizationHeader(userToken: string): Promise<string> {
         return userToken.startsWith('Bearer') ? userToken : 'Bearer ' + userToken;
@@ -51,90 +53,118 @@ export class AzureDataEcosystemServices extends AbstractDataEcosystemCore {
         return true;
     }
 
-    public static async getPartitionConfiguration(dataPartitionID: string): Promise<any> {
-        const options = {
-            headers: {
-                'Accept': 'application/json',
-                'Authorization': 'Bearer ' + (await AzureCredentials.getAzureServicePrincipalAccessToken(
-                    AzureConfig.SP_CLIENT_ID, AzureConfig.SP_CLIENT_SECRET,
-                    AzureConfig.SP_TENANT_ID, AzureConfig.SP_APP_RESOURCE_ID)).access_token,
-                'Content-Type': 'application/json'
-            }
-        };
-        const url = AzureConfig.DES_SERVICE_HOST_PARTITION + '/api/partition/v1/partitions/' + dataPartitionID;
-        const results = await axios.get(url, options).catch((error) => {
+    public static async getStorageEndpoint(dataPartitionID: string): Promise<string> {
+        const config = await AzureDataEcosystemServices.getPartitionConfiguration(dataPartitionID).catch((error) => {
             throw (Error.makeForHTTPRequest(error));
         });
-        return results.data;
+        
+        if (!config) {
+            throw Error.makeForHTTPRequest(`Storage endpoint is null`);
+        }
+
+        return config.storageAccountBlobEndpoint
+            ? config.storageAccountBlobEndpoint
+            : `https://${config.sdmsStorageAccountName}.blob.core.windows.net`;
     }
+
+    public static async getCosmosConnectionParams(dataPartitionID: string):
+        Promise<{ endpoint: string, key: string; }> {
+        const config = await AzureDataEcosystemServices.getPartitionConfiguration(dataPartitionID).catch((error) => {
+            throw (Error.makeForHTTPRequest(error));
+        });
+
+        if (!config) {
+            throw Error.makeForHTTPRequest(`Cosmos endpoint is null`);
+        }
+
+        return { endpoint: config.cosmosEndpoint, key: config.cosmosPrimaryKey };
+    }
+
 
     public static async getPartitions(): Promise<string[]> {
+        return AzureDataEcosystemServices.partitionServiceCall(AzureConfig.DataPartitionSvcBaseUrlPath)
+    }
+
+    private static async getPartitionConfiguration(dataPartitionID: string): Promise<PartitionConfiguration> {
+
+        const partitionValues = await AzureDataEcosystemServices
+            .partitionServiceCall(`${AzureConfig.DataPartitionSvcBaseUrlPath}/${dataPartitionID}`);
+        const [
+                storageAccountBlobEndpoint,
+                cosmosEndpoint,
+                cosmosPrimaryKey,
+                sdmsStorageAccountName] = await Promise.all([
+                this.getConfigurationItem(partitionValues, Keyvault.STORAGE_ACCOUNT_BLOB_ENDPOINT),
+                this.getConfigurationItem(partitionValues, Keyvault.DATA_PARTITION_COSMOS_ENDPOINT),
+                this.getConfigurationItem(partitionValues, Keyvault.DATA_PARTITION_COSMOS_PRIMARY_KEY),
+                this.getConfigurationItem(partitionValues, Keyvault.DATA_PARTITION_STORAGE_ACCOUNT_NAME)
+            ]);
+        const res = {
+                storageAccountBlobEndpoint,
+                cosmosEndpoint,
+                cosmosPrimaryKey,
+                sdmsStorageAccountName
+            } as PartitionConfiguration;
+
+        return res;
+    }
+
+    private static async getConfigurationItem(values: any, key: string): Promise<string> {
+        const item = values[key];
+        if (!item) {
+          throw Error.makeForHTTPRequest(`Partition Configuration error. Missing configuration value: ${key}`);
+        }
+        if (!item.sensitive) {
+          return item.value;
+        }
+
+        return (await Keyvault.CreateSecretClient().getSecret(item.value)).value;
+    }
+
+    private static async partitionServiceCall<T>(endpoint: string): Promise<T> {
+        const credentials = AzureCredentials.getCredential()
+        const aud = AzureConfig.SP_APP_RESOURCE_ID;
+        const accessToken = (await credentials.getToken(`${aud}/.default`)).token
         const options = {
             headers: {
                 'Accept': 'application/json',
-                'Authorization': 'Bearer ' + (await AzureCredentials.getAzureServicePrincipalAccessToken(
-                    AzureConfig.SP_CLIENT_ID, AzureConfig.SP_CLIENT_SECRET,
-                    AzureConfig.SP_TENANT_ID, AzureConfig.SP_APP_RESOURCE_ID)).access_token,
+                'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json'
-            }
+            },
+            url: AzureConfig.DES_SERVICE_HOST_PARTITION + endpoint
         };
-        const  url = AzureConfig.DES_SERVICE_HOST_PARTITION + '/api/partition/v1/partitions';
-        const results = await axios.get(url, options).catch((error) => {
+        try {
+            return JSON.parse(await request.get(options));
+        } catch (error) {
             throw (Error.makeForHTTPRequest(error));
-        });
-        return results.data;
-    }
-
-    public static async getStorageResourceName(dataPartitionID: string): Promise<string> {
-
-        const cache = getInMemoryCacheInstance();
-        const cacheKey = 'azure-storage-' + dataPartitionID;
-        const res = cache.get<string>(cacheKey);
-        if (res !== undefined) { return res; };
-
-        const dataPartitionConfigurations = await AzureDataEcosystemServices.getPartitionConfiguration(dataPartitionID);
-        const storageConfigs = (dataPartitionConfigurations[Keyvault.DATA_PARTITION_STORAGE_ACCOUNT_NAME] as {
-            sensitive: boolean, value: string;
-        });
-        if (storageConfigs.sensitive) {
-            storageConfigs.value = (await Keyvault.CreateSecretClient().getSecret(storageConfigs.value)).value;
         }
-        cache.set<string>(cacheKey, storageConfigs.value, 3600);
-        return storageConfigs.value;
     }
-
-    public static async getCosmosConnectionParams(
-        dataPartitionID: string): Promise<{ endpoint: string, key: string; }> {
-
-        const cache = getInMemoryCacheInstance();
-        const cacheKey = 'azure-cosmos-' + dataPartitionID;
-        const res = cache.get<string>(cacheKey);
-        if (res !== undefined) { return JSON.parse(res); };
-
-        const dataPartitionConfigurations = await AzureDataEcosystemServices.getPartitionConfiguration(dataPartitionID);
-
-        const cosmosEndpointConfigs = (dataPartitionConfigurations[Keyvault.DATA_PARTITION_COSMOS_ENDPOINT] as {
-            sensitive: boolean, value: string;
-        });
-        if (cosmosEndpointConfigs.sensitive) {
-            cosmosEndpointConfigs.value = (await Keyvault.CreateSecretClient().getSecret(
-                cosmosEndpointConfigs.value)).value;
-        }
-
-        const cosmosKeyConfigs = (dataPartitionConfigurations[Keyvault.DATA_PARTITION_COSMOS_PRIMARY_KEY] as {
-            sensitive: boolean, value: string;
-        });
-        if (cosmosKeyConfigs.sensitive) {
-            cosmosKeyConfigs.value = (await Keyvault.CreateSecretClient().getSecret(
-                cosmosKeyConfigs.value)).value;
-        }
-
-        cache.set<string>(dataPartitionID, JSON.stringify({
-            endpoint: cosmosEndpointConfigs.value, key: cosmosKeyConfigs.value
-        }), 3600);
-
-        // return storageConfigs.value;
-        return { endpoint: cosmosEndpointConfigs.value, key: cosmosKeyConfigs.value };
-    }
-
 }
+
+class PartitionConfiguration {
+
+    /**
+     * Partition Property: 'storage-account-blob-endpoint'
+     */
+    storageAccountBlobEndpoint: string;
+
+    /**
+     * Partition Property: 'cosmos-endpoint'
+     */
+    cosmosEndpoint: string;
+
+    /**
+     * Partition Property: 'cosmos-primary-key'
+     *
+     * @deprecated this property was deprecated. We need to migrate to MSI for cosmosDb interaction.
+     */
+    cosmosPrimaryKey: string;
+
+    /**
+     * Partition Property: 'sdms-storage-account-name'
+     *
+     * @deprecated this property was deprecated. Please use `storageAccountBlobEndpoint` instead.
+     */
+    sdmsStorageAccountName: string;
+}
+

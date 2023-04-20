@@ -30,6 +30,8 @@ import { DefaultAzureCredential, TokenCredential, DefaultAzureCredentialOptions 
 import { AzureDataEcosystemServices } from './dataecosystem';
 import {ExponentialRetryPolicyOptions} from '@azure/core-rest-pipeline'
 import { AccessToken, GetTokenOptions } from '@azure/core-auth';
+import { Keyvault } from './keyvault';
+
 
 const KExpiresMargin = 300; // 5 minutes
 const UserDelegationKeyValidityInMinutes = 3599; // expires at the same time as the sas token
@@ -108,27 +110,69 @@ export class AzureCredentials extends AbstractCredentials {
     public async getStorageCredentials(
         tenant: string, subproject: string,
         bucket: string,readonly: boolean,partition: string): Promise<IAccessTokenModel> {
-        const accountName = await AzureDataEcosystemServices.getStorageResourceName(partition);
+        const endpoint = await AzureDataEcosystemServices.getStorageEndpoint(partition);
         const now = new Date();
         const expiration = this.addMinutes(now, SasExpirationInMinutes);
-        const sasToken = await this.generateSASToken(accountName, bucket, expiration, readonly);
+
+        const sasToken = endpoint.toLowerCase().indexOf(".") === -1 ? 
+                            await this.generateSASToken(endpoint, bucket, expiration, readonly):
+                            await this.generateSASTokenDNS(endpoint, bucket, expiration, readonly);
         const result = {
-            access_token: sasToken,
-            expires_in: 3599,
-            token_type: 'SasUrl',
-        };
+                access_token: sasToken,
+                expires_in: 3599,
+                token_type: 'SasUrl',
+            };
         return result;
     }
 
     private async generateSASToken(
-        accountName: string, containerName: string, expiration: Date, readOnly: boolean): Promise<string> {
-
+        accountName: string,
+        containerName: string,
+        expiration: Date,
+        readOnly: boolean
+    ): Promise<string> {
         const blobServiceClient = new BlobServiceClient(
             `https://${accountName}.blob.core.windows.net`,
             this.defaultAzureCredential
         );
 
         const userDelegationKey = await this.getDelegationKey(blobServiceClient);
+        const permissions = new ContainerSASPermissions();
+        permissions.list = true;
+        permissions.write = !readOnly;
+        permissions.create = !readOnly;
+        permissions.delete = !readOnly;
+        permissions.read = true;
+
+        const containerSAS = generateBlobSASQueryParameters(
+            {
+                containerName,
+                permissions,
+                protocol: SASProtocol.Https,
+                expiresOn: expiration,
+            },
+            userDelegationKey,
+            accountName
+        );
+        return `https://${accountName}.blob.core.windows.net/${containerName}?${containerSAS.toString()}`;
+    }
+
+    private async generateSASTokenDNS(
+        endpoint: string,
+        containerName: string,
+        expiration: Date,
+        readOnly: boolean): Promise<string> {
+
+        const blobServiceClient = new BlobServiceClient(
+            endpoint,
+            this.defaultAzureCredential
+        );
+
+        const domain = endpoint.match(/^(?:https?:\/\/)?(?:[^@\n]+@)?(?:www\.)?([^:\/\n\?\=]+)/im);
+        const accountName = domain[1].split('.')[0];
+
+        const userDelegationKey = await this.getDelegationKey(blobServiceClient);
+
 
         const permissions = new ContainerSASPermissions();
         permissions.list = true;
@@ -144,8 +188,9 @@ export class AzureCredentials extends AbstractCredentials {
             expiresOn: expiration
         }, userDelegationKey, // UserDelegationKey
             accountName);
-        return `https://${accountName}.blob.core.windows.net/${containerName}?${containerSAS.toString()}`;
+        return `${endpoint}${containerName}?${containerSAS.toString()}`;
     }
+
 
     private async getDelegationKey(blobServiceClient: BlobServiceClient): Promise<UserDelegationKey> {
         const key = blobServiceClient.accountName;
