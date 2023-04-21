@@ -12,6 +12,7 @@ class Settings:
 
     # This is required for running the service
     SDMS_URL: str = os.getenv('SDMS_SERVICE_HOST')
+    APPLICATION_CORS_ENABLED: bool = os.getenv('APPLICATION_CORS_ENABLED', 'true') == 'true'
 
 
 settings = Settings()

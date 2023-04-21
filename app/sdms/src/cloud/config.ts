@@ -70,6 +70,7 @@ export interface ConfigModel {
     USER_ID_CLAIM_FOR_ENTITLEMENTS_SVC: string;
     USER_ASSOCIATION_SVC_PROVIDER: string;
     SDMS_PREFIX: string;
+    APPLICATION_CORS_ENABLED: boolean;
 }
 
 export abstract class Config implements IConfig {
@@ -211,6 +212,9 @@ export abstract class Config implements IConfig {
     // SDMS URL prefix
     public static SDMS_PREFIX: string;
 
+    // CORS enabled at application level
+    public static APPLICATION_CORS_ENABLED: boolean;
+
     // strong consistency emulation
     public static ENABLE_STRONG_CONSISTENCY_EMULATION: boolean;
 
@@ -289,6 +293,9 @@ export abstract class Config implements IConfig {
 
         // Set the URL prefix correctly
         Config.SDMS_PREFIX = model.SDMS_PREFIX;
+
+        // Set whether cors is enabled at application level, by default true
+        Config.APPLICATION_CORS_ENABLED = model.APPLICATION_CORS_ENABLED;
 
         Config.checkRequiredConfig(Config.CLOUDPROVIDER, 'CLOUDPROVIDER');
         Config.checkRequiredConfig(Config.SERVICE_ENV, 'SERVICE_ENV');

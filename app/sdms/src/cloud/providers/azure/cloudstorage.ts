@@ -36,9 +36,11 @@ export class AzureCloudStorage extends AbstractStorage {
 
     public async getBlobServiceClient(): Promise<BlobServiceClient> {
         if (!this.blobServiceClient) {
-            const account = await AzureDataEcosystemServices.getStorageResourceName(this.dataPartition);
+            const account = await AzureDataEcosystemServices.getStorageEndpoint(this.dataPartition);
+            const endpoint = account.toLowerCase().indexOf('.') === -1 ?
+                    `https://${account}.blob.core.windows.net` : account;
             this.blobServiceClient = new BlobServiceClient(
-                `https://${account}.blob.core.windows.net`,
+                endpoint,
                 this.defaultAzureCredential
             );
         }
