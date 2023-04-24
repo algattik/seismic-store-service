@@ -1,3 +1,0 @@
-steps:
-- bash: 'cp -rf $(Build.SourcesDirectory)/seistore-osdu/coverage/. $(Build.SourcesDirectory)/coverage'
-  displayName: 'Copy coverage reports to $(Build.SourcesDirectory)/coverage'
