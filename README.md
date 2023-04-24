@@ -1,15 +1,76 @@
-# SEISMIC STORE
+# Introduction 
+This project will provide the restful APIs to access SEGY file headers.
 
-Seismic Store is a cloud-based solution designed to store and manage datasets of any size in the cloud by enabling a secure way to access them through a scoped authorization mechanism. Seismic Store overcomes the object size limitations imposed by a cloud provider, by managing generic datasets as multi independent objects and, therefore, provides a generic, reliable and a better performed solution to handle data on a cloud storage.
+There are 3 ways to build and test this service: local, docker and GitLab.
+# Local
+## Getting Started
+1.	Installation process
+    - Install Python virtual environment if not
+      `pip install virtualenv`
+  
+    - Create a virtual environment
+      `virtualenv venv --python=python3.10`
 
-Saving a dataset on a cloud-based storage, as single entity, may be a problem when it exceeds the maximum allowed object size. Adopting a single object storage approach is also not an optimal solution in terms of performance as a single entity cannot be easily uploaded and downloaded directly in parallel.
+    - Activate virtual environment
+      `.\venv\scripts\activate.bat`
 
-Seismic Store is a cloud-based solution composed by restful micro-services, client APIs and tools designed to implement a multi-object storage approach. The system saves objects that compose a dataset as a hierarchical data structure in a cloud storage and the dataset properties as a metadata entry in a no-relational catalogue. Having the datasets stored as multiple independent objects improve the overall performance, as generic I/O operations, for example read or write objects, can be easily parallelized.
+    - Install dependencies
+      `pip install -r requirements.txt`
+    
+    - Deactivate virtual environment
+      `(venv)> deactivate`
 
-Seismic Store manages data authorization at service level by protecting access to storage bucket resources. Only service authorized users are enabled to directly access a storage resource. The service implements a mechanism that generates an “impersonation token” by authorizing long running/background production jobs to access data without requiring further user interactions.
+    - Install javascript dependencies. In folder app/ run this command
+       `npm install`
+    
+2.	Software dependencies
+    - fastapi
+    - uvicorn
+    - segysdk-python==`<latest version>`
 
-Seismic DMS is a software suite solution compose by multiple micro services:
+3.	Latest releases
+    
+4.	API references
 
-1. [seismic store service V3](app/sdms/README.md): a DMS designed to store and manage datasets on the cloud.
-2. [seismic store service V4](app/sdms-v4/README.md): a DMS designed to store and manage seismic domain data on the cloud.
-3. [filemetadata](app/filemetadata/README.md): a microservice designed to compute, retrieve and manage seismic header data.
+## Build and Test
+1. set environment variable `SDMS_SERVICE_HOST` to the url of [seismic store service]
+
+2. `python main.py`
+
+3. Open `http://localhost:8000/seismic-file-metadata/api/v1/swagger-ui.html` in web browser
+    - Enter bearer token (you can get it from Delfi Portal) and appkey for authorization 
+    - Enter sdpath i.e. `sd://opendes/dchentest/test.sgy`
+
+# Docker
+## Getting Started
+1. Build the docker image. `docker build -t seismic-metadata-image . `
+
+## Build and Test
+1. Run the docker image. `docker run --env SDMS_SERVICE_HOST=<SDMS_SERVICE_HOST> -d -it --rm --name seismic-metadata-container -p 8080:8000 seismic-metadata-image`
+Replace environment variable `<SDMS_SERVICE_HOST>` with the url of [seismic store service]
+
+2. Open `http://localhost:8080/seismic-file-metadata/api/v1/swagger-ui.html` in web browser
+    - Enter bearer token (you can get it from Delfi Portal) and appkey for authorization 
+    - Enter sdpath i.e. `sd://opendes/dchentest/test.sgy`
+
+# GitLab
+## Build and Test
+1. [CI/CD Pipeline](https://community.opengroup.org/osdu/platform/domain-data-mgmt-services/seismic/seismic-dms-suite/seismic-store-service/-/pipelines)
+
+2. `SDMS_SERVICE_HOST` is defined in `devops\azure\chart\templates\configmap.yaml`
+
+3. [Test web url](https://osdu-glab.msft-osdu-test.org/seismic-file-metadata/api/v1/swagger-ui.html)
+
+# Run Unit Tests
+
+1. Navigate to `seismic-store-service/app/filemetadata/app`
+
+2. Run command `python -m unittest discover -s test -p "test_*" -v`
+
+# Run integration tests locally
+
+> ENV variables needed for CI/CD, `svctoken (eg. Bearer eyJ...)`, `LEGAL_TAG (eg. opendes-public-usa-dataset-7643990)`, `SVC_API_KEY (Working API key)`, `TENANT_NAME (eg. opendes)`, `DNS (Defaults to localhost and qa)`
+
+1. Navigate to `seismic-store-service/app/filemetadata/app/integration_test`
+
+3. Run command `python -m behave -v`
