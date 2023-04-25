@@ -1,7 +1,6 @@
 import json
 import re
 import segysdk
-
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security.api_key import APIKey
 from starlette.status import HTTP_500_INTERNAL_SERVER_ERROR
@@ -35,6 +34,7 @@ async def get_revision(
         raise segy_error(se)
     except Exception as e:
         raise internal_server_error(e)
+
 
     return revision
 
@@ -77,10 +77,8 @@ async def get_textual_header(
     try:
         ascii_headers_as_json = segy.get_ascii_headers_as_json()
         json_header = json.loads(ascii_headers_as_json)["Textualheader"]
-    except segysdk.SegyException as se:
-        raise segy_error(se)
-    except Exception as e:
-        raise internal_server_error(e)
+    except:
+        raise internal_server_error
 
     return {"header": f"{json_header}"}
 
@@ -152,8 +150,12 @@ async def get_scaled_trace_headers(
 def __create_segy_session(bearer, api_key, sdpath):
     try:
         configure_remote_access(bearer, api_key)
-        return segysdk.create_session(sdpath, '{}')    
+    except Exception:
+        raise authorization_error
+    try:
+        return segysdk.create_session(sdpath, '{}')
     except segysdk.SegyException as se:
         raise segy_error(se)
     except Exception as e:
         raise internal_server_error(e)
+
