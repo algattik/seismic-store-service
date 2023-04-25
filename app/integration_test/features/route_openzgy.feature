@@ -8,4 +8,3 @@ Feature: Route openzgy integration test
   Scenario: Bingrid endpoint response
     When bingrid endpoint is called
     Then bingrid response should have value integration_test_bingrid_response.json
-
