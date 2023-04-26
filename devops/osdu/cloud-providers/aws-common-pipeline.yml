@@ -11,6 +11,12 @@ aws-update-eks:
   only:
       - $DISABLED == 'true'
   
+aws-update-ecs:
+  script:
+      echo 'empty'
+  only:
+      - $DISABLED == 'true'
+  
 .aws-containerize:
   extends:
     - .aws    
