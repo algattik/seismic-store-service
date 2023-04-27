@@ -1,11 +1,5 @@
 include:
 
-  # # global
-  # - local: "devops/osdu/global/gitlab.yml"
-
-  # # containerize
-  # - local: "devops/osdu/containerize/osdu.yml"
-  
   # deploy
   # azure
   - local: "devops/osdu/cloud-providers/azure.yml"
