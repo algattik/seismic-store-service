@@ -1,8 +1,8 @@
 include:
 
   # global
-  - local: "app/devops/osdu/global/gitlab.yml"
+  - local: "devops/osdu/global/gitlab.yml"
 
   # deploy
   # azure
-  - local: "app/devops/osdu/cloud-providers/azure.yml"
+  - local: "devops/osdu/cloud-providers/azure.yml"
