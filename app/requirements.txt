@@ -1,5 +1,5 @@
 #for fasapi and uvicorn
-fastapi==0.66.1
+fastapi==0.92.0
 uvicorn==0.14.0
 
 #for segy library
