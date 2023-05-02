@@ -14,6 +14,7 @@
 // // limitations under the License.
 // // ============================================================================
 
+import { Redis } from 'ioredis';
 import redis from 'ioredis-mock';
 import Redlock from 'redlock';
 import sinon from 'sinon';
@@ -70,7 +71,7 @@ export class TestLocker {
 	private static dataset: DatasetModel;
 	private static writeLockValueInCache;
 	private static multiSessionReadLockValueInCache;
-	private static redisClient: redis.Redis;
+	private static redisClient: Redis;
 	private static datasetKey: string;
 	private static sampleRedlock: object;
 	private static journal: any;

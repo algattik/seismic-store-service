@@ -98,6 +98,10 @@ export class AzureConfig extends Config {
             AzureConfig.LOCKSMAP_REDIS_INSTANCE_PORT = +process.env.REDIS_INSTANCE_PORT;
             AzureConfig.LOCKSMAP_REDIS_INSTANCE_ADDRESS = process.env.REDIS_INSTANCE_ADDRESS ||
                 AzureConfig.LOCKSMAP_REDIS_INSTANCE_ADDRESS;
+            console.log("ADDRESS GIO " + AzureConfig.LOCKSMAP_REDIS_INSTANCE_ADDRESS);
+            AzureConfig.LOCKSMAP_REDIS_INSTANCE_TLS_DISABLE =
+                process.env.REDIS_INSTANCE_TLS_DISABLE === 'true'; // enabled by default
+
             AzureConfig.LOCKSMAP_REDIS_INSTANCE_KEY = process.env.REDIS_INSTANCE_KEY ||
                 AzureConfig.LOCKSMAP_REDIS_INSTANCE_KEY;
             Config.checkRequiredConfig(AzureConfig.LOCKSMAP_REDIS_INSTANCE_PORT, 'REDIS_INSTANCE_PORT');
@@ -141,6 +145,7 @@ export class AzureConfig extends Config {
                 DES_SERVICE_HOST_COMPLIANCE: AzureConfig.DES_SERVICE_HOST_COMPLIANCE,
                 DES_SERVICE_HOST_ENTITLEMENT: AzureConfig.DES_SERVICE_HOST_ENTITLEMENT,
                 DES_SERVICE_HOST_STORAGE: AzureConfig.DES_SERVICE_HOST_STORAGE,
+                LOCKSMAP_REDIS_INSTANCE_TLS_DISABLE: AzureConfig.LOCKSMAP_REDIS_INSTANCE_TLS_DISABLE,
                 DES_SERVICE_HOST_PARTITION: AzureConfig.DES_SERVICE_HOST_PARTITION,
                 DES_POLICY_SERVICE_HOST: AzureConfig.DES_POLICY_SERVICE_HOST,
                 DES_SERVICE_APPKEY: AzureConfig.DES_SERVICE_APPKEY,

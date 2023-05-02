@@ -364,7 +364,6 @@ export class DatasetHandler {
 
         const searchParam: string  = userInput.name;
         const selectParam: string[] = userInput.select;
-        console.log("select param " + selectParam);
         const dataset = userInput.dataset;
         const pagination = userInput.pagination;
         const userInfo = userInput.userInfo;
@@ -379,19 +378,20 @@ export class DatasetHandler {
             req.headers['impersonation-token-context'] as string);
 
         // Retrieve the list of datasets metadata
-        console.log("searchparam in list " + searchParam);
         const output = await DatasetDAO.list(journalClient, dataset, pagination, searchParam, selectParam) as any;
 
         // attach the gcpid for fast check, access_policy and exchange user-info (if requested)
         const userAssociationService = FeatureFlags.isEnabled(Feature.CCM_INTERACTION) && userInfo ?
             UserAssociationServiceFactory.build(Config.USER_ASSOCIATION_SVC_PROVIDER) : undefined;
         const dataPartition = DESUtils.getDataPartitionID(tenant.esd);
-        for (const item of output.datasets) {
-            item.ctag = item.ctag + tenant.gcpid + ';' + dataPartition;
-            item.access_policy = subproject.access_policy || Config.UNIFORM_ACCESS_POLICY;
-            if (userAssociationService && !Utils.isEmail(item.created_by)) {
-                item.created_by = await userAssociationService.convertPrincipalIdentifierToUserInfo(
-                    item.created_by, dataPartition);
+        if(!selectParam){
+            for (const item of output.datasets) {
+                item.ctag = item.ctag + tenant.gcpid + ';' + dataPartition;
+                item.access_policy = subproject.access_policy || Config.UNIFORM_ACCESS_POLICY;
+                if (userAssociationService && !Utils.isEmail(item.created_by)) {
+                    item.created_by = await userAssociationService.convertPrincipalIdentifierToUserInfo(
+                        item.created_by, dataPartition);
+                }
             }
         }
 

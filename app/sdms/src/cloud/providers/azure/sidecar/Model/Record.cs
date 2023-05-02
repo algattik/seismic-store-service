@@ -13,7 +13,7 @@ public class QueryPaginatedRequestBody
 public class PaginatedRecords
 {
 
-    public List<Record>? records { get; set; }
+    public List<Object>? records { get; set; }
 
     public string? continuationToken { get; set; }
 
@@ -22,9 +22,19 @@ public class PaginatedRecords
 public class PaginatedRecordsPath
 {
 
-    public List<RecordPath>? records { get; set; }
+    public List<Object>? records { get; set; }
 
     public string? continuationToken { get; set; }
+
+        public override string ToString()
+    {
+        return JsonConvert.SerializeObject(this);
+    }
+
+    public static Record? FromString(string json)
+    {
+        return JsonConvert.DeserializeObject<Record>(json);
+    }
 
 }
 

@@ -91,20 +91,17 @@ export class DatasetDAO {
 
         if (pagination && pagination.limit) { query = query.limit(pagination.limit); }
 
-        if (searchParam) {
-            console.log("searchparam " + searchParam); 
-            query = query.filter('name', 'LIKE', searchParam); 
-            }
-        console.log("selectparam -> " + selectParam);
-        if (selectParam){
-            query = query.select(selectParam);
-        }
+        if (searchParam) { query = query.filter('name', 'LIKE', searchParam); }
+        
+        if (selectParam){ query = query.select(selectParam); }
 
         const [entities, info] = await journalClient.runQuery(query);
 
         // Fix model for old entity
-        for (let entity of entities) {
-            entity = await this.fixOldModel(entity, dataset.tenant, dataset.subproject);
+        if(!selectParam){
+            for (let entity of entities) {
+                entity = await this.fixOldModel(entity, dataset.tenant, dataset.subproject);
+            }
         }
 
         const output: PaginatedDatasetList = {

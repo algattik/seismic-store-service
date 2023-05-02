@@ -1,4 +1,5 @@
 ﻿using Microsoft.Azure.Cosmos;
+using Newtonsoft.Json;
 
 namespace Sidecar.Services
 {
@@ -34,14 +35,17 @@ namespace Sidecar.Services
             await container.DeleteItemAsync<Record>(pk, new PartitionKey(pk));
         }
 
-        public async Task<PaginatedRecordsPath> QueryPath(string cs, string sql, string? ctoken, int? limit)
+        public async Task<string> QueryPath(string cs, string sql, string? ctoken, int? limit)
         {
             this.initCosmosClient(cs);
             Database database = Cosmos.cosmosClients[cs].GetDatabase(this.databaseId);
             Container container = database.GetContainer(this.containerId);
-            List<RecordPath> records = new List<RecordPath>();
+            List<Object> records = new List<Object>();
+            Console.WriteLine("sqll {0}", sql);
+            Console.WriteLine("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+
             QueryRequestOptions options = new QueryRequestOptions() { MaxItemCount = limit != null ? limit : 100 };
-            FeedIterator<RecordPath> query = container.GetItemQueryIterator<RecordPath>(
+            FeedIterator<Object> query = container.GetItemQueryIterator<Object>(
                 sql,
                 continuationToken: ctoken,
                 requestOptions: options);
@@ -50,40 +54,46 @@ namespace Sidecar.Services
                 while (query.HasMoreResults) 
                 {
                     var results = await query.ReadNextAsync();
-                    foreach (RecordPath record in results)
+                    foreach (Object record in results)
                     {
+                        Console.WriteLine("pirveli {0} da tipi {1}", record, record.GetType());
                         records.Add(record);
                     }
                 }
+                
+                Console.WriteLine("vabruneb {0}", records);
                 PaginatedRecordsPath paginatedRecords = new PaginatedRecordsPath();
                 paginatedRecords.records = records;
                 paginatedRecords.continuationToken = null;
-                return paginatedRecords;
+                paginatedRecords.records.ForEach(i => Console.Write("{0}\t", i));
+
+                return JsonConvert.SerializeObject(paginatedRecords);
             }
             else // fetch next page
             {
                 var results = await query.ReadNextAsync();
                 foreach (RecordPath record in results)
                 {
+                    Console.WriteLine("meore {0} da tipi {1}", record, record.GetType());
                     records.Add(record);
                 }
                 PaginatedRecordsPath paginatedRecords = new PaginatedRecordsPath();
                 paginatedRecords.records = records;
                 paginatedRecords.continuationToken = results.ContinuationToken;
-                return paginatedRecords;
+                return JsonConvert.SerializeObject(paginatedRecords);
             }
         }
 
 
 
-        public async Task<PaginatedRecords> Query(string cs, string sql, string? ctoken, int? limit)
+        public async Task<string> Query(string cs, string sql, string? ctoken, int? limit)
         {
             this.initCosmosClient(cs);
             Database database = Cosmos.cosmosClients[cs].GetDatabase(this.databaseId);
             Container container = database.GetContainer(this.containerId);
-            List<Record> records = new List<Record>();
+            List<Object> records = new List<Object>();
             QueryRequestOptions options = new QueryRequestOptions() { MaxItemCount = limit != null ? limit : 100 };
-            FeedIterator<Record> query = container.GetItemQueryIterator<Record>(
+            FeedIterator<Object> query = container.GetItemQueryIterator<Object>(
                 sql,
                 continuationToken: ctoken,
                 requestOptions: options);
@@ -92,27 +102,31 @@ namespace Sidecar.Services
                 while (query.HasMoreResults) 
                 {
                     var results = await query.ReadNextAsync();
-                    foreach (Record record in results)
+                    foreach (Object record in results)
                     {
+                        Console.WriteLine("AXAli 1 {0} da tipi {1}", record, record.GetType());
+                        
                         records.Add(record);
                     }
                 }
                 PaginatedRecords paginatedRecords = new PaginatedRecords();
                 paginatedRecords.records = records;
                 paginatedRecords.continuationToken = null;
-                return paginatedRecords;
+                return JsonConvert.SerializeObject(paginatedRecords);
             }
             else // fetch next page
             {
                 var results = await query.ReadNextAsync();
                 foreach (Record record in results)
                 {
+                    
+                        Console.WriteLine("AXAli 2 {0}", record);
                     records.Add(record);
                 }
                 PaginatedRecords paginatedRecords = new PaginatedRecords();
                 paginatedRecords.records = records;
                 paginatedRecords.continuationToken = results.ContinuationToken;
-                return paginatedRecords;
+                return JsonConvert.SerializeObject(paginatedRecords);
             }
         }
 
