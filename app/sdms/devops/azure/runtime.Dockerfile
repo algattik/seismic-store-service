@@ -25,8 +25,10 @@ ADD ./ /service
 COPY ./ /service
 WORKDIR /service
 RUN tdnf -y update \
-    && tdnf install -y g++ make python3 \
-    && rm -r node_modules npm-shrinkwrap.json \
+    && tdnf install -y g++ make python3 build-essential \
+    && npm install -g husky \
+    && npm cache clean --force \
+    && npm install -g node-gyp \
     && npm install --quiet \
     && npm run build \
     && mkdir artifact \
@@ -41,13 +43,14 @@ COPY --from=runtime-builder /service/artifact /seistore-service
 WORKDIR /seistore-service
 
 RUN tdnf -y update \
-    && tdnf install -y shadow-utils \
-    && tdnf clean all   
-RUN groupadd appgroup \
+    && tdnf install -y shadow-utils python3 build-essential \
+    && npm install -g husky \
+    && groupadd appgroup \
     && useradd -g appgroup appuser \
     && chown -R appuser:appgroup /seistore-service \
     && echo '%appgroup ALL=(ALL) NOPASSWD: /usr/bin/npm' >> /etc/sudoers \
     && echo '%appgroup ALL=(ALL) NOPASSWD: /usr/bin/node' >> /etc/sudoers \
-    && npm install --production --quiet 
+    && npm install --production --quiet \    
+    && tdnf clean all
 
 ENTRYPOINT ["node", "--trace-warnings", "--trace-uncaught", "./dist/server/server-start.js"]
