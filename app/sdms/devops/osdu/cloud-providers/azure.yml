@@ -49,7 +49,7 @@ sdms_azure_containerize:
     - chmod +x devops/scripts/clean_package_json.sh
     - devops/scripts/clean_package_json.sh
     # Runtime image
-    - docker build -t $SDMS_UTEST_RUNTIME_IMAGE --file devops/azure/runtime.Dockerfile .
+    - docker build -t $SDMS_UTEST_RUNTIME_IMAGE --file devops/azure/runtime.Dockerfile --no-cache .
     # Sidecar image
     - cd src/cloud/providers/azure/sidecar
     - docker build --build-arg PASS=$SIDECAR_CERT_PASS -t $SDMS_SIDECAR_IMAGE .
