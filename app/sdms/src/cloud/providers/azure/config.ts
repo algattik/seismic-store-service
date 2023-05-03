@@ -168,8 +168,7 @@ export class AzureConfig extends Config {
                     process.env.FEATURE_FLAG_LOGGING !== 'false' : true,
                 FEATURE_FLAG_STACKDRIVER_EXPORTER: process.env.FEATURE_FLAG_STACKDRIVER_EXPORTER !== undefined ?
                     process.env.FEATURE_FLAG_STACKDRIVER_EXPORTER !== 'false' : true,
-                FEATURE_FLAG_CCM_INTERACTION: process.env.FEATURE_FLAG_CCM_INTERACTION ?
-                    process.env.FEATURE_FLAG_CCM_INTERACTION === 'true' : false,
+                FEATURE_FLAG_CCM_INTERACTION: true,
                 FEATURE_FLAG_POLICY_SVC_INTERACTION: process.env.FEATURE_FLAG_POLICY_SVC_INTERACTION === 'true',
                 CCM_SERVICE_URL: AzureConfig.CCM_SERVICE_URL,
                 CCM_TOKEN_SCOPE: AzureConfig.CCM_TOKEN_SCOPE,
