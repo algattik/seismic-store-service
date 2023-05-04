@@ -766,6 +766,18 @@ paths:
       tags:
         - Dataset
       parameters:
+        - description: "Select fields to return"
+          in: query
+          name: select
+          required: false
+          default: ""
+          type: string
+        - description: "Filter by name"
+          in: query
+          name: name
+          required: false
+          default: ""
+          type: string
         - description: "The impersonation token context (required only with impersonation token credentials)"
           in: header
           name: impersonation-token-context
