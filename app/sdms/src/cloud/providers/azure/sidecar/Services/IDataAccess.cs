@@ -6,6 +6,5 @@
         Task<Record> Get(string cs, string pk);
         Task Delete(string cs, string pk);
         Task<string> Query(string cs, string sql, string? ctoken, int? limit);
-        Task<string> QueryPath(string cs, string sql, string? ctoken, int? limit);
     }
 }
