@@ -36,10 +36,4 @@ newman
 *.bak
 
 # dump file
-<<<<<<< HEAD
 *.rdb
-
-
-=======
-*.rdb
->>>>>>> master
