@@ -72,20 +72,5 @@ namespace Sidecar.Controllers
                 return Problem(((int)ex.StatusCode) + "-" + ex.ResponseBody);
             }
         }
-
-        [HttpPost("/query-path")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PaginatedRecordsPath))]
-        public async Task<IActionResult> QueryPath([FromBody] QueryPaginatedRequestBody body)
-        {
-            try
-            {
-                return Ok(await _dataAccess.QueryPath(body.cs, body.sql, body.ctoken, body.limit));
-            }
-            catch (CosmosException ex)
-            {
-                return Problem(((int)ex.StatusCode) + "-" + ex.ResponseBody);
-            }
-        }
-
     }
 }
