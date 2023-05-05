@@ -14,7 +14,6 @@
 // // limitations under the License.
 // // ============================================================================
 
-import { Redis } from 'ioredis';
 import redis from 'ioredis-mock';
 import Redlock from 'redlock';
 import sinon from 'sinon';
