@@ -766,15 +766,15 @@ paths:
       tags:
         - Dataset
       parameters:
-        - description: "Select fields to return"
+        - description: "Select fields to return example: select=[name,subproject...]"
           in: query
           name: select
           required: false
           default: ""
           type: string
-        - description: "Filter by name"
+        - description: "SQL like search parameter example: search=name=file%"
           in: query
-          name: name
+          name: search
           required: false
           default: ""
           type: string
