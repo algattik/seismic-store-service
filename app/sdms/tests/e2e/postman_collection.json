@@ -2058,7 +2058,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{SVC_URL}}/dataset/tenant/{{tenant}}/subproject/{{subproject}}?name=randomfile%",
+							"raw": "{{SVC_URL}}/dataset/tenant/{{tenant}}/subproject/{{subproject}}?search=name=randomfile%",
 							"host": [
 								"{{SVC_URL}}"
 							],
@@ -2071,8 +2071,8 @@
 							],
 							"query": [
 								{
-									"key": "name",
-									"value": "randomfile%"
+									"key": "search",
+									"value": "name=randomfile%"
 								}
 							]
 						}
