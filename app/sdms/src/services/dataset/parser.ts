@@ -146,8 +146,8 @@ export class DatasetParser {
                 'The \'cursor\' query parameter can not be empty if supplied'));
         }
 
-        if (req.query?.name) {
-            input.name = req.query.name as string;
+        if (req.query?.search) {
+            input.search = req.query.search as string;
         }
 
         if (req.query?.select && typeof req.query.select === 'string') {

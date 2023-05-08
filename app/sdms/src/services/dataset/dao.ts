@@ -112,8 +112,11 @@ export class DatasetDAO {
 
         if (pagination && pagination.limit) { query = query.limit(pagination.limit); }
 
-        if (searchParam) { query = query.filter('name', 'LIKE', searchParam); }
-        
+        if (searchParam) {
+            const [variable, value] = searchParam.split('=');
+            query = query.filter(variable, 'LIKE', value);
+        }
+
         if (selectParam){ query = query.select(selectParam); }
 
         const [entities, info] = await journalClient.runQuery(query);

@@ -365,7 +365,7 @@ export class DatasetHandler {
         // Retrieve the dataset path information
         const userInput = DatasetParser.list(req);
 
-        const searchParam: string  = userInput.name;
+        const searchParam: string  = userInput.search;
         const selectParam: string[] = userInput.select;
         const dataset = userInput.dataset;
         const pagination = userInput.pagination;

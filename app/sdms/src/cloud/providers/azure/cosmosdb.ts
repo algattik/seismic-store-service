@@ -346,7 +346,9 @@ export class AzureCosmosDbDAO extends AbstractJournal {
                         }
                     } else {
                         for (const record of records) {
-                            resultsList.push(record);
+                            if (Object.keys(record).length !== 0){
+                                resultsList.push(record);
+                            }
                         }
                     }
                     return Promise.resolve([resultsList, { endCursor: result.data.continuationToken }]);
