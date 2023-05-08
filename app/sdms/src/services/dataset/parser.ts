@@ -151,7 +151,7 @@ export class DatasetParser {
         }
 
         if (req.query?.select && typeof req.query.select === 'string') {
-            input.select = req.query.select.slice(1,-1).split(",");
+            input.select = req.query.select.slice(1,-1).split(',');
         }
 
         return input;
