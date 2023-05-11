@@ -10,6 +10,7 @@ include:
   # baremetal
   - project: "osdu/platform/ci-cd-pipelines"
     file: "cloud-providers/gc-baremetal-variables.yml"
+    ref: "GONRG-7029-anthos-to-baremetal"
 
   # preship
   - project: "osdu/platform/ci-cd-pipelines"
