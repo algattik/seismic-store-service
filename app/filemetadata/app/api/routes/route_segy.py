@@ -1,3 +1,4 @@
+from enum import Enum
 import json
 import re
 import segysdk
@@ -22,8 +23,36 @@ def segy_error(se: segysdk.SegyException):
         return HTTPException(status_code=http_error, detail=message)
     
     return HTTPException(status_code=HTTP_500_INTERNAL_SERVER_ERROR, detail=message)
+class Role(Enum):
+    viewer = "viewer"
+    admin = "admin"
+    both = "both"
+    none = "none"
 
-@router.get(settings.API_PATH + "segy/revision",  tags=["SEGY"])
+def api_description(what: str, role: Role, standard: bool=True):
+    if(standard):
+        description = f"<ul><li>Returns {what} of the given dataset.</li><li>Required roles:<ul>"
+    else:
+        description = f"<ul><li>Returns {what}</li><li>Required roles:<ul>"
+
+    if(role == Role.viewer):
+        description += "<li>subproject.viewer: if the applied subproject policy is 'uniform'</li>"
+        description += "<li>dataset.viewer: if the applied subproject policy is 'dataset'</li>"
+    elif(role == Role.admin):
+        description += "<li>subproject.admin: if the applied subproject policy is 'uniform'</li>"
+        description += "<li>dataset.admin: if the applied subproject policy is 'dataset'</li>"
+    elif(role == Role.both):
+        description += "<li>subproject.admin, subproject.viewer: if the applied subproject policy is 'uniform'</li>"
+        description =+ "<li>dataset.admin, dataset.viewer: if the applied subproject policy is 'dataset'</li>"
+
+    else:
+        description += "<li>None</li>"
+    
+    description += "</ul></li></ul>"
+
+    return description
+
+@router.get(settings.API_PATH + "segy/revision",  tags=["SEGY"], description=api_description("revision", Role.viewer))
 async def get_revision(
         sdpath: str,
         bearer: APIKey = Depends(get_bearer),
@@ -38,7 +67,7 @@ async def get_revision(
 
     return revision
 
-@router.get(settings.API_PATH + "segy/is3D", tags=["SEGY"])
+@router.get(settings.API_PATH + "segy/is3D", tags=["SEGY"], description=api_description("1 if given dataset is 3D", Role.viewer, False))
 async def get_is_3d(
         sdpath: str,
         bearer: APIKey = Depends(get_bearer),
@@ -53,7 +82,7 @@ async def get_is_3d(
 
     return is_3d == 1
 
-@router.get(settings.API_PATH + "segy/traceHeaderFieldCount", tags=["SEGY"])
+@router.get(settings.API_PATH + "segy/traceHeaderFieldCount", tags=["SEGY"], description=api_description("trace header field count", Role.viewer))
 async def get_trace_header_field_count(
         sdpath: str,
         bearer: APIKey = Depends(get_bearer),
@@ -68,7 +97,7 @@ async def get_trace_header_field_count(
 
     return count
 
-@router.get(settings.API_PATH + "segy/textualHeader", tags=["SEGY"])
+@router.get(settings.API_PATH + "segy/textualHeader", tags=["SEGY"], description=api_description("textual header", Role.viewer))
 async def get_textual_header(
         sdpath: str,
         bearer: APIKey = Depends(get_bearer),
@@ -84,7 +113,7 @@ async def get_textual_header(
 
     return {"header": f"{json_header}"}
 
-@router.get(settings.API_PATH + "segy/extendedTextualHeaders", tags=["SEGY"])
+@router.get(settings.API_PATH + "segy/extendedTextualHeaders", tags=["SEGY"], description=api_description("extended textual headers", Role.viewer))
 async def get_extended_textual_headers(
         sdpath: str,
         bearer: APIKey = Depends(get_bearer),
@@ -100,7 +129,7 @@ async def get_extended_textual_headers(
 
     return {"header": json_header}
 
-@router.get(settings.API_PATH + "segy/binaryHeader", tags=["SEGY"])
+@router.get(settings.API_PATH + "segy/binaryHeader", tags=["SEGY"], description=api_description("binary header", Role.viewer))
 async def get_binary_header(
         sdpath: str,
         bearer: APIKey = Depends(get_bearer),
@@ -116,7 +145,7 @@ async def get_binary_header(
 
     return {"header": json_header}
 
-@router.get(settings.API_PATH + "segy/rawTraceHeaders", tags=["SEGY"])
+@router.get(settings.API_PATH + "segy/rawTraceHeaders", tags=["SEGY"], description=api_description("raw trace headers", Role.viewer))
 async def get_raw_trace_headers(
         sdpath: str,
         start_trace: int,
@@ -134,7 +163,7 @@ async def get_raw_trace_headers(
 
     return {"header": json_header}
 
-@router.get(settings.API_PATH + "segy/scaledTraceHeaders", tags=["SEGY"])
+@router.get(settings.API_PATH + "segy/scaledTraceHeaders", tags=["SEGY"], description=api_description("scaled trace headers", Role.viewer))
 async def get_scaled_trace_headers(
         sdpath: str,
         start_trace: int,
