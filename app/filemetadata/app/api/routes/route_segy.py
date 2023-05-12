@@ -98,7 +98,7 @@ async def get_extended_textual_headers(
     except Exception as e:
         raise internal_server_error(e)
 
-    return {"header": f"{json_header}"}
+    return {"header": json_header}
 
 @router.get(settings.API_PATH + "segy/binaryHeader", tags=["SEGY"])
 async def get_binary_header(
