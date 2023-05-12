@@ -178,7 +178,7 @@ async def get_headers(
                 'Statistics':              {'Count': reader.statistics[0], 'Sum': reader.statistics[1], 'SumOfSquares': reader.statistics[2], 'Minimum': reader.statistics[3],'Maximum': reader.statistics[4]},
                 'Histogram':               {'Count': reader.histogram[0], 'Minimum': reader.histogram[1], 'Maximum':reader.histogram[2], 'Bins': reader.histogram[3]}
             }
-            return json.dumps(headers, indent=2)
+            return json.loads(json.dumps(headers, indent=2))
     except zgy.ZgyError as ze:
         raise zgy_error(ze)
     except Exception as e:
@@ -212,7 +212,7 @@ async def get_bingrid(
                                 r.corners[3][0], r.corners[3][1])
             
             zgyToBinGrid = ZGYToBinGrid(point00, point10, point01, point11, inline, xline)
-            return zgyToBinGrid.getValusAsJson()
+            return json.loads(zgyToBinGrid.getValusAsJson())
     except zgy.ZgyError as ze:
         raise zgy_error(ze)
     except Exception as e:

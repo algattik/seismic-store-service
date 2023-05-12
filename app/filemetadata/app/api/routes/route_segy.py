@@ -108,12 +108,13 @@ async def get_binary_header(
     segy = __create_segy_session(bearer, api_key, sdpath)
     try:
         header = segy.get_binary_header_as_json()
+        json_header = json.loads(header)
     except segysdk.SegyException as se:
         raise segy_error(se)
     except Exception as e:
         raise internal_server_error(e)
 
-    return {"header": f"{header}"}
+    return {"header": json_header}
 
 @router.get(settings.API_PATH + "segy/rawTraceHeaders", tags=["SEGY"])
 async def get_raw_trace_headers(
@@ -125,12 +126,13 @@ async def get_raw_trace_headers(
     segy = __create_segy_session(bearer, api_key, sdpath)
     try:
         header = segy.get_raw_trace_headers_as_json(start_trace, traces_to_dump)
+        json_header = json.loads(header)
     except segysdk.SegyException as se:
         raise segy_error(se)
     except Exception as e:
         raise internal_server_error(e)
 
-    return {"header": f"{header}"}
+    return {"header": json_header}
 
 @router.get(settings.API_PATH + "segy/scaledTraceHeaders", tags=["SEGY"])
 async def get_scaled_trace_headers(
@@ -142,12 +144,13 @@ async def get_scaled_trace_headers(
     segy = __create_segy_session(bearer, api_key, sdpath)
     try:
         header = segy.get_scaled_trace_headers_as_json(start_trace, traces_to_dump)
+        json_header = json.loads(header)
     except segysdk.SegyException as se:
         raise segy_error(se)
     except Exception as e:
         raise internal_server_error(e)
 
-    return {"header": f"{header}"}
+    return {"header": json_header}
 
 def __create_segy_session(bearer, api_key, sdpath):
     try:
