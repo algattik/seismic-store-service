@@ -282,6 +282,10 @@ export class DatasetHandler {
         // retrieve journalClient client
         const journalClient = JournalFactoryTenantClient.get(tenant);
 
+        // Check if user is member of any of the subproject acl viewer groups
+        await Auth.isUserAuthorized(req.headers.authorization,
+            SubprojectAuth.getAuthGroups(subproject, AuthRoles.viewer), tenant.esd, req[Config.DE_FORWARD_APPKEY]);
+
         // Retrieve the dataset metadata
         const datasetOUT = subproject.enforce_key ?
             await DatasetDAO.getByKey(journalClient, datasetIN) :
