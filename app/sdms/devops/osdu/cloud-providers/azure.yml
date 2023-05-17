@@ -198,11 +198,21 @@ sdms_azure_test:
     - chmod +x devops/scripts/clean_package_json.sh
     - devops/scripts/clean_package_json.sh
     - echo $svctoken > /dev/null
-    - npm install -g newman
     - npm install -g husky
     - npm ci
     - chmod +x ./tests/e2e/run_e2e_tests.sh
     - ./tests/e2e/run_e2e_tests.sh --seistore-svc-url="https://${AZURE_DNS_NAME}${AZURE_SDMS_PREFIX}" --seistore-svc-api-key="NA" --user-idtoken="$svctoken" --tenant="${E2E_TENANT}" --admin-email="${E2E_ADMIN_EMAIL}" --datapartition="${E2E_DATA_PARTITION}" --legaltag01="${E2E_LEGALTAG01}" --legaltag02="${E2E_LEGALTAG02}" --VCS-Provider="${ISGITLAB}"  --subproject="${E2E_SUBPROJECT}"
+    - |
+      if [ -f "./tests/e2e/results/e2e_tests.html" ]
+      then
+        mv -f ./tests/e2e/results/e2e_tests.html \
+          ./tests/e2e/results/e2e_tests_azure.html
+      else
+        echo "[ERROR] Test report was not created"
+      fi
+  artifacts:
+    paths: 
+      - app/$SDMS_SERVICE/tests/e2e/results/e2e_tests_azure.html
   only:
     changes:
       - devops/**/*

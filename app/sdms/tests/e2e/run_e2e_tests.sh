@@ -182,7 +182,7 @@ if [ -f "./node_modules/newman/bin/newman.js" ]; then
       --iteration-count 3 \
       --reporters cli,htmlextra \
       --reporter-htmlextra-skipHeaders "Authorization appkey x-api-key" \
-      --reporter-htmlextra-export ./tests/e2e/authorization/results/authorization_tests.html \
+      --reporter-htmlextra-export ./tests/e2e/results/e2e_tests.html \
       --bail
 else
    npm install -g newman
@@ -194,7 +194,7 @@ else
       --iteration-count 3 \
       --reporters cli,htmlextra \
       --reporter-htmlextra-skipHeaders "Authorization appkey x-api-key" \
-      --reporter-htmlextra-export ./tests/e2e/authorization/results/authorization_tests.html \
+      --reporter-htmlextra-export ./tests/e2e/results/e2e_tests.html \
       --bail
 fi
 
