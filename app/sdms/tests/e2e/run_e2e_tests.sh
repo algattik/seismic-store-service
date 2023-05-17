@@ -190,7 +190,7 @@ else
    newman run ./tests/e2e/postman_collection.json \
       -e ./tests/e2e/postman_env.json \
       --insecure \
-      --timeout 18200000 \
+      --timeout 1800000 \
       --iteration-count 3 \
       --reporters cli,htmlextra \
       --reporter-htmlextra-skipHeaders "Authorization appkey x-api-key" \
