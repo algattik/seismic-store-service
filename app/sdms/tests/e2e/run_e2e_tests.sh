@@ -174,6 +174,8 @@ sed -i "s/#{SUBPROJECT}#/${subproject}/g" ./tests/e2e/postman_env.json
 npm ci 
 
 # run tests
+rm -f ./tests/e2e/results/e2e_tests.html
+
 if [ -f "./node_modules/newman/bin/newman.js" ]; then
    ./node_modules/newman/bin/newman.js run ./tests/e2e/postman_collection.json \
       -e ./tests/e2e/postman_env.json \
@@ -187,6 +189,7 @@ if [ -f "./node_modules/newman/bin/newman.js" ]; then
 else
    npm install -g newman
    npm install -g newman-reporter-htmlextra
+
    newman run ./tests/e2e/postman_collection.json \
       -e ./tests/e2e/postman_env.json \
       --insecure \
