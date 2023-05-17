@@ -175,7 +175,6 @@ npm ci
 
 # run tests
 if [ -f "./node_modules/newman/bin/newman.js" ]; then
-   npm install -g newman-reporter-htmlextra
    ./node_modules/newman/bin/newman.js run ./tests/e2e/postman_collection.json \
       -e ./tests/e2e/postman_env.json \
       --insecure \
