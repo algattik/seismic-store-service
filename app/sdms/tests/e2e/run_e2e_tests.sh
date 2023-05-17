@@ -175,18 +175,28 @@ npm ci
 
 # run tests
 if [ -f "./node_modules/newman/bin/newman.js" ]; then
+   npm install -g newman-reporter-htmlextra
    ./node_modules/newman/bin/newman.js run ./tests/e2e/postman_collection.json \
       -e ./tests/e2e/postman_env.json \
       --insecure \
-      --timeout 600000 \
-      --reporters junit,cli
+      --timeout 900000 \
+      --iteration-count 3 \
+      --reporters cli,htmlextra \
+      --reporter-htmlextra-skipHeaders "Authorization appkey x-api-key" \
+      --reporter-htmlextra-export ./tests/e2e/authorization/results/authorization_tests.html \
+      --bail
 else
    npm install -g newman
+   npm install -g newman-reporter-htmlextra
    newman run ./tests/e2e/postman_collection.json \
       -e ./tests/e2e/postman_env.json \
       --insecure \
-      --timeout 600000 \
-      --reporters junit,cli
+      --timeout 900000 \
+      --iteration-count 3 \
+      --reporters cli,htmlextra \
+      --reporter-htmlextra-skipHeaders "Authorization appkey x-api-key" \
+      --reporter-htmlextra-export ./tests/e2e/authorization/results/authorization_tests.html \
+      --bail
 fi
 
 resTest=$?
