@@ -8,6 +8,7 @@
 // We need to manually populate them since we are not using their SDK
 // References: https://eng.ms/docs/products/geneva/collect/instrument/audit/schema#
 // import { CommonProperties } from "@fluidframework/server-services-telemetry";
+import { Request as expRequest, Response as expResponse } from 'express';
 
 export interface AuditLogMetadata {
     tenantId: string;
@@ -44,6 +45,13 @@ export enum ServiceFieldResultType {
     Fail = "Fail",
     Timeout = "Timeout",
     ClientError = "ClientError",
+}
+
+export enum ServiceFieldOperationType {
+    Create = "Create",
+    Update = "Update",
+    Delete = "Delete",
+    Read = "Read",
 }
 
 export enum ServiceFieldAuditCategoryType {
@@ -118,16 +126,16 @@ export enum ServiceFieldAuditType {
 //     CallerDisplayName?: string;
 // }
 
-export function createAuditLogMetadata(tenantId: string): AuditLogMetadata
+export function createAuditLogMetadata(req: expRequest): AuditLogMetadata
 {
     const metadata: AuditLogMetadata = {
         tenantId: tenantId,
         timeGenerated: new Date(),
-        category: "category",
-        location: "eastus",
-        serviceName: "seismic",
-        operationName: "create?",
-        dataPartitionId: "dpId",
+        category: "ResourceManagement",
+       // location: "eastus",
+        serviceName: "Seismic.Audit",
+        operationName: ,
+        dataPartitionId:req.params.tenantid,
         action: "idkopname",
         actionId: "IN002",
         puid: "00000-00000-00000-00000",
