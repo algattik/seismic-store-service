@@ -299,7 +299,7 @@ export class DatasetHandler {
             if(subproject.access_policy === Config.UNIFORM_ACCESS_POLICY) {
                 await Auth.isUserAuthorized(req.get('authorization'),
                     SubprojectAuth.getAuthGroups(subproject, AuthRoles.viewer),
-                        tenant.esd, req[Config.DE_FORWARD_APPKEY]);     
+                        tenant.esd, req[Config.DE_FORWARD_APPKEY]);
             } else {
                 await Auth.isUserAuthorized(req.get('authorization'),
                     [TenantGroups.userGroup(tenant.esd)], tenant.esd, req[Config.DE_FORWARD_APPKEY]);
