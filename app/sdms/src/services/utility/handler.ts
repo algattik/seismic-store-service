@@ -41,23 +41,23 @@ export class UtilityHandler {
         try {
             const logger = LoggerFactory.build(Config.CLOUDPROVIDER);
             if (op === UtilityOP.GCSTOKEN) {
-                logger.info(createAuditLogMetadata(req, res.statusCode, "Get GCS Access Token"));
+                logger.info(createAuditLogMetadata(req, res.statusCode.toString(), "Get GCS Access Token"));
                 Response.writeOK(res, await this.getGCSAccessToken(req));
             } else if (op === UtilityOP.LS) {
-                logger.info(createAuditLogMetadata(req, res.statusCode, "List Files"));
+                logger.info(createAuditLogMetadata(req, res.statusCode.toString(), "List Files"));
                 Response.writeOK(res, await this.ls(req));
             } else if (op === UtilityOP.CP) {
-                logger.info(createAuditLogMetadata(req, res.statusCode, "Copy File"));
+                logger.info(createAuditLogMetadata(req, res.statusCode.toString(), "Copy File"));
                 const response = await this.cp(req);
                 Response.writeOK(res, { 'status': response.status }, response.code);
             } else if (op === UtilityOP.UPLOAD_CONNECTION_STRING) {
-                logger.info(createAuditLogMetadata(req, res.statusCode, "Upload Connection String"));
+                logger.info(createAuditLogMetadata(req, res.statusCode.toString(), "Upload Connection String"));
                 Response.writeOK(res, await this.getConnectionString(req, false));
             } else if (op === UtilityOP.DOWNLOAD_CONNECTION_STRING) {
-                logger.info(createAuditLogMetadata(req, res.statusCode, "Get Connection String"));
+                logger.info(createAuditLogMetadata(req, res.statusCode.toString(), "Get Connection String"));
                 Response.writeOK(res, await this.getConnectionString(req, true));
             } else if (op === UtilityOP.STORAGE_TIERS) {
-                logger.info(createAuditLogMetadata(req, res.statusCode, "List Storage Tiers"));
+                logger.info(createAuditLogMetadata(req, res.statusCode.toString(), "List Storage Tiers"));
                 Response.writeOK(res, await this.listStorageTiers(req));
             } else {
                 throw (Error.make(Error.Status.UNKNOWN, 'Internal Server Error'));

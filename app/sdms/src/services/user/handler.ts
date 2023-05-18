@@ -45,16 +45,16 @@ export class UserHandler {
             }
 
             if (op === UserOP.Add) {
-                logger.info(createAuditLogMetadata(req, res.statusCode, "Add User"));
+                logger.info(createAuditLogMetadata(req, res.statusCode.toString(), "Add User"));
                 Response.writeOK(res, await this.addUser(req));
             } else if (op === UserOP.Remove) {
-                logger.info(createAuditLogMetadata(req, res.statusCode, "Remove User"));
+                logger.info(createAuditLogMetadata(req, res.statusCode.toString(), "Remove User"));
                 Response.writeOK(res, await this.removeUser(req));
             } else if (op === UserOP.List) {
-                logger.info(createAuditLogMetadata(req, res.statusCode, "List Users"));
+                logger.info(createAuditLogMetadata(req, res.statusCode.toString(), "List Users"));
                 Response.writeOK(res, await this.listUsers(req));
             } else if (op === UserOP.Roles) {
-                logger.info(createAuditLogMetadata(req, res.statusCode, "List Roles"));
+                logger.info(createAuditLogMetadata(req, res.statusCode.toString(), "List Roles"));
                 Response.writeOK(res, await this.rolesUser(req));
             } else { throw (Error.make(Error.Status.UNKNOWN, 'Internal Server Error')); }
 

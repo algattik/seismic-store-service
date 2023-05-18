@@ -53,34 +53,34 @@ export class SubProjectHandler {
 
                 const subproject = await this.create(req, tenant);
                 delete (subproject as any).service_account; // we don't want to return it
-                logger.info(createAuditLogMetadata(req, res.statusCode, "Create Subproject"));
+                logger.info(createAuditLogMetadata(req, res.statusCode.toString(), "Create Subproject"));
                 Response.writeOK(res, subproject);
 
             } else if (op === SubProjectOP.Get) {
 
                 const subproject = await this.get(req, tenant);
                 delete (subproject as any).service_account; // we don't want to return it
-                logger.info(createAuditLogMetadata(req, res.statusCode, "Get Subproject"));
+                logger.info(createAuditLogMetadata(req, res.statusCode.toString(), "Get Subproject"));
                 Response.writeOK(res, subproject);
 
             } else if (op === SubProjectOP.Delete) {
 
                 await this.delete(req, tenant);
-                logger.info(createAuditLogMetadata(req, res.statusCode, "Delete Subproject"));
+                logger.info(createAuditLogMetadata(req, res.statusCode.toString(), "Delete Subproject"));
                 Response.writeOK(res);
 
             } else if (op === SubProjectOP.Patch) {
 
                 const subproject = await this.patch(req, tenant);
                 delete (subproject as any).service_account; // we don't want to return it
-                logger.info(createAuditLogMetadata(req, res.statusCode, "Patch Subproject"));
+                logger.info(createAuditLogMetadata(req, res.statusCode.toString(), "Patch Subproject"));
                 Response.writeOK(res, subproject);
 
             } else if (op === SubProjectOP.List) {
 
                 const subprojects = await this.list(req, tenant);
                 for (const item of subprojects) { delete (item as any).service_account; } // we don't want to return it
-                logger.info(createAuditLogMetadata(req, res.statusCode, "List Subprojects"));
+                logger.info(createAuditLogMetadata(req, res.statusCode.toString(), "List Subprojects"));
                 Response.writeOK(res, subprojects);
 
             } else {throw (Error.make(Error.Status.UNKNOWN, 'Internal Server Error')); }

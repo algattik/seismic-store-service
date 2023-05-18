@@ -11,7 +11,7 @@
 import { Request as expRequest, Response as expResponse } from 'express';
 
 export interface AuditLogMetadata {
-    tenantId: string;
+    traceId: string;
     subscriptionId: string;
     timeGenerated: Date;
     category: string;
@@ -21,9 +21,9 @@ export interface AuditLogMetadata {
     dataPartitionId: string;
     action: string;
     actionId: string;
-    puId: string;
+    traceId2: string;
     resultType: string;
-    resourceId: string;
+    requestId: string;
 }
 
 // Audit log enums
@@ -55,7 +55,7 @@ export enum ServiceFieldAuditCategoryType {
 export function createAuditLogMetadata(req: expRequest, responseCode: string, opName: string): AuditLogMetadata
 {
     const metadata: AuditLogMetadata = {
-        tenantId: req.header("x-ms-client-tenant-id"),
+        traceId: req.rawHeaders[11],
         subscriptionId: req.params.subscriptionId,
         timeGenerated: new Date(),
         category: ServiceFieldAuditCategoryType.ResourceManagement,
@@ -65,9 +65,9 @@ export function createAuditLogMetadata(req: expRequest, responseCode: string, op
         dataPartitionId: req.params.tenantid,
         action: ServiceFieldOperationType.Create,  // TODO: dummy var, use request to define action
         actionId: "IN002",
-        puId: req.header("x-ms-client-object-id"),
+        traceId2: req.rawHeaders[43],
         resultType: responseCode,  // TODO: change this from code to enum
-        resourceId: req.header("x-ms-client-principal-id"),
+        requestId: req.rawHeaders[35],
     };
 
 

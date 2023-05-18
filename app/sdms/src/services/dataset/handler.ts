@@ -44,43 +44,43 @@ export class DatasetHandler {
                 JournalFactoryTenantClient.get(tenant), req.params.tenantid, req.params.subprojectid);
 
             if (op === DatasetOP.CheckCTag) {
-                logger.info(createAuditLogMetadata(req, res.statusCode, "Check C Tag"));
+                logger.info(createAuditLogMetadata(req, res.statusCode.toString(), "Check C Tag"));
                 Response.writeOK(res, await this.checkCTag(req, subproject));
             } else if (op === DatasetOP.Register) {
-                logger.info(createAuditLogMetadata(req, res.statusCode, "Register Dataset"));
+                logger.info(createAuditLogMetadata(req, res.statusCode.toString(), "Register Dataset"));
                 Response.writeOK(res, await this.register(req, tenant, subproject));
             } else if (op === DatasetOP.Get) {
-                logger.info(createAuditLogMetadata(req, res.statusCode, "Get Dataset"));
+                logger.info(createAuditLogMetadata(req, res.statusCode.toString(), "Get Dataset"));
                 Response.writeOK(res, await this.get(req, tenant, subproject));
             } else if (op === DatasetOP.List) {
-                logger.info(createAuditLogMetadata(req, res.statusCode, "List Datasets"));
+                logger.info(createAuditLogMetadata(req, res.statusCode.toString(), "List Datasets"));
                 Response.writeOK(res, await this.list(req, tenant, subproject));
             } else if (op === DatasetOP.Delete) {
-                logger.info(createAuditLogMetadata(req, res.statusCode, "Delete Dataset"));
+                logger.info(createAuditLogMetadata(req, res.statusCode.toString(), "Delete Dataset"));
                 Response.writeOK(res, await this.delete(req, tenant, subproject));
             } else if (op === DatasetOP.Patch) {
-                logger.info(createAuditLogMetadata(req, res.statusCode, "Patch Dataset"));
+                logger.info(createAuditLogMetadata(req, res.statusCode.toString(), "Patch Dataset"));
                 Response.writeOK(res, await this.patch(req, tenant, subproject));
             } else if (op === DatasetOP.Lock) {
-                logger.info(createAuditLogMetadata(req, res.statusCode, "Lock Dataset"));
+                logger.info(createAuditLogMetadata(req, res.statusCode.toString(), "Lock Dataset"));
                 Response.writeOK(res, await this.lock(req, tenant, subproject));
             } else if (op === DatasetOP.UnLock) {
-                logger.info(createAuditLogMetadata(req, res.statusCode, "Unlock Dataset"));
+                logger.info(createAuditLogMetadata(req, res.statusCode.toString(), "Unlock Dataset"));
                 Response.writeOK(res, await this.unlock(req, tenant, subproject));
             } else if (op === DatasetOP.Exists) {
-                logger.info(createAuditLogMetadata(req, res.statusCode, "Check if Dataset Exists"));
+                logger.info(createAuditLogMetadata(req, res.statusCode.toString(), "Check if Dataset Exists"));
                 Response.writeOK(res, await this.exists(req, tenant, subproject));
             } else if (op === DatasetOP.Sizes) {
-                logger.info(createAuditLogMetadata(req, res.statusCode, "Get Dataset Size"));
+                logger.info(createAuditLogMetadata(req, res.statusCode.toString(), "Get Dataset Size"));
                 Response.writeOK(res, await this.sizes(req, tenant, subproject));
             } else if (op === DatasetOP.Permission) {
-                logger.info(createAuditLogMetadata(req, res.statusCode, "Check Dataset Permissions"));
+                logger.info(createAuditLogMetadata(req, res.statusCode.toString(), "Check Dataset Permissions"));
                 Response.writeOK(res, await this.checkPermissions(req, tenant, subproject));
             } else if (op === DatasetOP.ListContent) {
-                logger.info(createAuditLogMetadata(req, res.statusCode, "List Dataset Content"));
+                logger.info(createAuditLogMetadata(req, res.statusCode.toString(), "List Dataset Content"));
                 Response.writeOK(res, await this.listContent(req, tenant, subproject));
             } else if (op === DatasetOP.PutTags) {
-                logger.info(createAuditLogMetadata(req, res.statusCode, "Put Dataset Tags"));
+                logger.info(createAuditLogMetadata(req, res.statusCode.toString(), "Put Dataset Tags"));
                 Response.writeOK(res, await this.putTags(req, tenant, subproject));
             } else { throw (Error.make(Error.Status.UNKNOWN, 'Internal Server Error')); }
 

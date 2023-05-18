@@ -42,19 +42,19 @@ export class TenantHandler {
             }
 
             if (op === TenantOP.CREATE) {
-                logger.info(createAuditLogMetadata(req, res.statusCode, "Create Tenant"));
+                logger.info(createAuditLogMetadata(req, res.statusCode.toString(), "Create Tenant"));
                 Response.writeOK(res, await this.create(req));
 
             } else if (op === TenantOP.GET) {
-                logger.info(createAuditLogMetadata(req, res.statusCode, "Get Tenant"));
+                logger.info(createAuditLogMetadata(req, res.statusCode.toString(), "Get Tenant"));
                 Response.writeOK(res, await this.get(req));
 
             } else if (op === TenantOP.DELETE) {
-                logger.info(createAuditLogMetadata(req, res.statusCode, "Delete Tenant"));
+                logger.info(createAuditLogMetadata(req, res.statusCode.toString(), "Delete Tenant"));
                 Response.writeOK(res, await this.delete(req));
 
             } else if (op === TenantOP.GETSDPATH) {
-                logger.info(createAuditLogMetadata(req, res.statusCode, "Get SDPath"));
+                logger.info(createAuditLogMetadata(req, res.statusCode.toString(), "Get SDPath"));
                 Response.writeOK(res, await this.getTenantSDPath(req));
 
             } else { throw (Error.make(Error.Status.UNKNOWN, 'Internal Server Error')); }
