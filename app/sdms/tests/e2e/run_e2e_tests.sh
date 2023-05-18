@@ -194,9 +194,10 @@ if [ -f "./node_modules/newman/bin/newman.js" ]; then
          -e ./tests/e2e/postman_env.json \
          --insecure \
          --timeout 900000 \
-         --reporters cli,JUnit,htmlextra \
+         --reporters cli,junit,htmlextra \
          --reporter-htmlextra-skipHeaders "Authorization appkey x-api-key" \
          --reporter-htmlextra-export ./tests/e2e/results/e2e_tests_iteration$1.html \
+         --reporter-junit-export ./newman/e2e_tests_iteration$1.xml \
          --bail
    }
 
@@ -209,9 +210,10 @@ else
          -e ./tests/e2e/postman_env.json \
          --insecure \
          --timeout 900000 \
-         --reporters cli,JUnit,htmlextra \
+         --reporters cli,junit,htmlextra \
          --reporter-htmlextra-skipHeaders "Authorization appkey x-api-key" \
          --reporter-htmlextra-export ./tests/e2e/results/e2e_tests_iteration$1.html \
+         --reporter-junit-export ./newman/e2e_tests_iteration$1.xml \
          --bail
    }
 fi
