@@ -30,6 +30,7 @@ import { IWriteLockSession, Locker } from './locker';
 import { DatasetOP } from './optype';
 import { DatasetParser } from './parser';
 import { SchemaManagerFactory } from './schema-manager';
+import { createAuditLogMetadata } from '../../cloud/providers/azure/auditmetadata';
 
 export class DatasetHandler {
 
@@ -37,35 +38,49 @@ export class DatasetHandler {
     public static async handler(req: expRequest, res: expResponse, op: DatasetOP) {
 
         try {
+            const logger = LoggerFactory.build(Config.CLOUDPROVIDER);
             const tenant = await TenantDAO.get(req.params.tenantid);
             const subproject = await SubProjectDAO.get(
                 JournalFactoryTenantClient.get(tenant), req.params.tenantid, req.params.subprojectid);
 
             if (op === DatasetOP.CheckCTag) {
+                logger.info(createAuditLogMetadata(req, res.statusCode, "Check C Tag"));
                 Response.writeOK(res, await this.checkCTag(req, subproject));
             } else if (op === DatasetOP.Register) {
+                logger.info(createAuditLogMetadata(req, res.statusCode, "Register Dataset"));
                 Response.writeOK(res, await this.register(req, tenant, subproject));
             } else if (op === DatasetOP.Get) {
+                logger.info(createAuditLogMetadata(req, res.statusCode, "Get Dataset"));
                 Response.writeOK(res, await this.get(req, tenant, subproject));
             } else if (op === DatasetOP.List) {
+                logger.info(createAuditLogMetadata(req, res.statusCode, "List Datasets"));
                 Response.writeOK(res, await this.list(req, tenant, subproject));
             } else if (op === DatasetOP.Delete) {
+                logger.info(createAuditLogMetadata(req, res.statusCode, "Delete Dataset"));
                 Response.writeOK(res, await this.delete(req, tenant, subproject));
             } else if (op === DatasetOP.Patch) {
+                logger.info(createAuditLogMetadata(req, res.statusCode, "Patch Dataset"));
                 Response.writeOK(res, await this.patch(req, tenant, subproject));
             } else if (op === DatasetOP.Lock) {
+                logger.info(createAuditLogMetadata(req, res.statusCode, "Lock Dataset"));
                 Response.writeOK(res, await this.lock(req, tenant, subproject));
             } else if (op === DatasetOP.UnLock) {
+                logger.info(createAuditLogMetadata(req, res.statusCode, "Unlock Dataset"));
                 Response.writeOK(res, await this.unlock(req, tenant, subproject));
             } else if (op === DatasetOP.Exists) {
+                logger.info(createAuditLogMetadata(req, res.statusCode, "Check if Dataset Exists"));
                 Response.writeOK(res, await this.exists(req, tenant, subproject));
             } else if (op === DatasetOP.Sizes) {
+                logger.info(createAuditLogMetadata(req, res.statusCode, "Get Dataset Size"));
                 Response.writeOK(res, await this.sizes(req, tenant, subproject));
             } else if (op === DatasetOP.Permission) {
+                logger.info(createAuditLogMetadata(req, res.statusCode, "Check Dataset Permissions"));
                 Response.writeOK(res, await this.checkPermissions(req, tenant, subproject));
             } else if (op === DatasetOP.ListContent) {
+                logger.info(createAuditLogMetadata(req, res.statusCode, "List Dataset Content"));
                 Response.writeOK(res, await this.listContent(req, tenant, subproject));
             } else if (op === DatasetOP.PutTags) {
+                logger.info(createAuditLogMetadata(req, res.statusCode, "Put Dataset Tags"));
                 Response.writeOK(res, await this.putTags(req, tenant, subproject));
             } else { throw (Error.make(Error.Status.UNKNOWN, 'Internal Server Error')); }
 

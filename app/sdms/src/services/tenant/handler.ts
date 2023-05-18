@@ -17,13 +17,14 @@
 import { Request as expRequest, Response as expResponse } from 'express';
 import { TenantAuth, TenantModel } from '.';
 import { Auth, AuthGroups } from '../../auth';
-import { Config, JournalFactoryTenantClient } from '../../cloud';
+import { Config, JournalFactoryTenantClient, LoggerFactory } from '../../cloud';
 import { Error, ErrorModel, Feature, FeatureFlags, Response } from '../../shared';
 import { SubProjectDAO } from '../subproject';
 import { TenantDAO } from './dao';
 import { TenantGroups } from './groups';
 import { TenantOP } from './optype';
 import { TenantParser } from './parser';
+import { createAuditLogMetadata } from '../../cloud/providers/azure/auditmetadata';
 
 export class TenantHandler {
 
@@ -32,6 +33,7 @@ export class TenantHandler {
 
         try {
 
+            const logger = LoggerFactory.build(Config.CLOUDPROVIDER);
             // tenant endpoints are not available with impersonation token
             if (Auth.isImpersonationToken(req.headers.authorization)) {
                 throw (Error.make(Error.Status.PERMISSION_DENIED,
@@ -40,19 +42,19 @@ export class TenantHandler {
             }
 
             if (op === TenantOP.CREATE) {
-
+                logger.info(createAuditLogMetadata(req, res.statusCode, "Create Tenant"));
                 Response.writeOK(res, await this.create(req));
 
             } else if (op === TenantOP.GET) {
-
+                logger.info(createAuditLogMetadata(req, res.statusCode, "Get Tenant"));
                 Response.writeOK(res, await this.get(req));
 
             } else if (op === TenantOP.DELETE) {
-
+                logger.info(createAuditLogMetadata(req, res.statusCode, "Delete Tenant"));
                 Response.writeOK(res, await this.delete(req));
 
             } else if (op === TenantOP.GETSDPATH) {
-
+                logger.info(createAuditLogMetadata(req, res.statusCode, "Get SDPath"));
                 Response.writeOK(res, await this.getTenantSDPath(req));
 
             } else { throw (Error.make(Error.Status.UNKNOWN, 'Internal Server Error')); }

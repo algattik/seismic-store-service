@@ -16,7 +16,7 @@
 
 import { Request as expRequest, Response as expResponse } from 'express';
 import { Auth, AuthGroups, AuthRoles, UserRoles } from '../../auth';
-import { Config } from '../../cloud';
+import { Config, LoggerFactory } from '../../cloud';
 import { JournalFactoryTenantClient } from '../../cloud/journal';
 import { Error, Feature, FeatureFlags, Response, Utils } from '../../shared';
 import { ISDPathModel } from '../../shared/sdpath';
@@ -27,6 +27,7 @@ import { TenantDAO, TenantGroups, TenantModel } from '../tenant';
 import { ITenantModel } from '../tenant/model';
 import { UserOP } from './optype';
 import { UserParser } from './parser';
+import { createAuditLogMetadata } from '../../cloud/providers/azure/auditmetadata';
 
 
 export class UserHandler {
@@ -35,6 +36,7 @@ export class UserHandler {
     public static async handler(req: expRequest, res: expResponse, op: UserOP) {
 
         try {
+            const logger = LoggerFactory.build(Config.CLOUDPROVIDER);
 
             // subproject endpoints are not available with impersonation token
             if (Auth.isImpersonationToken(req.headers.authorization)) {
@@ -43,12 +45,16 @@ export class UserHandler {
             }
 
             if (op === UserOP.Add) {
+                logger.info(createAuditLogMetadata(req, res.statusCode, "Add User"));
                 Response.writeOK(res, await this.addUser(req));
             } else if (op === UserOP.Remove) {
+                logger.info(createAuditLogMetadata(req, res.statusCode, "Remove User"));
                 Response.writeOK(res, await this.removeUser(req));
             } else if (op === UserOP.List) {
+                logger.info(createAuditLogMetadata(req, res.statusCode, "List Users"));
                 Response.writeOK(res, await this.listUsers(req));
             } else if (op === UserOP.Roles) {
+                logger.info(createAuditLogMetadata(req, res.statusCode, "List Roles"));
                 Response.writeOK(res, await this.rolesUser(req));
             } else { throw (Error.make(Error.Status.UNKNOWN, 'Internal Server Error')); }
 

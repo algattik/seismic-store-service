@@ -31,64 +31,14 @@ import { SubprojectGroups } from './groups';
 import { SubProjectOP } from './optype';
 import { SubProjectParser } from './parser';
 import { createAuditLogMetadata } from '../../cloud/providers/azure/auditmetadata';
-
-// function getCircularReplacer() {
-//     const ancestors = [];
-//     return function (key, value) {
-//       if (typeof value !== "object" || value === null) {
-//         return value;
-//       }
-//       // `this` is the object that value is contained in,
-//       // i.e., its direct parent.
-//       while (ancestors.length > 0 && ancestors.at(-1) !== this) {
-//         ancestors.pop();
-//       }
-//       if (ancestors.includes(value)) {
-//         return "[Circular]";
-//       }
-//       ancestors.push(value);
-//       return value;
-//     };
-//   }
   
 export class SubProjectHandler {
 
     // handler for the [ /subproject ] endpoints
-
- 
     public static async handler(req: expRequest, res: expResponse, op: SubProjectOP) {
 
         try {
             const logger = LoggerFactory.build(Config.CLOUDPROVIDER);
-            // console.log('\nRequest: '+ JSON.stringify(req,function replacer(key, value) {
-            //     if(key === 'itself') {
-            //       return null
-            //     }              
-            //     return value
-            //   })); 
-            var util = require("util");
-            var jsoncircular = require("json-circular-stringify");
-
-            console.log('\nComplete Request in util' + util.inspect(req,{depth:null}));
-            console.log('\nComplete Response in util' + util.inspect(res,{depth:null}));
-            console.log('\nRequest');
-            console.log('\nComplete Request' + jsoncircular.JSON.stringify(req));
-            console.log('\nRequest TenantID: '+ req.params.tenantid);  
-            //console.log('\nRequest TenantID: '+ req.params.);  
-            //console.log('\nResponse: '+ req.params.tenantid);
-            // console.log('\nHierarchical path of the dataset '+ JSON.stringify(req.params.path));
-            // console.log('\nDataset Id: '+JSON.stringify(res.params.datasetid));
-            console.log('\nLegal Tag '+ req.params.ltag);
-            console.log('\nSubProjectId: '+ jsoncircular.JSON.stringify(req.params.subprojectid));
-            console.log('\nRequest Body '+ jsoncircular.JSON.stringify(req.body));
-            
-            console.log('\nResponse');
-            //console.log('\nResponse Body '+ JSON.stringify(res.body));
-            console.log('\nComplete Response '+ jsoncircular.JSON.stringify(res));
-            //console.log('\nResponse Body '+ JSON.stringify(res.body));
-
-
-            console.log('\nSubProjectOP: '+ jsoncircular.JSON.stringify(op));
               
             // subproject endpoints are not available with impersonation token
             if (Auth.isImpersonationToken(req.headers.authorization)) {
@@ -103,47 +53,37 @@ export class SubProjectHandler {
 
                 const subproject = await this.create(req, tenant);
                 delete (subproject as any).service_account; // we don't want to return it
-                console.log('\nLogger Info');
-                logger.info(createAuditLogMetadata(req.params.tenantid));
-                console.log('\nCreate Audit Log: ' + JSON.stringify(createAuditLogMetadata(req.params.tenantid)));
+                logger.info(createAuditLogMetadata(req, res.statusCode, "Create Subproject"));
                 Response.writeOK(res, subproject);
 
             } else if (op === SubProjectOP.Get) {
 
                 const subproject = await this.get(req, tenant);
                 delete (subproject as any).service_account; // we don't want to return it
-                console.log('\nLogger Info');
-                logger.info(createAuditLogMetadata(req.params.tenantid));
-                console.log('\nGET Audit Log: ' + JSON.stringify(createAuditLogMetadata(req.params.tenantid)));
+                logger.info(createAuditLogMetadata(req, res.statusCode, "Get Subproject"));
                 Response.writeOK(res, subproject);
 
             } else if (op === SubProjectOP.Delete) {
 
                 await this.delete(req, tenant);
-                console.log('\nLogger Info');
-                logger.info(createAuditLogMetadata(req.params.tenantid));
-                console.log('\nDelete Audit Log: ' + JSON.stringify(createAuditLogMetadata(req.params.tenantid)));
+                logger.info(createAuditLogMetadata(req, res.statusCode, "Delete Subproject"));
                 Response.writeOK(res);
 
             } else if (op === SubProjectOP.Patch) {
 
                 const subproject = await this.patch(req, tenant);
                 delete (subproject as any).service_account; // we don't want to return it
-                console.log('\nLogger Info');
-                logger.info(createAuditLogMetadata(req.params.tenantid));
-                console.log('\nPatch Audit Log: ' + JSON.stringify(createAuditLogMetadata(req.params.tenantid)));
+                logger.info(createAuditLogMetadata(req, res.statusCode, "Patch Subproject"));
                 Response.writeOK(res, subproject);
 
             } else if (op === SubProjectOP.List) {
 
                 const subprojects = await this.list(req, tenant);
-                for (const item of subprojects) { delete (item as any).service_account; }
-                console.log('\nLogger Info'); // we don't want to return it
-                logger.info(createAuditLogMetadata(req.params.tenantid));
-                console.log('\nList Audit Log: ' + JSON.stringify(createAuditLogMetadata(req.params.tenantid)));
+                for (const item of subprojects) { delete (item as any).service_account; } // we don't want to return it
+                logger.info(createAuditLogMetadata(req, res.statusCode, "List Subprojects"));
                 Response.writeOK(res, subprojects);
 
-            } else { throw (Error.make(Error.Status.UNKNOWN, 'Internal Server Error')); }
+            } else {throw (Error.make(Error.Status.UNKNOWN, 'Internal Server Error')); }
 
         } catch (error) { Response.writeError(res, error); }
 

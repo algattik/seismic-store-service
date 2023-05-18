@@ -17,7 +17,7 @@
 import Bull from 'bull';
 import { Request as expRequest, Response as expResponse } from 'express';
 import { Auth, AuthRoles } from '../../auth';
-import { Config, CredentialsFactory, JournalFactoryTenantClient, StorageFactory } from '../../cloud';
+import { Config, CredentialsFactory, JournalFactoryTenantClient, StorageFactory, LoggerFactory } from '../../cloud';
 import { IAccessTokenModel } from '../../cloud/credentials';
 import { IDESEntitlementGroupModel } from '../../cloud/dataecosystem';
 import { SeistoreFactory } from '../../cloud/seistore';
@@ -30,6 +30,7 @@ import { SubprojectAuth, SubProjectDAO } from '../subproject';
 import { TenantDAO } from '../tenant';
 import { UtilityOP } from './optype';
 import { UtilityParser } from './parser';
+import { createAuditLogMetadata } from '../../cloud/providers/azure/auditmetadata';
 
 
 export class UtilityHandler {
@@ -38,18 +39,25 @@ export class UtilityHandler {
     public static async handler(req: expRequest, res: expResponse, op: UtilityOP) {
 
         try {
+            const logger = LoggerFactory.build(Config.CLOUDPROVIDER);
             if (op === UtilityOP.GCSTOKEN) {
+                logger.info(createAuditLogMetadata(req, res.statusCode, "Get GCS Access Token"));
                 Response.writeOK(res, await this.getGCSAccessToken(req));
             } else if (op === UtilityOP.LS) {
+                logger.info(createAuditLogMetadata(req, res.statusCode, "List Files"));
                 Response.writeOK(res, await this.ls(req));
             } else if (op === UtilityOP.CP) {
+                logger.info(createAuditLogMetadata(req, res.statusCode, "Copy File"));
                 const response = await this.cp(req);
                 Response.writeOK(res, { 'status': response.status }, response.code);
             } else if (op === UtilityOP.UPLOAD_CONNECTION_STRING) {
+                logger.info(createAuditLogMetadata(req, res.statusCode, "Upload Connection String"));
                 Response.writeOK(res, await this.getConnectionString(req, false));
             } else if (op === UtilityOP.DOWNLOAD_CONNECTION_STRING) {
+                logger.info(createAuditLogMetadata(req, res.statusCode, "Get Connection String"));
                 Response.writeOK(res, await this.getConnectionString(req, true));
             } else if (op === UtilityOP.STORAGE_TIERS) {
+                logger.info(createAuditLogMetadata(req, res.statusCode, "List Storage Tiers"));
                 Response.writeOK(res, await this.listStorageTiers(req));
             } else {
                 throw (Error.make(Error.Status.UNKNOWN, 'Internal Server Error'));
