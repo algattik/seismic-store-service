@@ -43,4 +43,8 @@ export class TenantGroups {
         return 'users.datalake.admins';
     }
 
+    public static userGroup(esd: string): string {
+        return 'users@' + esd;
+    }
+
 }
