@@ -296,16 +296,13 @@ export class DatasetHandler {
 
         // check if the dataset does not exist
         if (!datasetOUT) {
-
-            // policy = uniform
-            // CHECK IF USER IS AUTHORIZED IN SUBPROJECT
-            // NO -> UNAUTHORIZED
-            // YES -> RETURN THE DATASET DOES NOT EXIST
-
-            // policy = dataset
-            // CHECK IF USER IS AUTHORIZED IN USER GROUP (like before)
-            // NO -> UNAUTHORIZED
-            // YES -> ERROR MESSAGE
+            if(subproject.access_policy === Config.UNIFORM_ACCESS_POLICY) {
+                await Auth.isUserAuthorized(req.headers.authorization,
+                    SubprojectAuth.getAuthGroups(subproject, AuthRoles.viewer), tenant.esd, req[Config.DE_FORWARD_APPKEY]);     
+            } else {
+                await Auth.isUserAuthorized(req.get('authorization'), 
+                    [TenantGroups.userGroup(tenant.esd)], tenant.esd, req[Config.DE_FORWARD_APPKEY]);
+            }
 
             throw (Error.make(Error.Status.NOT_FOUND,
                 'The dataset ' + Config.SDPATHPREFIX + datasetIN.tenant + '/' +
