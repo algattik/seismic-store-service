@@ -234,6 +234,9 @@ cp -f ./tests/e2e/postman_env_original.json ./tests/e2e/postman_env.json
 rm -f ./tests/e2e/postman_env_original.json
 rm -f ./tests/e2e/postman_env_initiated.json
 
+# Wait for report to be created
+sleep 30
+
 # exit the script
 printf "%s\n" "--------------------------------------------"
 if [ $resTest -ne 0 ]; then exit 1; fi
