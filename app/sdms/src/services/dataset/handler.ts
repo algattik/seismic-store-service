@@ -44,7 +44,7 @@ export class DatasetHandler {
                 subproject = await SubProjectDAO.get(
                 JournalFactoryTenantClient.get(tenant), req.params.tenantid, req.params.subprojectid);
             } catch (error) {
-                await Auth.isUserAuthorized(req.get('authorization'), 
+                await Auth.isUserAuthorized(req.get('authorization'),
                     [TenantGroups.userGroup(tenant.esd)], tenant.esd, req[Config.DE_FORWARD_APPKEY]);
                 throw error;
             }
@@ -298,9 +298,10 @@ export class DatasetHandler {
         if (!datasetOUT) {
             if(subproject.access_policy === Config.UNIFORM_ACCESS_POLICY) {
                 await Auth.isUserAuthorized(req.get('authorization'),
-                    SubprojectAuth.getAuthGroups(subproject, AuthRoles.viewer), tenant.esd, req[Config.DE_FORWARD_APPKEY]);     
+                    SubprojectAuth.getAuthGroups(subproject, AuthRoles.viewer),
+                        tenant.esd, req[Config.DE_FORWARD_APPKEY]);     
             } else {
-                await Auth.isUserAuthorized(req.get('authorization'), 
+                await Auth.isUserAuthorized(req.get('authorization'),
                     [TenantGroups.userGroup(tenant.esd)], tenant.esd, req[Config.DE_FORWARD_APPKEY]);
             }
 
