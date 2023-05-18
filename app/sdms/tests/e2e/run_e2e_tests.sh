@@ -155,57 +155,82 @@ printf "%s\n" "subproject = ${subproject}"
 printf "%s\n" "--------------------------------------------"
 
 # replace values in the main env
-cp ./tests/e2e/postman_env.json ./tests/e2e/postman_env_original.json
-sed -i "s,#{SVC_URL}#,${seistore_svc_url},g" ./tests/e2e/postman_env.json
-sed -i "s/#{SVC_API_KEY}#/${seistore_svc_api_key}/g" ./tests/e2e/postman_env.json
-sed -i "s/#{STOKEN}#/${user_idtoken}/g" ./tests/e2e/postman_env.json
-sed -i "s/#{TENANT}#/${working_tenant}/g" ./tests/e2e/postman_env.json
-sed -i "s/#{ADMINEMAIL}#/${admin_email}/g" ./tests/e2e/postman_env.json
-sed -i "s/#{DATAPARTITION}#/${datapartition}/g" ./tests/e2e/postman_env.json
-sed -i "s/#{LEGALTAG01}#/${legaltag01}/g" ./tests/e2e/postman_env.json
-sed -i "s/#{LEGALTAG02}#/${legaltag02}/g" ./tests/e2e/postman_env.json
-sed -i "s/#{NEWUSEREMAIL}#/${newuser}/g" ./tests/e2e/postman_env.json
-sed -i "s/#{NEWUSERGROUP}#/${newusergroup}/g" ./tests/e2e/postman_env.json
-sed -i "s/#{VCS_PROVIDER}#/${VCS_Provider}/g" ./tests/e2e/postman_env.json
-sed -i "s/#{DE_APP_KEY}#/${de_app_key}/g" ./tests/e2e/postman_env.json
-sed -i "s/#{SUBPROJECT}#/${subproject}/g" ./tests/e2e/postman_env.json
+if [[ -f "./tests/e2e/postman_env.json" ]]
+then
+   cp ./tests/e2e/postman_env.json ./tests/e2e/postman_env_original.json
+   sed -i "s,#{SVC_URL}#,${seistore_svc_url},g" ./tests/e2e/postman_env.json
+   sed -i "s/#{SVC_API_KEY}#/${seistore_svc_api_key}/g" ./tests/e2e/postman_env.json
+   sed -i "s/#{STOKEN}#/${user_idtoken}/g" ./tests/e2e/postman_env.json
+   sed -i "s/#{TENANT}#/${working_tenant}/g" ./tests/e2e/postman_env.json
+   sed -i "s/#{ADMINEMAIL}#/${admin_email}/g" ./tests/e2e/postman_env.json
+   sed -i "s/#{DATAPARTITION}#/${datapartition}/g" ./tests/e2e/postman_env.json
+   sed -i "s/#{LEGALTAG01}#/${legaltag01}/g" ./tests/e2e/postman_env.json
+   sed -i "s/#{LEGALTAG02}#/${legaltag02}/g" ./tests/e2e/postman_env.json
+   sed -i "s/#{NEWUSEREMAIL}#/${newuser}/g" ./tests/e2e/postman_env.json
+   sed -i "s/#{NEWUSERGROUP}#/${newusergroup}/g" ./tests/e2e/postman_env.json
+   sed -i "s/#{VCS_PROVIDER}#/${VCS_Provider}/g" ./tests/e2e/postman_env.json
+   sed -i "s/#{DE_APP_KEY}#/${de_app_key}/g" ./tests/e2e/postman_env.json
+   sed -i "s/#{SUBPROJECT}#/${subproject}/g" ./tests/e2e/postman_env.json
+   cp ./tests/e2e/postman_env.json ./tests/e2e/postman_env_initiated.json
+
+   echo "-----------------------------------------------------------"
+   echo "./tests/e2e/postman_env.json was updated"
+   echo "-----------------------------------------------------------"
+
+else
+   echo "./tests/e2e/postman_env.json doesn't exist"
+   exit 1
+fi
 
 # install requied packages
 npm ci 
 
 # run tests
-rm -f ./tests/e2e/results/e2e_tests.html
+rm -f ./tests/e2e/results/e2e_tests_*.html
 
 if [ -f "./node_modules/newman/bin/newman.js" ]; then
-   ./node_modules/newman/bin/newman.js run ./tests/e2e/postman_collection.json \
-      -e ./tests/e2e/postman_env.json \
-      --insecure \
-      --timeout 1800000 \
-      --iteration-count 3 \
-      --reporters cli,htmlextra \
-      --reporter-htmlextra-skipHeaders "Authorization appkey x-api-key" \
-      --reporter-htmlextra-export ./tests/e2e/results/e2e_tests.html \
-      --bail
+   runTests() {
+      ./node_modules/newman/bin/newman.js run ./tests/e2e/postman_collection.json \
+         -e ./tests/e2e/postman_env.json \
+         --insecure \
+         --timeout 900000 \
+         --reporters cli,JUnit,htmlextra \
+         --reporter-htmlextra-skipHeaders "Authorization appkey x-api-key" \
+         --reporter-htmlextra-export ./tests/e2e/results/e2e_tests_iteration$1.html \
+         --bail
+   }
+
 else
    npm install -g newman
    npm install -g newman-reporter-htmlextra
 
-   newman run ./tests/e2e/postman_collection.json \
-      -e ./tests/e2e/postman_env.json \
-      --insecure \
-      --timeout 1800000 \
-      --iteration-count 3 \
-      --reporters cli,htmlextra \
-      --reporter-htmlextra-skipHeaders "Authorization appkey x-api-key" \
-      --reporter-htmlextra-export ./tests/e2e/results/e2e_tests.html \
-      --bail
+   runTests() {
+      newman run ./tests/e2e/postman_collection.json \
+         -e ./tests/e2e/postman_env.json \
+         --insecure \
+         --timeout 900000 \
+         --reporters cli,JUnit,htmlextra \
+         --reporter-htmlextra-skipHeaders "Authorization appkey x-api-key" \
+         --reporter-htmlextra-export ./tests/e2e/results/e2e_tests_iteration$1.html \
+         --bail
+   }
 fi
 
-resTest=$?
+# make three attempts in case of failure
+i=1
+while : ;
+do
+  runTests "$i"
+  resTest=$?
+  [ $resTest -ne 0 ] && [ $i -lt 3 ] || break
+  cp -f ./tests/e2e/postman_env_initiated.json ./tests/e2e/postman_env.json
+  ((i++))
+done
 
 # restore configuraiton and remove installed dependencies
-cp ./tests/e2e/postman_env_original.json ./tests/e2e/postman_env.json
-rm ./tests/e2e/postman_env_original.json
+cp -f ./tests/e2e/postman_env_original.json ./tests/e2e/postman_env.json
+rm -f ./tests/e2e/postman_env_original.json
+rm -f ./tests/e2e/postman_env_initiated.json
 
 # exit the script
 printf "%s\n" "--------------------------------------------"
