@@ -297,7 +297,7 @@ export class DatasetHandler {
         // check if the dataset does not exist
         if (!datasetOUT) {
             if(subproject.access_policy === Config.UNIFORM_ACCESS_POLICY) {
-                await Auth.isUserAuthorized(req.headers.authorization,
+                await Auth.isUserAuthorized(req.get('authorization'),
                     SubprojectAuth.getAuthGroups(subproject, AuthRoles.viewer), tenant.esd, req[Config.DE_FORWARD_APPKEY]);     
             } else {
                 await Auth.isUserAuthorized(req.get('authorization'), 
