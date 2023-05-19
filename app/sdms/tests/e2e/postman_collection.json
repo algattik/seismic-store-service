@@ -476,7 +476,7 @@
 					"response": []
 				},
 				{
-					"name": "SUBPROJECT GET: Retrieve the subproject",
+					"name": "SUBPROJECT PATCH: verify the initial value of the legal tag is set for subproject",
 					"event": [
 						{
 							"listen": "test",
@@ -486,7 +486,31 @@
 									"    console.log(pm.response.text())",
 									"    _.retryOnFailure(postman, pm.response.code, request.name, pm.environment.get(\"maxAmountOfRetries\"));",
 									"",
-									"} else if (responseCode.code === 404) {",
+									"} else if (responseCode.code === 200) {",
+									"    var jsonData = pm.response.json();",
+									"",
+									"    pm.test(\"Status code is 200\", function () {",
+									"        pm.response.to.have.status(200);",
+									"    });",
+									"",
+									"    pm.test(\"Legal tag is legaltag01\", function () {",
+									"        pm.expect(jsonData.ltag).to.eql(pm.environment.get(\"legaltag01\"));",
+									"    });",
+									"    ",
+									"    // Reset environment variables if _.retryOnFailure function was used before",
+									"    var key = request.name + '_counter';",
+									"    pm.environment.unset(key);",
+									"    postman.setEnvironmentVariable('execCounter', 1)",
+									"",
+									"    var sleepDuration = 15 * 1000;",
+									"    var waitUntilTime = new Date().getTime() + sleepDuration;",
+									"    while (new Date().getTime() < waitUntilTime) {",
+									"        // Do Nothing -> Wait for cache expiration",
+									"    }",
+									"",
+									"    postman.setNextRequest(\"SUBPROJECT GET: Retrieve the subproject\");",
+									"",
+									"} else {",
 									"    pm.test(\"Status code is 404\", function () {",
 									"        pm.response.to.have.status(404);",
 									"    });",
@@ -495,26 +519,6 @@
 									"    var key = request.name + '_counter';",
 									"    pm.environment.unset(key);",
 									"    postman.setEnvironmentVariable('execCounter', 1)",
-									"",
-									"    postman.setNextRequest(\"SUBPROJECT REGISTER default admin: Create a new subproject with default admin\");",
-									"",
-									"} else {",
-									"    pm.test(\"Status code is 200\", function () {",
-									"        pm.response.to.have.status(200);",
-									"    });",
-									"",
-									"    var jsonData = pm.response.json();",
-									"",
-									"    pm.test(\"Status code is 200\", function () {",
-									"        pm.expect(jsonData.name).to.eql(pm.environment.get(\"subproject\"))",
-									"    });",
-									"",
-									"    // Reset environment variables if _.retryOnFailure function was used before",
-									"    var key = request.name + '_counter';",
-									"    pm.environment.unset(key);",
-									"    postman.setEnvironmentVariable('execCounter', 1)",
-									"",
-									"    postman.setNextRequest(\"SUBPROJECT LIST: List subprojects in a tenant\");",
 									"}"
 								],
 								"type": "text/javascript"
@@ -522,7 +526,7 @@
 						}
 					],
 					"request": {
-						"method": "GET",
+						"method": "PATCH",
 						"header": [
 							{
 								"key": "Authorization",
@@ -537,13 +541,20 @@
 								"value": "application/json"
 							},
 							{
+								"key": "ltag",
+								"value": "{{legaltag01}}"
+							},
+							{
 								"key": "appkey",
-								"value": "{{DE_APP_KEY}}",
-								"type": "text"
+								"value": "{{DE_APP_KEY}}"
 							}
 						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
-							"raw": "{{SVC_URL}}/subproject/tenant/{{tenant}}/subproject/{{subproject}}",
+							"raw": "{{SVC_URL}}/subproject/tenant/{{tenant}}/subproject/{{subproject}}4564",
 							"host": [
 								"{{SVC_URL}}"
 							],
@@ -552,7 +563,7 @@
 								"tenant",
 								"{{tenant}}",
 								"subproject",
-								"{{subproject}}"
+								"{{subproject}}4564"
 							]
 						}
 					},
