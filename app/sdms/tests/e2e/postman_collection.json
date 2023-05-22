@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "dc543ba0-a8d1-422c-9291-0dd7584df3f0",
-		"name": "SDMS-E2E ver.M18 - Release 0.21",
+		"name": "SDMS-E2E ver.M19 - Release 0.22",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "11702291"
 	},
@@ -508,7 +508,7 @@
 									"        // Do Nothing -> Wait for cache expiration",
 									"    }",
 									"",
-									"    postman.setNextRequest(\"SUBPROJECT GET: Retrieve the subproject\");",
+									"    postman.setNextRequest(\"SUBPROJECT GET: Retrieve the subproject metadata\");",
 									"",
 									"} else {",
 									"    pm.test(\"Status code is 404\", function () {",
@@ -563,7 +563,7 @@
 								"tenant",
 								"{{tenant}}",
 								"subproject",
-								"{{subproject}}4564"
+								"{{subproject}}"
 							]
 						}
 					},
@@ -650,7 +650,7 @@
 					"response": []
 				},
 				{
-					"name": "SUBPROJECT GET NEW: Retrieve the new subproject",
+					"name": "SUBPROJECT GET: Retrieve the subproject metadata",
 					"event": [
 						{
 							"listen": "test",
