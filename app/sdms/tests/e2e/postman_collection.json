@@ -554,7 +554,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{SVC_URL}}/subproject/tenant/{{tenant}}/subproject/{{subproject}}4564",
+							"raw": "{{SVC_URL}}/subproject/tenant/{{tenant}}/subproject/{{subproject}}",
 							"host": [
 								"{{SVC_URL}}"
 							],
