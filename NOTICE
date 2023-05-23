@@ -959,6 +959,13 @@ The following software have components provided under the terms of this license:
 - prisma (from https://www.npmjs.com/package/prisma)
 
 ========================================================================
+bsd-2-clause-views
+========================================================================
+The following software have components provided under the terms of this license:
+
+- uri-js (from https://www.npmjs.com/package/uri-js)
+
+========================================================================
 mit-addition
 ========================================================================
 The following software have components provided under the terms of this license:
@@ -971,6 +978,13 @@ ogl-uk-3.0
 The following software have components provided under the terms of this license:
 
 - prisma (from https://www.npmjs.com/package/prisma)
+
+========================================================================
+public-domain
+========================================================================
+The following software have components provided under the terms of this license:
+
+- json-bigint (from https://www.npmjs.com/package/json-bigint)
 
 ========================================================================
 unknown

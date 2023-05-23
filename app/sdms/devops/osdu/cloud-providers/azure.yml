@@ -198,7 +198,6 @@ sdms_azure_test:
     - chmod +x devops/scripts/clean_package_json.sh
     - devops/scripts/clean_package_json.sh
     - echo $svctoken > /dev/null
-    - npm install -g newman
     - npm install -g husky
     - npm ci
     - chmod +x ./tests/e2e/run_e2e_tests.sh
