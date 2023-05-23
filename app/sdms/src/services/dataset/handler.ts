@@ -23,7 +23,7 @@ import { SeistoreFactory } from '../../cloud/seistore';
 import { DESStorage, DESUtils, UserAssociationServiceFactory } from '../../dataecosystem';
 import { Error, ErrorModel, Feature, FeatureFlags, Response, Utils } from '../../shared';
 import { SubprojectAuth, SubProjectDAO, SubProjectModel } from '../subproject';
-import { TenantDAO, TenantModel } from '../tenant';
+import { TenantDAO, TenantGroups, TenantModel } from '../tenant';
 import { DatasetAuth } from './auth';
 import { DatasetDAO } from './dao';
 import { IWriteLockSession, Locker } from './locker';
@@ -39,8 +39,15 @@ export class DatasetHandler {
 
         try {
             const tenant = await TenantDAO.get(req.params.tenantid);
-            const subproject = await SubProjectDAO.get(
+            let subproject: SubProjectModel;
+            try {
+                subproject = await SubProjectDAO.get(
                 JournalFactoryTenantClient.get(tenant), req.params.tenantid, req.params.subprojectid);
+            } catch (error) {
+                await Auth.isUserAuthorized(req.get('authorization'),
+                    [TenantGroups.userGroup(tenant.esd)], tenant.esd, req[Config.DE_FORWARD_APPKEY]);
+                throw error;
+            }
 
             if (op === DatasetOP.CheckCTag) {
                 Response.writeOK(res, await this.checkCTag(req, subproject));
@@ -289,6 +296,15 @@ export class DatasetHandler {
 
         // check if the dataset does not exist
         if (!datasetOUT) {
+            if(subproject.access_policy === Config.UNIFORM_ACCESS_POLICY) {
+                await Auth.isUserAuthorized(req.get('authorization'),
+                    SubprojectAuth.getAuthGroups(subproject, AuthRoles.viewer),
+                        tenant.esd, req[Config.DE_FORWARD_APPKEY]);
+            } else {
+                await Auth.isUserAuthorized(req.get('authorization'),
+                    [TenantGroups.userGroup(tenant.esd)], tenant.esd, req[Config.DE_FORWARD_APPKEY]);
+            }
+
             throw (Error.make(Error.Status.NOT_FOUND,
                 'The dataset ' + Config.SDPATHPREFIX + datasetIN.tenant + '/' +
                 datasetIN.subproject + datasetIN.path + datasetIN.name + ' does not exist'));
@@ -297,17 +313,18 @@ export class DatasetHandler {
         // Check if retrieve the seismic metadata storage record
         const retrieveStorageRecord = datasetOUT.seismicmeta_guid !== undefined && userInput[1];
 
-        // Check if legal tag is valid
-        if (datasetOUT.ltag) {
-            await Auth.isLegalTagValid(req.headers.authorization, datasetOUT.ltag,
-                tenant.esd, req[Config.DE_FORWARD_APPKEY]);
-        }
 
         // Use the access policy to determine which groups to fetch for read authorization
         await Auth.isReadAuthorized(req.headers.authorization,
             DatasetAuth.getAuthGroups(subproject, datasetOUT, AuthRoles.viewer),
             tenant, datasetIN.subproject, req[Config.DE_FORWARD_APPKEY],
             req.headers['impersonation-token-context'] as string);
+
+        // Check if legal tag is valid
+        if (datasetOUT.ltag) {
+            await Auth.isLegalTagValid(req.headers.authorization, datasetOUT.ltag,
+                tenant.esd, req[Config.DE_FORWARD_APPKEY]);
+        }
 
         // [NOTE OF DEPRECATION] subid-to-email to deprecated in favor of translate-user-info
         // Convert userId to email if translate-user-info or subid-to-email is not false
