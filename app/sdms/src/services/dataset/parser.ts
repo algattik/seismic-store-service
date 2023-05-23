@@ -52,7 +52,8 @@ export class DatasetParser {
         if (Auth.isImpersonationToken(req.headers.authorization)) {
             const context = req.get('impersonation-token-context');
             if (context === undefined) {
-                dataset.created_by = Utils.getUserIdFromUserToken(req.headers.authorization);
+                dataset.created_by = req.get(Config.USER_ID_HEADER_KEY_NAME) ||
+                Utils.getUserIdFromUserToken(req.headers.authorization);
             }
             else {
                 const tokenContext = ImpersonationTokenHandler.decodeContext(context);
