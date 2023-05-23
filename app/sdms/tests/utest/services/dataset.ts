@@ -261,6 +261,7 @@ export class TestDatasetSVC {
 
         Tx.testExp(async (done: any, expReq: expRequest, expRes: expResponse) => {
             this.sandbox.stub(DatasetDAO, 'get').resolves([{ sbit: null, ltag: '123' }, 'key'] as any);
+            this.sandbox.stub(Auth, 'isUserAuthorized').resolves(true);
             this.sandbox.stub(Auth, 'isLegalTagValid').resolves(true);
             this.sandbox.stub(Auth, 'isReadAuthorized').resolves(true);
             this.sandbox.stub(DatasetDAO, 'update').resolves();
@@ -273,6 +274,7 @@ export class TestDatasetSVC {
         Tx.testExp(async (done: any, expReq: expRequest, expRes: expResponse) => {
             expReq.query.openmode = 'write';
             this.sandbox.stub(DatasetDAO, 'get').resolves([{ sbit: null }, 'key'] as any);
+            this.sandbox.stub(Auth, 'isUserAuthorized').resolves(true);
             this.sandbox.stub(Auth, 'isReadAuthorized').resolves(true);
             this.sandbox.stub(DatasetDAO, 'update').resolves();
             this.sandbox.stub(DESUtils, 'getDataPartitionID');
@@ -282,6 +284,7 @@ export class TestDatasetSVC {
 
         Tx.testExp(async (done: any, expReq: expRequest, expRes: expResponse) => {
             this.sandbox.stub(DatasetDAO, 'get').resolves([{ sbit: 'R', sbit_count: 1 }, 'key'] as any);
+            this.sandbox.stub(Auth, 'isUserAuthorized').resolves(true);
             this.sandbox.stub(Auth, 'isReadAuthorized').resolves(undefined);
             this.sandbox.stub(DatasetDAO, 'update').resolves();
             this.sandbox.stub(DESUtils, 'getDataPartitionID');
