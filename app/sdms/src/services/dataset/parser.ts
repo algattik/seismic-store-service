@@ -50,8 +50,15 @@ export class DatasetParser {
         dataset.ltag = (req.headers.ltag) as string;
         dataset.type = req.body ? req.body.type : undefined;
         if (Auth.isImpersonationToken(req.headers.authorization)) {
-            const tokenContext = ImpersonationTokenHandler.decodeContext(req.get('impersonation-token-context'));
-            dataset.created_by = tokenContext.user;
+            const context = req.get('impersonation-token-context');
+            if (context) {
+                const tokenContext = ImpersonationTokenHandler.decodeContext(context);
+                dataset.created_by = tokenContext.user;
+            }
+            else {
+                dataset.created_by = req.get(Config.USER_ID_HEADER_KEY_NAME) ||
+                Utils.getUserIdFromUserToken(req.headers.authorization);
+            }
         }
         else {
             dataset.created_by = req.get(Config.USER_ID_HEADER_KEY_NAME) ||
