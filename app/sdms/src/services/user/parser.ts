@@ -22,13 +22,17 @@ export class UserParser {
 
     public static removeUser(req: expRequest): { email: string, sdPath: SDPathModel } {
 
-        Params.checkBody(req.body);
-        Params.checkString(req.body.email, 'email');
-        Params.checkString(req.body.path, 'path');
+        if(!req.query?.email || !req.query?.path){
+            throw (Error.make(Error.Status.BAD_REQUEST,
+                'Please provide both email and path query parameters'));
+        }
 
-        const email = req.body.email;
+        Params.checkString(req.query.email, 'email');
+        Params.checkString(req.query.path, 'path');
 
-        const sdPath = SDPath.getFromString(req.body.path);
+        const email = req.query.email as string;
+        const sdPath = SDPath.getFromString(req.query.path as string);
+
         if (!sdPath) {
             throw (Error.make(Error.Status.BAD_REQUEST,
                 'The \'path\' body parameter is not a valid seismic store path.'));

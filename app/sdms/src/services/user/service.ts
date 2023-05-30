@@ -30,7 +30,7 @@ router.get('/', async (req: expRequest, res: expResponse) => {
     await UserHandler.handler(req, res, UserOP.List);
 });
 
-// Remove a user from subproject
+// Remove a user from subproject (query params)
 router.delete('/', async (req: expRequest, res: expResponse) => {
     await UserHandler.handler(req, res, UserOP.Remove);
 });
