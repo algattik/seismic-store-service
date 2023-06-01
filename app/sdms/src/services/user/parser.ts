@@ -32,12 +32,12 @@ export class UserParser {
 
         if (!sdPath) {
             throw (Error.make(Error.Status.BAD_REQUEST,
-                'The \'path\' body parameter is not a valid seismic store path.'));
+                'The \'path\' parameter is not a valid seismic store path.'));
         }
 
         if (!sdPath.tenant && !sdPath.subproject) {
             throw (Error.make(Error.Status.BAD_REQUEST,
-                'The \'path\' body parameter is neither a valid tenant or a valid subproject resource path.'));
+                'The \'path\' parameter is neither a valid tenant or a valid subproject resource path.'));
         }
 
         return { email, sdPath };
