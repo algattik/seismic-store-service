@@ -22,16 +22,13 @@ export class UserParser {
 
     public static removeUser(req: expRequest): { email: string, sdPath: SDPathModel } {
 
-        if(!req.query?.email || !req.query?.path){
-            throw (Error.make(Error.Status.BAD_REQUEST,
-                'Please provide both email and path query parameters'));
-        }
+        const email = req.query?.email || req.body?.email;
+        const path = req.query?.path  || req.body?.path;
 
-        Params.checkString(req.query.email, 'email');
-        Params.checkString(req.query.path, 'path');
+        Params.checkString(email, 'email');
+        Params.checkString(path, 'path');
 
-        const email = req.query.email as string;
-        const sdPath = SDPath.getFromString(req.query.path as string);
+        const sdPath = SDPath.getFromString(path);
 
         if (!sdPath) {
             throw (Error.make(Error.Status.BAD_REQUEST,
