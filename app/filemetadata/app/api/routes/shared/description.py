@@ -1,11 +1,5 @@
 from enum import Enum
 
-from fastapi import APIRouter
-
-from core.config import settings
-
-router = APIRouter()
-
 class Role(Enum):
     viewer = "viewer"
     admin = "admin"
@@ -14,7 +8,7 @@ class Role(Enum):
 
 def api_description(what: str, role: Role, standard: bool=True):
     if(standard):
-        description = f"<ul><li>Returns the seismic store {what}</li><li>Required roles:<ul>"
+        description = f"<ul><li>Returns {what} of the given dataset.</li><li>Required roles:<ul>"
     else:
         description = f"<ul><li>Returns {what}</li><li>Required roles:<ul>"
 
@@ -34,7 +28,3 @@ def api_description(what: str, role: Role, standard: bool=True):
     description += "</ul></li></ul>"
 
     return description
-
-@router.get(settings.API_PATH + "service-status", tags=["General"], description=api_description("service status", Role.none))
-def get_status():
-    return {"status": "ok"}

@@ -6,14 +6,17 @@ import math
 import json
 import vector
 
+from ..shared.description import Role, api_description
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security.api_key import APIKey
 from starlette.status import HTTP_500_INTERNAL_SERVER_ERROR
 
 from api.dependencies.authentication import get_bearer, get_api_key, configure_remote_access
 from core.config import settings
+VERSION = 1
 
 router = APIRouter()
+PATH = settings.API_PATH + 'v' + str(VERSION) + '/'
 
 def internal_server_error(e: Exception): 
     return HTTPException(status_code=HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
@@ -39,35 +42,6 @@ class P6Bin(enum.Enum):
     P6TransformationMethod = 10
     P6MapGridBearingOfBinGridJaxis = 11
     BinGridLocalCoordinates = 12
-
-class Role(enum.Enum):
-    viewer = "viewer"
-    admin = "admin"
-    both = "both"
-    none = "none"
-
-def api_description(what: str, role: Role, standard: bool=True):
-    if(standard):
-        description = f"<ul><li>Returns {what} of the given dataset.</li><li>Required roles:<ul>"
-    else:
-        description = f"<ul><li>Returns {what}</li><li>Required roles:<ul>"
-
-    if(role == Role.viewer):
-        description += "<li>subproject.viewer: if the applied subproject policy is 'uniform'</li>"
-        description += "<li>dataset.viewer: if the applied subproject policy is 'dataset'</li>"
-    elif(role == Role.admin):
-        description += "<li>subproject.admin: if the applied subproject policy is 'uniform'</li>"
-        description += "<li>dataset.admin: if the applied subproject policy is 'dataset'</li>"
-    elif(role == Role.both):
-        description += "<li>subproject.admin, subproject.viewer: if the applied subproject policy is 'uniform'</li>"
-        description =+ "<li>dataset.admin, dataset.viewer: if the applied subproject policy is 'dataset'</li>"
-
-    else:
-        description += "<li>None</li>"
-    
-    description += "</ul></li></ul>"
-
-    return description
 
 
 class Line:
@@ -173,7 +147,7 @@ class ZGYToBinGrid:
         return json.dumps(m, indent=2)
 
 
-@router.get(settings.API_PATH + "openzgy/headers", tags=["OPENZGY"], description=api_description("headers", Role.viewer))
+@router.get(PATH + "openzgy/headers", tags=["OPENZGY"], description=api_description("headers", Role.viewer))
 async def get_headers(
         sdpath: str,
         bearer: APIKey = Depends(get_bearer),
@@ -207,14 +181,14 @@ async def get_headers(
                 'Statistics':              {'Count': reader.statistics[0], 'Sum': reader.statistics[1], 'SumOfSquares': reader.statistics[2], 'Minimum': reader.statistics[3],'Maximum': reader.statistics[4]},
                 'Histogram':               {'Count': reader.histogram[0], 'Minimum': reader.histogram[1], 'Maximum':reader.histogram[2], 'Bins': reader.histogram[3]}
             }
-            return json.loads(json.dumps(headers, indent=2))
+            return json.dumps(headers, indent=2)
     except zgy.ZgyError as ze:
         raise zgy_error(ze)
     except Exception as e:
         raise internal_server_error(e)
 
 
-@router.get(settings.API_PATH + "openzgy/bingrid", tags=["OPENZGY"], description=api_description("bingrid", Role.viewer))
+@router.get(PATH + "openzgy/bingrid", tags=["OPENZGY"], description=api_description("bingrid", Role.viewer))
 async def get_bingrid(
         sdpath: str,
         bearer: APIKey = Depends(get_bearer),
@@ -241,7 +215,7 @@ async def get_bingrid(
                                 r.corners[3][0], r.corners[3][1])
             
             zgyToBinGrid = ZGYToBinGrid(point00, point10, point01, point11, inline, xline)
-            return json.loads(zgyToBinGrid.getValusAsJson())
+            return zgyToBinGrid.getValusAsJson()
     except zgy.ZgyError as ze:
         raise zgy_error(ze)
     except Exception as e:
